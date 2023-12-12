@@ -1,0 +1,12 @@
+{
+  "name": "chatter-api",
+  "version": "1.0.0",
+  "description": "Backend API for the Chatter webserver.",
+  "main": "src/main.ts",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "keywords": [],
+  "author": "Connell Reffo",
+  "license": "MIT"
+}
