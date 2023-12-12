@@ -2,11 +2,19 @@
   "name": "chatter-api",
   "version": "1.0.0",
   "description": "Backend API for the Chatter webserver.",
-  "main": "src/main.ts",
+  "main": "src/Main.ts",
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "start": "ts-node src/Main.ts",
+    "dev": "nodemon src/Main.ts"
   },
   "keywords": [],
   "author": "Connell Reffo",
-  "license": "MIT"
+  "license": "MIT",
+  "dependencies": {
+    "@types/cors": "^2.8.17",
+    "@types/express": "^4.17.21",
+    "@types/node": "^20.10.4",
+    "socket.io": "^4.7.2"
+  }
 }
