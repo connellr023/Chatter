@@ -4,7 +4,7 @@
   "description": "Backend API for the Chatter webserver.",
   "main": "src/Main.ts",
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1",
+    "test": "jest",
     "start": "ts-node src/Main.ts",
     "dev": "nodemon src/Main.ts"
   },
@@ -16,5 +16,11 @@
     "@types/express": "^4.17.21",
     "@types/node": "^20.10.4",
     "socket.io": "^4.7.2"
+  },
+  "devDependencies": {
+    "@types/jest": "^29.5.11",
+    "jest": "^29.7.0",
+    "ts-jest": "^29.1.1",
+    "typescript": "^5.3.3"
   }
 }

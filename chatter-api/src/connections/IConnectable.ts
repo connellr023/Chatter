@@ -1,7 +1,7 @@
-import IManager from "../Lib/IManager";
+import IManager from "../lib/IManager";
 import IConnectionObserver from "./IConnectionObserver";
 import Client from "./Client";
-import NamedIdentity from "../Lib/NamedIdentity";
+import NamedIdentity from "../lib/NamedIdentity";
 
 import {Socket} from "socket.io";
 

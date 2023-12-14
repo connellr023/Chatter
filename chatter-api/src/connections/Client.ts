@@ -1,8 +1,8 @@
-import IMessageable from "../Chat/IMessageable";
-import ResponseObject from "../Chat/ResponseObject";
+import IMessageable from "../chat/IMessageable";
+import ResponseObject from "../chat/ResponseObject";
 
 import {Socket} from "socket.io";
-import NamedIdentity from "../Lib/NamedIdentity";
+import NamedIdentity from "../lib/NamedIdentity";
 
 /**
  * Class responsible for passing off socket stream messaging to other

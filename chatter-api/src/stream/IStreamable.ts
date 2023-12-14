@@ -1,4 +1,4 @@
-import IManager from "../Lib/IManager";
+import IManager from "../lib/IManager";
 import IStreamObserver from "./IStreamObserver";
 
 import {Socket} from "socket.io";
@@ -16,7 +16,7 @@ export default interface IStreamable extends IManager<IStreamObserver> {
      * @param events The event(s) to listen for
      * @param observers The observer(s) to be attached
      */
-    attach(events: SocketEvents[], ...observers: IStreamObserver[]): void;
+    attach(events: SocketEvents[]|string[], ...observers: IStreamObserver[]): void;
 
     /**
      * Notifies all observers that a socket connected <br />
@@ -39,5 +39,5 @@ export default interface IStreamable extends IManager<IStreamObserver> {
      * @param event The event that triggered it (some observers may be registered to multiple events)
      * @param data The data sent
      */
-    notifyDataReceived(socket: Socket, event: SocketEvents, data: Object): void;
+    notifyDataReceived(socket: Socket, event: SocketEvents|string, data: Object): void;
 }

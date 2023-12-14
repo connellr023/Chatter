@@ -1,9 +1,10 @@
 import IConnectable from "./IConnectable";
-import IStreamObserver from "../Stream/IStreamObserver";
+import IStreamObserver from "../stream/IStreamObserver";
 import IConnectionObserver from "./IConnectionObserver";
-import NamedIdentity from "../Lib/NamedIdentity";
-import {Socket} from "socket.io";
+import NamedIdentity from "../lib/NamedIdentity";
 import Client from "./Client";
+
+import {Socket} from "socket.io";
 
 /**
  * Class responsible for managing client connections to chat rooms and routing messages to the correct room
@@ -14,39 +15,39 @@ export default class ConnectionsManager implements IConnectable, IStreamObserver
     /**
      * @inheritDoc
      */
-    notifyClientJoined(client: Client, room: NamedIdentity): void {
+    public notifyClientJoined(client: Client, room: NamedIdentity): void {
     }
 
     /**
      * @inheritDoc
      */
-    notifyClientLeft(client: Client, room: NamedIdentity): void {
+    public notifyClientLeft(client: Client, room: NamedIdentity): void {
     }
 
     /**
      * @inheritDoc
      */
-    notifyMessageSent(client: Client, message: string, room: NamedIdentity): void {
+    public notifyMessageSent(client: Client, message: string, room: NamedIdentity): void {
     }
 
     /**
      * @inheritDoc
      */
-    getRooms(): Map<NamedIdentity, number> {
+    public getRooms(): Map<NamedIdentity, number> {
         return undefined;
     }
 
     /**
      * @inheritDoc
      */
-    getSockets(): Map<Socket, NamedIdentity[]> {
+    public getSockets(): Map<Socket, NamedIdentity[]> {
         return undefined;
     }
 
     /**
      * @inheritDoc
      */
-    getObservers(): Map<string, IConnectionObserver[]> {
+    public getObservers(): Map<string, IConnectionObserver[]> {
         return undefined;
     }
 }

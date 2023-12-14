@@ -1,4 +1,4 @@
-import IConnectionObserver from "../Connections/IConnectionObserver";
+import IConnectionObserver from "../connections/IConnectionObserver";
 import IMessageable from "./IMessageable";
 import ResponseObject from "./ResponseObject";
 
@@ -11,6 +11,6 @@ export default class ChatRoom implements IConnectionObserver, IMessageable {
     /**
      * @inheritDoc
      */
-    send(data: ResponseObject): void {
+    public send(data: ResponseObject): void {
     }
 }
