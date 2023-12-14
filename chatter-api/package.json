@@ -4,7 +4,7 @@
   "description": "Backend API for the Chatter webserver.",
   "main": "src/Main.ts",
   "scripts": {
-    "test": "jest",
+    "test": "jest --silent --maxWorkers=2",
     "start": "ts-node src/Main.ts",
     "dev": "nodemon src/Main.ts"
   },
