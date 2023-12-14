@@ -5,12 +5,31 @@ import NamedIdentity from "../lib/NamedIdentity";
 import Client from "./Client";
 
 import {Socket} from "socket.io";
+import {SocketEvents} from "../stream/SocketEvents";
 
 /**
  * Class responsible for managing client connections to chat rooms and routing messages to the correct room
  * @author Connell Reffo
  */
 export default class ConnectionsManager implements IConnectable, IStreamObserver {
+
+    /**
+     * @inheritDoc
+     */
+    public onReceived(socket: Socket, event: SocketEvents | string, data: Object): void {
+    }
+
+    /**
+     * @inheritDoc
+     */
+    public onSocketConnected(socket: Socket): void {
+    }
+
+    /**
+     * @inheritDoc
+     */
+    public onSocketDisconnected(socket: Socket): void {
+    }
 
     /**
      * @inheritDoc
