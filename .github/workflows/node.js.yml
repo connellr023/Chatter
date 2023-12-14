@@ -22,7 +22,7 @@ jobs:
       with:
         node-version: ${{ matrix.node-version }}
         cache: "npm"
-        cache-dependency-path: chatter-api/package.lock.json
+        cache-dependency-path: ${{github.workspace}}/chatter-api/package-lock.json
     - name: build and test
       run: |
         npm install
