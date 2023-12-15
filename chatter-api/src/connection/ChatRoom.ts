@@ -1,47 +1,53 @@
-import AbstractStreamer from "../stream/AbstractStreamer";
-import IJoinable from "../lib/IJoinable";
-import Client from "./Client";
+import AbstractRoom from "./AbstractRoom";
 
-import {Namespace} from "socket.io";
+import {Namespace, Socket} from "socket.io";
 
-export default class ChatRoom extends AbstractStreamer<Namespace> implements IJoinable {
-
-    private static rooms: ChatRoom[] = [];
-
-    public static factory(io: Namespace, name: string): ChatRoom {
-        let room = new ChatRoom(io, name, ChatRoom.rooms.length);
-        ChatRoom.rooms.push(room);
-
-        return room;
-    }
-
-    public static getAll(): ChatRoom[] {
-        return ChatRoom.rooms;
-    }
-
-    protected name: string;
-    protected id: number;
+export default class ChatRoom extends AbstractRoom {
 
     private constructor(io: Namespace, name: string, id: number) {
-        super(io);
-
-        this.name = name;
-        this.id = id;
+        super(io, name, id);
     }
 
     public listen(): void {
-        // TODO
+        this.io.on("connection", (socket: Socket): void => {
+            this.connections.add(socket);
+
+            socket.on("disconnect", (): void => {
+                this.connections.delete(socket);
+            });
+        });
     }
 
-    public getName(): string {
-        return this.name;
-    }
+    /**
+     * Factory class that must be used to instantiate new chat rooms
+     * @author Connell Reffo
+     */
+    public static Factory  = class {
 
-    public getID(): number {
-        return this.id;
-    }
+        /**
+         * List of all rooms created by this factory
+         */
+        private static rooms: ChatRoom[] = [];
 
-    public getMembers(): Client[] {
-        return undefined;
+        /**
+         * Creates a new chat room object
+         * @static
+         * @param io The namespace socket.io object this room should use
+         * @param name The name of the room
+         */
+        public static create(io: Namespace, name: string): ChatRoom {
+            let room: ChatRoom = new ChatRoom(io, name, this.rooms.length);
+            this.rooms.push(room);
+
+            return room;
+        }
+
+        /**
+         * Gets a list of all rooms created by this factory
+         * @static
+         */
+        public static getAll(): ChatRoom[] {
+            return this.rooms;
+        }
     }
 }
