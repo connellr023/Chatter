@@ -25,5 +25,5 @@ export default interface IStreamObserver {
      * @param event Is the event that triggered this observer
      * @param data The data object that was received
      */
-    onReceived(socket: Socket, event: SocketEvents|string, data: Object): void;
+    onReceived(socket: Socket, event: SocketEvents|string, data: {}): void;
 }

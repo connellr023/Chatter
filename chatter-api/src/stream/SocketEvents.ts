@@ -3,6 +3,6 @@
  * @author Connell Reffo
  */
 export enum SocketEvents {
-    CONNECT = "connect",
+    CONNECTION = "connection",
     DISCONNECT = "disconnect"
 }

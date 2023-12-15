@@ -1,4 +1,4 @@
-import IConnectable from "./IConnectable";
+import IConnector from "./IConnector";
 import IStreamObserver from "../stream/IStreamObserver";
 import IConnectionObserver from "./IConnectionObserver";
 import NamedIdentity from "../lib/NamedIdentity";
@@ -6,12 +6,18 @@ import Client from "./Client";
 
 import {Socket} from "socket.io";
 import {SocketEvents} from "../stream/SocketEvents";
+import AbstractManager from "../lib/AbstractManager";
 
 /**
  * Class responsible for managing client connections to chat rooms and routing messages to the correct room
  * @author Connell Reffo
  */
-export default class ConnectionsManager implements IConnectable, IStreamObserver {
+export default class ConnectionsManager extends AbstractManager<IConnectionObserver> implements IConnector, IStreamObserver {
+
+    /**
+     * @inheritDoc
+     */
+    protected observers: Map<string, IConnectionObserver[]>;
 
     /**
      * @inheritDoc
@@ -60,13 +66,6 @@ export default class ConnectionsManager implements IConnectable, IStreamObserver
      * @inheritDoc
      */
     public getSockets(): Map<Socket, NamedIdentity[]> {
-        return undefined;
-    }
-
-    /**
-     * @inheritDoc
-     */
-    public getObservers(): Map<string, IConnectionObserver[]> {
         return undefined;
     }
 }

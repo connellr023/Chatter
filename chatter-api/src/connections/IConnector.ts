@@ -1,6 +1,6 @@
 import IManager from "../lib/IManager";
-import IConnectionObserver from "./IConnectionObserver";
 import Client from "./Client";
+import IConnectionObserver from "./IConnectionObserver";
 import NamedIdentity from "../lib/NamedIdentity";
 
 import {Socket} from "socket.io";
@@ -9,7 +9,7 @@ import {Socket} from "socket.io";
  * Abstract representation of a class that is responsible for managing client connections to a socket stream
  * @author Connell Reffo
  */
-export default interface IConnectable extends IManager<IConnectionObserver> {
+export default interface IConnector extends IManager<IConnectionObserver> {
 
     /**
      * Notifies all connection observers of a specific room that a client joined <br />

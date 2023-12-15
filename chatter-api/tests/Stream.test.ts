@@ -1,11 +1,12 @@
 import StreamManager from "../src/stream/StreamManager";
 import IStreamObserver from "../src/stream/IStreamObserver";
-import IStreamable from "../src/stream/IStreamable";
+import IStreamer from "../src/stream/IStreamer";
+import StreamError from "../src/exceptions/StreamException";
 
 import {SocketEvents} from "../src/stream/SocketEvents";
-import {Socket} from "socket.io";
+import {Server, Socket} from "socket.io";
 
-let sm: IStreamable;
+let sm: IStreamer;
 
 beforeEach((): void => {
     sm = new StreamManager();
@@ -16,7 +17,7 @@ afterEach((): void => {
 });
 
 test("Register single observer to single event", (): void => {
-    let event = SocketEvents.CONNECT;
+    let event = "test";
     let observer = new StreamObserverStub();
 
     let expected = new Map<SocketEvents|string, IStreamObserver[]>();
@@ -41,7 +42,7 @@ test("Register single observer to multiple events", (): void => {
 });
 
 test("Register multiple observers to single event", (): void => {
-    let event = SocketEvents.CONNECT;
+    let event = "test";
     let observer1 = new StreamObserverStub();
     let observer2 = new StreamObserverStub();
 
@@ -51,6 +52,18 @@ test("Register multiple observers to single event", (): void => {
     sm.attach([event], observer1, observer2);
 
     expect(sm.getObservers()).toStrictEqual(expected);
+});
+
+test("Should throw StreamError if observer attached to connect event", (): void => {
+    expect((): void => {
+        sm.attach([SocketEvents.CONNECTION], new StreamObserverStub());
+    }).toThrow(StreamError);
+});
+
+test("Should throw StreamError if observer attached to disconnect event", (): void => {
+    expect((): void => {
+        sm.attach([SocketEvents.DISCONNECT], new StreamObserverStub());
+    }).toThrow(StreamError);
 });
 
 class StreamObserverStub implements IStreamObserver {
