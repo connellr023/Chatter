@@ -3,21 +3,22 @@
  * @author Connell Reffo
  */
 
-import StreamManager from "./stream/StreamManager";
+import IStreamable from "./stream/IStreamable";
+import Stream from "./stream/Stream";
 
 // @ts-ignore
 import express, {Application} from "express";
 import {Server} from "socket.io";
-import IStreamer from "./stream/IStreamer";
 
 let app: Application = express();
-let streamManager: IStreamer = new StreamManager();
 
 // Setup server
 let server = app.listen(8000, (): void => {
     console.log("Server started")
 });
 
-// Setup stream manager
+// Setup stream
 let io = new Server(server, {httpCompression: false, transports: ["websocket"], allowUpgrades: false});
-streamManager.ready(io);
+let stream: IStreamable = new Stream(io);
+
+stream.listen();
