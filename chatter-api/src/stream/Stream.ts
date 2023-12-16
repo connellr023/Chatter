@@ -2,6 +2,7 @@ import AbstractStreamer from "./AbstractStreamer";
 import ChatRoom from "../connection/ChatRoom";
 
 import {Server, Socket} from "socket.io";
+import AbstractRoom from "../connection/AbstractRoom";
 
 /**
  * Class for setting up socket.io stream
@@ -9,13 +10,17 @@ import {Server, Socket} from "socket.io";
  */
 export default class Stream extends AbstractStreamer<Server> {
 
+    protected rooms: AbstractRoom[];
+
     public constructor(io: Server) {
         super(io);
+
+        this.rooms = [];
     }
 
     public listen(): void {
-        ChatRoom.Factory.create(this.io.of("/room1"), "Default Room 1");
-        ChatRoom.Factory.create(this.io.of("/room2"), "Default Room 2");
+        this.rooms.push(ChatRoom.Factory.create(this.io.of("/room1"), "Default Room 1"));
+        this.rooms.push(ChatRoom.Factory.create(this.io.of("/room2"), "Default Room 2"));
 
         this.io.on("connection", (socket: Socket): void => {
             this.connections.add(socket);

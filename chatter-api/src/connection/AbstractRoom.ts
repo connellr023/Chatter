@@ -1,6 +1,7 @@
 import AbstractStreamer from "../stream/AbstractStreamer";
-import {Namespace} from "socket.io";
 import IIdentifiable from "../lib/IIdentifiable";
+
+import {Namespace} from "socket.io";
 
 export default abstract class AbstractRoom extends AbstractStreamer<Namespace> implements IIdentifiable {
 

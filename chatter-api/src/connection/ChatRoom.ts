@@ -22,12 +22,9 @@ export default class ChatRoom extends AbstractRoom {
      * Factory class that must be used to instantiate new chat rooms
      * @author Connell Reffo
      */
-    public static Factory  = class {
+    public static Factory = class {
 
-        /**
-         * List of all rooms created by this factory
-         */
-        private static rooms: ChatRoom[] = [];
+        private static count: number;
 
         /**
          * Creates a new chat room object
@@ -36,18 +33,10 @@ export default class ChatRoom extends AbstractRoom {
          * @param name The name of the room
          */
         public static create(io: Namespace, name: string): ChatRoom {
-            let room: ChatRoom = new ChatRoom(io, name, this.rooms.length);
-            this.rooms.push(room);
+            let room: ChatRoom = new ChatRoom(io, name, this.count);
+            this.count++;
 
             return room;
-        }
-
-        /**
-         * Gets a list of all rooms created by this factory
-         * @static
-         */
-        public static getAll(): ChatRoom[] {
-            return this.rooms;
         }
     }
 }
