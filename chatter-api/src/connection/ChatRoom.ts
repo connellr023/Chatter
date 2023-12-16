@@ -1,16 +1,16 @@
 import AbstractRoom from "./AbstractRoom";
 
-import {Namespace, Socket} from "socket.io";
+import {Server, Socket} from "socket.io";
 
 export default class ChatRoom extends AbstractRoom {
 
-    private constructor(io: Namespace, name: string, id: number) {
+    private constructor(io: Server, name: string, id: number) {
         super(io, name, id);
     }
 
     public listen(): void {
         this.io.on("connection", (socket: Socket): void => {
-            this.connections.add(socket);
+            // TODO: On Join Room: this.connections.add(socket);
 
             socket.on("disconnect", (): void => {
                 this.connections.delete(socket);
@@ -32,7 +32,7 @@ export default class ChatRoom extends AbstractRoom {
          * @param io The namespace socket.io object this room should use
          * @param name The name of the room
          */
-        public static create(io: Namespace, name: string): ChatRoom {
+        public static create(io: Server, name: string): ChatRoom {
             let room: ChatRoom = new ChatRoom(io, name, this.count);
             this.count++;
 

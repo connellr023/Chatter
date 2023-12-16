@@ -1,14 +1,14 @@
 import AbstractStreamer from "../stream/AbstractStreamer";
 import IIdentifiable from "../lib/IIdentifiable";
 
-import {Namespace} from "socket.io";
+import {Server} from "socket.io";
 
-export default abstract class AbstractRoom extends AbstractStreamer<Namespace> implements IIdentifiable {
+export default abstract class AbstractRoom extends AbstractStreamer implements IIdentifiable {
 
     protected name: string;
     protected id: number;
 
-    protected constructor(io: Namespace, name: string, id: number) {
+    protected constructor(io: Server, name: string, id: number) {
         super(io);
 
         this.name = name;
