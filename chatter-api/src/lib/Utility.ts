@@ -17,7 +17,7 @@ export interface RoomObject {
 
 export interface SendChatObject {
     username: string,
-    roomId: string,
+    roomId: number,
     message: string
 }
 
@@ -26,7 +26,7 @@ export interface SendRoomsObject {
 }
 
 export interface ReceiveChatObject {
-    roomId: string,
+    roomId: number,
     message: string
 }
 

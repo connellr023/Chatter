@@ -1,18 +1,48 @@
-import AbstractRoom from "./AbstractRoom";
+import Client from "../lib/Client";
+import IStreamObserver from "../stream/IStreamObserver";
 
-import {Server, Socket} from "socket.io";
-import {StreamEvents} from "../lib/Utility";
+import {Server} from "socket.io";
+import {ReceiveChatObject, RoomObject, SendRoomsObject} from "../lib/Utility";
 
-export default class ChatRoom extends AbstractRoom {
+export default class ChatRoom implements IStreamObserver {
+
+    protected io: Server;
+    protected clients: Set<Client>;
+
+    protected name: string;
+    protected id: number;
 
     private constructor(io: Server, name: string, id: number) {
-        super(io, name, id);
+        this.io = io;
+        this.name = name;
+        this.id = id;
+        this.clients = new Set<Client>;
     }
 
-    public listen(): void {
-        this.io.on(StreamEvents.CONNECTION, (socket: Socket): void => {
-            // TODO
+    public onClientJoined(client: Client): void {
+        this.clients.add(client);
+    }
+
+    public onClientLeft(client: Client): void {
+        this.clients.delete(client);
+    }
+
+    public onClientMessage(client: Client, message: ReceiveChatObject): void {
+        this.broadcastData(message);
+    }
+    
+    public broadcastData(data: {}): void {
+        this.clients.forEach((client: Client): void => {
+            client.send(data);
         });
+    }
+
+    public getName(): string {
+        return this.name;
+    }
+
+    public getID(): number {
+        return this.id;
     }
 
     /**
@@ -21,7 +51,7 @@ export default class ChatRoom extends AbstractRoom {
      */
     public static Factory = class {
 
-        private static count: number;
+        private static rooms: ChatRoom[];
 
         /**
          * Creates a new chat room object
@@ -30,10 +60,37 @@ export default class ChatRoom extends AbstractRoom {
          * @param name The name of the room
          */
         public static create(io: Server, name: string): ChatRoom {
-            let room: ChatRoom = new ChatRoom(io, name, this.count);
-            this.count++;
+            let room: ChatRoom = new ChatRoom(io, name, this.rooms.length);
+            this.rooms.push(room);
 
             return room;
+        }
+
+        public static getAll(): ChatRoom[] {
+            return this.rooms;
+        }
+
+        public static encode(): SendRoomsObject {
+            let roomObjects: RoomObject[] = [];
+
+            this.rooms.forEach((room: ChatRoom): void => {
+                roomObjects.push({
+                    name: room.getName(),
+                    id: room.getID()
+                });
+            });
+
+            return {
+                rooms: roomObjects
+            };
+        }
+
+        /**
+         * <b>WARNING</b><br />
+         * This method should only be used in test cases
+         */
+        public static reset(): void {
+            this.rooms = [];
         }
     }
 }

@@ -1,7 +1,7 @@
 import {Socket} from "socket.io";
 
 /**
- * Represents a client socket object with additional fields
+ * Represents a client socket with restriction on access to socket functionality
  * @author Connell Reffo
  */
 export default class Client {
@@ -14,8 +14,8 @@ export default class Client {
         this.name = name;
     }
 
-    public getSocket(): Socket {
-        return this.socket;
+    public send(data: {}): void {
+        this.socket.send(data);
     }
 
     public getName(): string {
