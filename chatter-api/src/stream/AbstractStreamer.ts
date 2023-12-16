@@ -1,3 +1,5 @@
+import Client from "../lib/Client";
+
 import {Server, Socket} from "socket.io";
 
 /**
@@ -7,16 +9,16 @@ import {Server, Socket} from "socket.io";
 export default abstract class AbstractStreamer {
 
     protected io: Server;
-    protected connections: Set<Socket>;
+    protected connections: Map<Socket, Client>;
 
     protected constructor(io: Server) {
         this.io = io;
-        this.connections = new Set<Socket>();
+        this.connections = new Map<Socket, Client>();
     }
 
     public abstract listen(): void;
 
-    public getConnections(): Set<Socket> {
+    public getConnections(): Map<Socket, Client> {
         return this.connections;
     }
 }

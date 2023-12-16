@@ -1,6 +1,7 @@
 import AbstractRoom from "./AbstractRoom";
 
 import {Server, Socket} from "socket.io";
+import {StreamEvents} from "../lib/Utility";
 
 export default class ChatRoom extends AbstractRoom {
 
@@ -9,12 +10,8 @@ export default class ChatRoom extends AbstractRoom {
     }
 
     public listen(): void {
-        this.io.on("connection", (socket: Socket): void => {
-            // TODO: On Join Room: this.connections.add(socket);
-
-            socket.on("disconnect", (): void => {
-                this.connections.delete(socket);
-            });
+        this.io.on(StreamEvents.CONNECTION, (socket: Socket): void => {
+            // TODO
         });
     }
 

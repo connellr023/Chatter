@@ -1,9 +1,8 @@
 import AbstractStreamer from "../stream/AbstractStreamer";
-import IIdentifiable from "../lib/IIdentifiable";
 
 import {Server} from "socket.io";
 
-export default abstract class AbstractRoom extends AbstractStreamer implements IIdentifiable {
+export default abstract class AbstractRoom extends AbstractStreamer {
 
     protected name: string;
     protected id: number;

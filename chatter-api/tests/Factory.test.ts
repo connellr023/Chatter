@@ -1,4 +1,4 @@
-import ChatRoom from "../src/connection/ChatRoom";
+import ChatRoom from "../src/chat/ChatRoom";
 
 import {Namespace, Server} from "socket.io";
 
