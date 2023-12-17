@@ -3,7 +3,7 @@ import IStreamObserver from "../src/stream/IStreamObserver";
 import Client from "../src/lib/Client";
 
 import {Server, Socket} from "socket.io";
-import {ReceiveChatObject, StreamEvents} from "../src/lib/Utility";
+import {ReceiveChatObject, StatusObject, StreamEvents} from "../src/lib/Utility";
 
 const io: Server = new Server();
 let stream: Stream;
@@ -52,7 +52,7 @@ test("Test get exactly one of each observer", (): void => {
     expect(actual).toStrictEqual(expected);
 });
 
-test("Test on receive user", (): void => {
+test("Test on receive user valid username", (): void => {
     const socket: Socket = null as Socket; // Hack to mock socket.io socket object
     const client: Client = new Client(socket, "alice");
 
@@ -61,6 +61,34 @@ test("Test on receive user", (): void => {
     stream.onReceiveUser(socket, {username: "alice"});
 
     expect(stream.getConnections()).toStrictEqual(expected);
+});
+
+test("Test on receive user with username exactly maximum length", (): void => {
+    const socket: Socket = null as Socket;
+    const status: StatusObject = stream.onReceiveUser(socket, {username: "aaaaaaaaaaaaaaa"});
+
+    expect(status.success).toBe(true);
+});
+
+test("Test on receive user with username exactly minimum length", (): void => {
+    const socket: Socket = null as Socket;
+    const status: StatusObject = stream.onReceiveUser(socket, {username: "a"});
+
+    expect(status.success).toBe(true);
+});
+
+test("Test on receive user with username too long", (): void => {
+    const socket: Socket = null as Socket;
+    const status: StatusObject = stream.onReceiveUser(socket, {username: "aaaaaaaaaaaaaaaa"});
+
+    expect(status.success).toBe(false);
+});
+
+test("Test on receive user with username too short", (): void => {
+    const socket: Socket = null as Socket;
+    const status: StatusObject = stream.onReceiveUser(socket, {username: ""});
+
+    expect(status.success).toBe(false);
 });
 
 test("Test on disconnect", (): void => {
@@ -125,6 +153,37 @@ test("Test attempt to notify invalid connection event", (): void => {
     expect((): void => stream.notifyClientConnectionStatus(null, null)).toThrow(Error);
 });
 
+test("Test notify client message received", (): void => {
+    const o1: StreamObserverStub = new StreamObserverStub();
+    const o2: StreamObserverStub = new StreamObserverStub();
+    const o3: StreamObserverStub = new StreamObserverStub();
+
+    const shouldReceive: StreamObserverStub[] = [o1, o2];
+    const shouldNotReceive: StreamObserverStub[] = [o3];
+    const expectedTrigger: string = "test message"
+
+    stream.attach(0, o1, o2);
+    stream.attach(1, o3);
+    stream.notifyClientMessage(0, null, {roomId: 0, text: expectedTrigger});
+
+    shouldReceive.forEach((observer: StreamObserverStub): void => {
+        if (observer.getTrigger() != expectedTrigger) {
+            if (observer.getTrigger().length == 0) {
+                throw new Error("Not triggered when expected");
+            }
+            else {
+                throw new Error("Incorrect message received");
+            }
+        }
+    });
+
+    shouldNotReceive.forEach((observer: StreamObserverStub): void => {
+        if (observer.getTrigger().length > 0) {
+            throw new Error("Triggered when not expected");
+        }
+    });
+});
+
 class StreamObserverStub implements IStreamObserver {
 
     private trigger: string;
@@ -133,16 +192,16 @@ class StreamObserverStub implements IStreamObserver {
         this.trigger = "";
     }
 
-    public onClientJoined(client: Client): void {
+    public onClientConnected(client: Client): void {
         this.trigger = "join";
     }
 
-    public onClientLeft(client: Client): void {
+    public onClientDisconnected(client: Client): void {
         this.trigger = "left";
     }
 
     public onClientMessage(client: Client, message: ReceiveChatObject): void {
-        this.trigger = "message";
+        this.trigger = message.text;
     }
 
     public getTrigger(): string {

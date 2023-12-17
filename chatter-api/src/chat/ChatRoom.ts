@@ -2,7 +2,7 @@ import Client from "../lib/Client";
 import IStreamObserver from "../stream/IStreamObserver";
 
 import {Server} from "socket.io";
-import {ReceiveChatObject, RoomObject, SendRoomsObject} from "../lib/Utility";
+import {config, ReceiveChatObject, RoomObject, SendChatObject, SendRoomsObject, StatusObject} from "../lib/Utility";
 
 export default class ChatRoom implements IStreamObserver {
 
@@ -19,16 +19,41 @@ export default class ChatRoom implements IStreamObserver {
         this.clients = new Set<Client>;
     }
 
-    public onClientJoined(client: Client): void {
+    public onClientConnected(client: Client): void {
         this.clients.add(client);
     }
 
-    public onClientLeft(client: Client): void {
+    public onClientDisconnected(client: Client): void {
         this.clients.delete(client);
     }
 
     public onClientMessage(client: Client, message: ReceiveChatObject): void {
-        this.broadcastData(message);
+        const data: SendChatObject = {
+            username: client.getName(),
+            roomId: message.roomId,
+            message: message.text
+        };
+
+        const status: StatusObject = this.verifyClientMessage(client, message);
+
+        if (status.success) {
+            this.broadcastData(data);
+        }
+        else {
+            client.send(status);
+        }
+    }
+
+    public verifyClientMessage(client: Client, message: ReceiveChatObject): StatusObject {
+        let success: boolean = false;
+
+        if (this.clients.has(client) && this.id == message.roomId && message.text.length >= config.MIN_MESSAGE_LENGTH && message.text.length <= config.MAX_MESSAGE_LENGTH) {
+            success = true;
+        }
+
+        return {
+            success: success
+        };
     }
 
     public broadcastData(data: {}): void {
@@ -51,6 +76,9 @@ export default class ChatRoom implements IStreamObserver {
      */
     public static Factory = class {
 
+        /**
+         * List of rooms instantiated by this factory
+         */
         private static rooms: ChatRoom[];
 
         /**
@@ -66,6 +94,9 @@ export default class ChatRoom implements IStreamObserver {
             return room;
         }
 
+        /**
+         * Encodes the rooms this factory has instantiated as an object
+         */
         public static encode(): SendRoomsObject {
             let roomObjects: RoomObject[] = [];
 
