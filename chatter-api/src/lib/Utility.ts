@@ -3,6 +3,7 @@
  * @author Connell Reffo
  */
 export const config = {
+    DEV_PORT: 8000,                                     // Port to be used for development testing
     MIN_MESSAGE_LENGTH: 1,                              // The minimum length of a chat message
     MAX_MESSAGE_LENGTH: 30,                             // The maximum length of a chat message
     MIN_NAME_LENGTH: 1,                                 // The minimum length of a client username
@@ -18,7 +19,9 @@ export enum StreamEvents {
     DISCONNECT = "disconnect",
     REQUEST_ROOMS = "req_rooms",
     RECEIVE_CHAT = "recv_chat",
-    RECEIVE_USER = "recv_user"
+    RECEIVE_USER = "recv_user",
+    SEND_STATUS = "send_status",
+    SEND_ROOMS = "send_rooms"
 }
 
 /**

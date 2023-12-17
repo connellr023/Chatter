@@ -1,19 +1,16 @@
 import Client from "../lib/Client";
 import IStreamObserver from "../stream/IStreamObserver";
 
-import {Server} from "socket.io";
 import {config, ReceiveChatObject, RoomObject, SendChatObject, SendRoomsObject, StatusObject} from "../lib/Utility";
 
 export default class ChatRoom implements IStreamObserver {
 
-    protected io: Server;
     protected clients: Set<Client>;
 
     protected name: string;
     protected id: number;
 
-    private constructor(io: Server, name: string, id: number) {
-        this.io = io;
+    private constructor(name: string, id: number) {
         this.name = name;
         this.id = id;
         this.clients = new Set<Client>;
@@ -84,11 +81,10 @@ export default class ChatRoom implements IStreamObserver {
         /**
          * Creates a new chat room object
          * @static
-         * @param io The namespace socket.io object this room should use
          * @param name The name of the room
          */
-        public static instantiate(io: Server, name: string): ChatRoom {
-            let room: ChatRoom = new ChatRoom(io, name, this.rooms.length);
+        public static instantiate(name: string): ChatRoom {
+            let room: ChatRoom = new ChatRoom(name, this.rooms.length);
             this.rooms.push(room);
 
             return room;

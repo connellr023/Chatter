@@ -1,9 +1,10 @@
-import Stream from "../src/stream/Stream";
-import IStreamObserver from "../src/stream/IStreamObserver";
-import Client from "../src/lib/Client";
+import Stream from "../../src/stream/Stream";
+import IStreamObserver from "../../src/stream/IStreamObserver";
+import Client from "../../src/lib/Client";
+import StreamObserverStub from "../stubs/StreamObserverStub";
 
 import {Server, Socket} from "socket.io";
-import {ReceiveChatObject, StatusObject, StreamEvents} from "../src/lib/Utility";
+import {StatusObject, StreamEvents} from "../../src/lib/Utility";
 
 const io: Server = new Server();
 let stream: Stream;
@@ -183,28 +184,3 @@ test("Test notify client message received", (): void => {
         }
     });
 });
-
-class StreamObserverStub implements IStreamObserver {
-
-    private trigger: string;
-
-    public constructor() {
-        this.trigger = "";
-    }
-
-    public onClientConnected(client: Client): void {
-        this.trigger = "join";
-    }
-
-    public onClientDisconnected(client: Client): void {
-        this.trigger = "left";
-    }
-
-    public onClientMessage(client: Client, message: ReceiveChatObject): void {
-        this.trigger = message.text;
-    }
-
-    public getTrigger(): string {
-        return this.trigger;
-    }
-}

@@ -81,8 +81,9 @@ export default class Stream implements IObservable<number, IStreamObserver> {
      */
     public listen(): void {
         this.io.on(StreamEvents.CONNECTION, (socket: Socket): void => {
+
             socket.on(StreamEvents.RECEIVE_USER, (data: ReceiveUserDataObject): void => {
-                socket.send(this.onReceiveUser(socket, data));
+                socket.emit(StreamEvents.SEND_STATUS, this.onReceiveUser(socket, data));
             });
 
             socket.on(StreamEvents.RECEIVE_CHAT, (data: ReceiveChatObject): void => {
@@ -90,7 +91,7 @@ export default class Stream implements IObservable<number, IStreamObserver> {
             });
 
             socket.on(StreamEvents.REQUEST_ROOMS, (): void => {
-                socket.send(ChatRoom.Factory.encode());
+                socket.emit(StreamEvents.SEND_ROOMS, ChatRoom.Factory.encode());
             });
 
             socket.on(StreamEvents.DISCONNECT, (): void => {
@@ -107,14 +108,15 @@ export default class Stream implements IObservable<number, IStreamObserver> {
      */
     public onReceiveUser(socket: Socket, data: ReceiveUserDataObject): StatusObject {
         const client: Client = new Client(socket, data.username);
-        let status: StatusObject = {success: true};
+        let status: StatusObject = {success: false};
 
-        if (data.username.length < config.MIN_NAME_LENGTH || data.username.length > config.MAX_NAME_LENGTH) {
-            status.success = false;
-        }
-        else {
-            this.connections.set(socket, client);
-            this.notifyClientConnectionStatus(StreamEvents.RECEIVE_USER, client);
+        if (typeof data.username == "string") {
+            if (data.username.length >= config.MIN_NAME_LENGTH && data.username.length <= config.MAX_NAME_LENGTH) {
+                status.success = true;
+
+                this.connections.set(socket, client);
+                this.notifyClientConnectionStatus(StreamEvents.RECEIVE_USER, client);
+            }
         }
 
         return status;

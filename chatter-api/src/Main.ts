@@ -9,12 +9,15 @@ import Stream from "./stream/Stream";
 import ChatRoom from "./chat/ChatRoom";
 
 import {Server} from "socket.io";
+import {config} from "./lib/Utility";
+
+const port: number = config.DEV_PORT;
 
 // Setup express
 const app: Application = express();
 
 // Setup HTTP server
-const server: http.Server = app.listen(8000, (): void => {
+const server: http.Server = app.listen(port, (): void => {
     console.log("Server started")
 });
 
@@ -26,7 +29,7 @@ const stream: Stream = new Stream(io);
 const defaultRoomCount: number = 3;
 
 for (let i: number = 0; i < defaultRoomCount; i++) {
-    stream.attach(i, ChatRoom.Factory.instantiate(io, `Default Room ${i + 1}`));
+    stream.attach(i, ChatRoom.Factory.instantiate(`Default Room ${i + 1}`));
 }
 
 // Listen

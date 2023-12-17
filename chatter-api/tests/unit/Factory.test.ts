@@ -1,25 +1,22 @@
-import ChatRoom from "../src/chat/ChatRoom";
+import ChatRoom from "../../src/chat/ChatRoom";
 
-import {Server} from "socket.io";
-import {SendRoomsObject} from "../src/lib/Utility";
-
-const io: Server = new Server();
+import {SendRoomsObject} from "../../src/lib/Utility";
 
 beforeEach((): void => {
     ChatRoom.Factory.reset();
 });
 
 test("Test unique ID assignment", (): void => {
-    let f1: ChatRoom = ChatRoom.Factory.instantiate(io, "1");
-    let f2: ChatRoom = ChatRoom.Factory.instantiate(io, "2");
+    let f1: ChatRoom = ChatRoom.Factory.instantiate("1");
+    let f2: ChatRoom = ChatRoom.Factory.instantiate("2");
 
     expect(f1.getID()).not.toEqual(f2.getID());
 });
 
 test("Test chat room encoding", (): void => {
-    ChatRoom.Factory.instantiate(io, "1");
-    ChatRoom.Factory.instantiate(io, "2");
-    ChatRoom.Factory.instantiate(io, "3");
+    ChatRoom.Factory.instantiate("1");
+    ChatRoom.Factory.instantiate("2");
+    ChatRoom.Factory.instantiate("3");
 
     const expected: SendRoomsObject = {
         rooms: [
