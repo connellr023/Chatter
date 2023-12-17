@@ -69,14 +69,14 @@ export default class Stream implements IObservable<number, IStreamObserver> {
     }
 
     public onReceiveUser(socket: Socket, data: ReceiveUserDataObject): void {
-        let client: Client = new Client(socket, data.username);
+        const client: Client = new Client(socket, data.username);
 
         this.connections.set(socket, client);
         this.notifyClientConnectionStatus(StreamEvents.RECEIVE_USER, client);
     }
 
     public onDisconnect(socket: Socket): void {
-        let client: Client = this.connections.get(socket);
+        const client: Client = this.connections.get(socket);
 
         this.connections.delete(socket);
         this.notifyClientConnectionStatus(StreamEvents.DISCONNECT, client);
@@ -96,5 +96,9 @@ export default class Stream implements IObservable<number, IStreamObserver> {
         });
 
         return final;
+    }
+
+    public getConnections(): Map<Socket, Client> {
+        return this.connections;
     }
 }

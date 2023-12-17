@@ -30,7 +30,7 @@ export default class ChatRoom implements IStreamObserver {
     public onClientMessage(client: Client, message: ReceiveChatObject): void {
         this.broadcastData(message);
     }
-    
+
     public broadcastData(data: {}): void {
         this.clients.forEach((client: Client): void => {
             client.send(data);
@@ -59,15 +59,11 @@ export default class ChatRoom implements IStreamObserver {
          * @param io The namespace socket.io object this room should use
          * @param name The name of the room
          */
-        public static create(io: Server, name: string): ChatRoom {
+        public static instantiate(io: Server, name: string): ChatRoom {
             let room: ChatRoom = new ChatRoom(io, name, this.rooms.length);
             this.rooms.push(room);
 
             return room;
-        }
-
-        public static getAll(): ChatRoom[] {
-            return this.rooms;
         }
 
         public static encode(): SendRoomsObject {
