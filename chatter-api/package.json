@@ -2,12 +2,12 @@
   "name": "chatter-api",
   "version": "1.0.0",
   "description": "Backend API for the Chatter webserver.",
-  "main": "src/Main.ts",
+  "main": "src/index.ts",
   "scripts": {
     "tsc": "tsc",
     "test": "jest --silent --coverage",
-    "start": "ts-node src/Main.ts",
-    "dev": "nodemon src/Main.ts"
+    "start": "ts-node src/index.ts",
+    "dev": "nodemon src/index.ts"
   },
   "keywords": [],
   "author": "Connell Reffo",
