@@ -15,13 +15,14 @@ export const config = {
  * @author Connell Reffo
  */
 export enum StreamEvents {
-    CONNECTION = "connection",
-    DISCONNECT = "disconnect",
-    REQUEST_ROOMS = "req_rooms",
-    RECEIVE_CHAT = "recv_chat",
-    RECEIVE_USER = "recv_user",
-    SEND_STATUS = "send_status",
-    SEND_ROOMS = "send_rooms"
+    CLIENT_CONNECTED = "connection",
+    CLIENT_DISCONNECTED = "disconnect",
+    CLIENT_REQUEST_ROOMS = "client_request_rooms",
+    CLIENT_SEND_CHAT = "client_send_chat",
+    CLIENT_SEND_USERDATA = "client_send_userdata",
+    SERVER_SEND_STATUS = "server_send_status",
+    SERVER_SEND_ROOMS = "server_send_rooms",
+    SERVER_CHAT_RESPONSE = "server_send_chat"
 }
 
 /**

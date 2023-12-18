@@ -49,13 +49,13 @@ export default class Stream implements IObservable<number, IStreamObserver> {
      * @param event Either <b>RECEIVE_USER</b> or <b>DISCONNECT</b>
      * @param client The object that represents the client that triggered the specified stream event
      */
-    public notifyClientConnectionStatus(event: StreamEvents.RECEIVE_USER|StreamEvents.DISCONNECT, client: Client): void {
+    public notifyClientConnectionStatus(event: StreamEvents.CLIENT_SEND_USERDATA|StreamEvents.CLIENT_DISCONNECTED, client: Client): void {
         this.getEachObserver().forEach((observer: IStreamObserver): void => {
             switch (event) {
-                case StreamEvents.RECEIVE_USER:
+                case StreamEvents.CLIENT_SEND_USERDATA:
                     observer.onClientConnected(client);
                     break;
-                case StreamEvents.DISCONNECT:
+                case StreamEvents.CLIENT_DISCONNECTED:
                     observer.onClientDisconnected(client);
                     break;
                 default:
@@ -80,21 +80,20 @@ export default class Stream implements IObservable<number, IStreamObserver> {
      * Starts listening on the socket server
      */
     public listen(): void {
-        this.io.on(StreamEvents.CONNECTION, (socket: Socket): void => {
-
-            socket.on(StreamEvents.RECEIVE_USER, (data: ReceiveUserDataObject): void => {
-                socket.emit(StreamEvents.SEND_STATUS, this.onReceiveUser(socket, data));
+        this.io.on(StreamEvents.CLIENT_CONNECTED, (socket: Socket): void => {
+            socket.on(StreamEvents.CLIENT_SEND_USERDATA, (data: ReceiveUserDataObject): void => {
+                socket.emit(StreamEvents.SERVER_SEND_STATUS, this.onReceiveUser(socket, data));
             });
 
-            socket.on(StreamEvents.RECEIVE_CHAT, (data: ReceiveChatObject): void => {
+            socket.on(StreamEvents.CLIENT_SEND_CHAT, (data: ReceiveChatObject): void => {
                 this.notifyClientMessage(data.roomId, this.connections.get(socket), data);
             });
 
-            socket.on(StreamEvents.REQUEST_ROOMS, (): void => {
-                socket.emit(StreamEvents.SEND_ROOMS, ChatRoom.Factory.encode());
+            socket.on(StreamEvents.CLIENT_REQUEST_ROOMS, (): void => {
+                socket.emit(StreamEvents.SERVER_SEND_ROOMS, ChatRoom.Factory.encode());
             });
 
-            socket.on(StreamEvents.DISCONNECT, (): void => {
+            socket.on(StreamEvents.CLIENT_DISCONNECTED, (): void => {
                 this.onDisconnect(socket);
             });
         });
@@ -115,7 +114,7 @@ export default class Stream implements IObservable<number, IStreamObserver> {
                 status.success = true;
 
                 this.connections.set(socket, client);
-                this.notifyClientConnectionStatus(StreamEvents.RECEIVE_USER, client);
+                this.notifyClientConnectionStatus(StreamEvents.CLIENT_SEND_USERDATA, client);
             }
         }
 
@@ -130,7 +129,7 @@ export default class Stream implements IObservable<number, IStreamObserver> {
         const client: Client = this.connections.get(socket);
 
         this.connections.delete(socket);
-        this.notifyClientConnectionStatus(StreamEvents.DISCONNECT, client);
+        this.notifyClientConnectionStatus(StreamEvents.CLIENT_DISCONNECTED, client);
     }
 
     /**

@@ -111,7 +111,7 @@ test("Test notify connect", (): void => {
 
     stream.attach(0, o1, o2);
 
-    stream.notifyClientConnectionStatus(StreamEvents.RECEIVE_USER, null);
+    stream.notifyClientConnectionStatus(StreamEvents.CLIENT_SEND_USERDATA, null);
 
     shouldRun.forEach((observer: StreamObserverStub): void => {
         if (observer.getTrigger() != expectedTrigger) {
@@ -134,7 +134,7 @@ test("Test notify disconnect", (): void => {
 
     stream.attach(0, o1, o2);
 
-    stream.notifyClientConnectionStatus(StreamEvents.DISCONNECT, null);
+    stream.notifyClientConnectionStatus(StreamEvents.CLIENT_DISCONNECTED, null);
 
     shouldRun.forEach((observer: StreamObserverStub): void => {
         if (observer.getTrigger() != expectedTrigger) {

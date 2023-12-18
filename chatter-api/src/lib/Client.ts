@@ -1,4 +1,5 @@
 import {Socket} from "socket.io";
+import {StreamEvents} from "./Utility";
 
 /**
  * Represents a client socket with restriction on access to socket functionality
@@ -14,8 +15,8 @@ export default class Client {
         this.name = name;
     }
 
-    public send(data: {}): void {
-        this.socket.send(data);
+    public emit(event: StreamEvents, data: {}): void {
+        this.socket.emit(event, data);
     }
 
     public getName(): string {

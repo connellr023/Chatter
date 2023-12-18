@@ -1,7 +1,15 @@
 import Client from "../lib/Client";
 import IStreamObserver from "../stream/IStreamObserver";
 
-import {config, ReceiveChatObject, RoomObject, SendChatObject, SendRoomsObject, StatusObject} from "../lib/Utility";
+import {
+    config,
+    ReceiveChatObject,
+    RoomObject,
+    SendChatObject,
+    SendRoomsObject,
+    StatusObject,
+    StreamEvents
+} from "../lib/Utility";
 
 export default class ChatRoom implements IStreamObserver {
 
@@ -31,21 +39,23 @@ export default class ChatRoom implements IStreamObserver {
             message: message.text
         };
 
-        const status: StatusObject = this.verifyClientMessage(client, message);
+        const status: StatusObject = this.verifyClientMessage(message);
 
         if (status.success) {
-            this.broadcastData(data);
+            this.broadcast(StreamEvents.SERVER_CHAT_RESPONSE, data);
         }
         else {
-            client.send(status);
+            client.emit(StreamEvents.SERVER_SEND_STATUS, status);
         }
     }
 
-    public verifyClientMessage(client: Client, message: ReceiveChatObject): StatusObject {
+    public verifyClientMessage(message: ReceiveChatObject): StatusObject {
         let success: boolean = false;
 
-        if (this.clients.has(client) && this.id == message.roomId && message.text.length >= config.MIN_MESSAGE_LENGTH && message.text.length <= config.MAX_MESSAGE_LENGTH) {
-            success = true;
+        if (typeof message.text == "string") {
+            if (this.id == message.roomId && message.text.length >= config.MIN_MESSAGE_LENGTH && message.text.length <= config.MAX_MESSAGE_LENGTH) {
+                success = true;
+            }
         }
 
         return {
@@ -53,9 +63,9 @@ export default class ChatRoom implements IStreamObserver {
         };
     }
 
-    public broadcastData(data: {}): void {
+    public broadcast(event: StreamEvents, data: {}): void {
         this.clients.forEach((client: Client): void => {
-            client.send(data);
+            client.emit(event, data);
         });
     }
 
