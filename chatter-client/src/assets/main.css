@@ -1,15 +1,16 @@
 @import url("https://fonts.googleapis.com/css2?family=Lexend:wght@500&family=Ubuntu+Mono&display=swap");
 
 :root {
-    --main-bg-color: #080808;
-    --foreground-bg-color: #090909;
-    --modal-bg-color: #111111;
-    --main-theme-color: #ffdf69;
-    --main-text-color: #eeeeee;
+    --main-bg-color: #090909;
+    --foreground-bg-color: #0a0a0a;
+    --modal-bg-color: #dddddd;
+    --main-theme-color: #d00b3b;
+    --light-text-color: #eeeeee;
+    --dark-text-color: #090909;
 }
 
 * {
-    color: var(--main-text-color);
+    color: var(--light-text-color);
     font-family: "Ubuntu Mono", monospace;
     font-size: 17px;
     margin: 0;
@@ -26,6 +27,40 @@ img {
     -moz-user-select: none;
     -webkit-user-select: none;
     -ms-user-select: none;
+}
+
+div.regular {
+    color: var(--dark-text-color);
+    font-size: 18px;
+}
+
+input.regular {
+    background-color: var(--main-bg-color);
+    border: none;
+    border-radius: 5px;
+    box-shadow: 0 2px 4px 0 rgba(0, 0, 0, 0.2), 0 3px 14px 0 rgba(0, 0, 0, 0.6);
+    color: var(--light-text-color);
+    padding: 6px;
+    outline: none;
+    transition: all 0.15s ease-in-out;
+}
+
+input.regular:focus {
+    box-shadow: 0 2px 4px 0 rgba(0, 0, 0, 0.2), 0 3px 20px 0 rgba(0, 0, 0, 0.9);
+}
+
+input.regular::placeholder {
+    color: #3c3c3c;
+    text-align: center;
+    transition: all 0.15s ease-in-out;
+}
+
+input.regular:hover {
+    background-color: #0c0c0c;
+}
+
+input.regular:hover::placeholder, input.regular:focus::placeholder {
+    color: var(--main-theme-color);
 }
 
 ::-webkit-scrollbar {
