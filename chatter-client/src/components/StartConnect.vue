@@ -22,8 +22,9 @@ onBeforeUnmount((): void => {
   <div id="start-view-wrapper" class="background-effect" :style="{ '--scroll': `${scroll}px` }">
     <div id="start-connect-window">
       <div id="start-connect-title">Welcome to <i>Chatter</i>,</div>
-      <div class="regular">Please enter a username below:</div>
+      <div class="regular">Please enter a username below</div>
       <input id="username-input" class="regular" placeholder="<username>" />
+      <button id="connect-button" class="regular">&lt;connect&gt;</button>
     </div>
   </div>
 </template>
@@ -52,9 +53,18 @@ div#start-connect-title, div#start-connect-title i {
 }
 
 input#username-input {
-  margin-bottom: 6px;
+  margin-bottom: 15px;
   margin-top: 17px;
-  width: 95%;
+  width: 90%;
+}
+
+button#connect-button {
+  width: calc(90% + 12px);
+  margin-bottom: 7px;
+}
+
+button#connect-button:hover {
+  color: #13ba58;
 }
 
 .background-effect {

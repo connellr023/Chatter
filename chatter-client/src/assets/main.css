@@ -3,9 +3,10 @@
 :root {
     --main-bg-color: #090909;
     --foreground-bg-color: #0a0a0a;
+    --highlight-color: #0d0d0d;
     --modal-bg-color: #dddddd;
     --main-theme-color: #d00b3b;
-    --light-text-color: #eeeeee;
+    --light-text-color: #adadad;
     --dark-text-color: #090909;
 }
 
@@ -38,15 +39,16 @@ input.regular {
     background-color: var(--main-bg-color);
     border: none;
     border-radius: 5px;
-    box-shadow: 0 2px 4px 0 rgba(0, 0, 0, 0.2), 0 3px 14px 0 rgba(0, 0, 0, 0.6);
+    box-shadow: 0 2px 4px 0 rgba(0, 0, 0, 0.2), 0 3px 14px 0 rgba(0, 0, 0, 0.65);
     color: var(--light-text-color);
     padding: 6px;
     outline: none;
-    transition: all 0.15s ease-in-out;
+    transition: all 0.30s ease-in-out;
 }
 
 input.regular:focus {
-    box-shadow: 0 2px 4px 0 rgba(0, 0, 0, 0.2), 0 3px 20px 0 rgba(0, 0, 0, 0.9);
+    box-shadow: 0 2px 4px 0 rgba(0, 0, 0, 0.2), 0 3px 20px 0 rgba(0, 0, 0, 0.8);
+    transition: all 0.30s ease-in-out;
 }
 
 input.regular::placeholder {
@@ -55,12 +57,32 @@ input.regular::placeholder {
     transition: all 0.15s ease-in-out;
 }
 
-input.regular:hover {
-    background-color: #0c0c0c;
+input.regular:hover, input.regular:focus {
+    background-color: var(--highlight-color);
+    transition: all 0.15s ease-in-out;
 }
 
-input.regular:hover::placeholder, input.regular:focus::placeholder {
-    color: var(--main-theme-color);
+button.regular {
+    color: var(--light-text-color);
+    background-color: var(--main-bg-color);
+    border: none;
+    border-radius: 5px;
+    box-shadow: 0 2px 4px 0 rgba(0, 0, 0, 0.2), 0 3px 14px 0 rgba(0, 0, 0, 0.65);
+    font-size: 16px;
+    padding: 7px;
+    transition: all 0.15s ease-in-out;
+}
+
+button.regular:hover {
+    background-color: var(--highlight-color);
+    cursor: pointer;
+    text-decoration: underline;
+    transition: all 0.15s ease-in-out;
+}
+
+button.regular:active {
+    box-shadow: 0 2px 4px 0 rgba(0, 0, 0, 0.2), 0 3px 14px 0 rgba(0, 0, 0, 0.45);
+    transition: all 0.15s ease-in-out;
 }
 
 ::-webkit-scrollbar {
