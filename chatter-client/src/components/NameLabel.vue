@@ -17,7 +17,7 @@ span#name-copy {
 div#name-label {
   font-size: 17px;
   position: absolute;
-  bottom: 7px;
+  bottom: 11px;
   left: 13px;
   opacity: 0.5;
   text-decoration: none;
