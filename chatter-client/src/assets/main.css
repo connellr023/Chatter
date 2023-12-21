@@ -8,6 +8,7 @@
     --main-theme-color: #d00b3b;
     --light-text-color: #adadad;
     --dark-text-color: #090909;
+    --base-button-width-start-view: 275px;
 }
 
 * {
@@ -48,7 +49,7 @@ input.regular {
 
 input.regular:focus {
     box-shadow: 0 2px 4px 0 rgba(0, 0, 0, 0.2), 0 3px 20px 0 rgba(0, 0, 0, 0.8);
-    transition: all 0.30s ease-in-out;
+    transition: all 0.45s ease-in-out;
 }
 
 input.regular::placeholder {
@@ -73,16 +74,21 @@ button.regular {
     transition: all 0.15s ease-in-out;
 }
 
-button.regular:hover {
+button.regular:hover:enabled {
     background-color: var(--highlight-color);
     cursor: pointer;
     text-decoration: underline;
     transition: all 0.15s ease-in-out;
 }
 
-button.regular:active {
+button.regular:active:enabled, button.regular:disabled {
     box-shadow: 0 2px 4px 0 rgba(0, 0, 0, 0.2), 0 3px 14px 0 rgba(0, 0, 0, 0.45);
     transition: all 0.15s ease-in-out;
+}
+
+button.regular:disabled {
+    color: #3c3c3c;
+    transition: all 0.30s ease-in-out;
 }
 
 button.regular.invert {

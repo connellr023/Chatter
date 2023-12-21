@@ -1,20 +1,25 @@
 <script setup lang="ts">
 import {useRouter} from "vue-router";
+import {ref} from "vue";
+
 import socket from "@/socket";
-import {useUserStore} from "@/stores/userStore";
+import LoadingButton from "@/components/LoadingButton.vue";
 
 const router = useRouter();
+const attemptingConnection = ref(false);
 
 function connect() {
   socket.connect();
+  attemptingConnection.value = true;
 
   socket.once("connect", (): void => {
+    attemptingConnection.value = false;
     router.push("/chat");
   });
 
   socket.once("connect_error", (): void => {
+    attemptingConnection.value = false;
     socket.disconnect();
-    console.log("uisdfuid")
   });
 }
 </script>
@@ -25,8 +30,8 @@ function connect() {
       <div id="start-connect-window">
         <div id="start-connect-title">Welcome to <i>Chatter</i>,</div>
         <div class="regular">Please enter a username below</div>
-        <input id="username-input" class="regular" placeholder="<username>" />
-        <button id="connect-button" class="regular" @click="connect">&lt;connect&gt;</button>
+        <input id="username-input" class="regular" placeholder="<username>" /><br />
+        <LoadingButton id="connect-button" text="connect" @pressed="connect" :is-loading="attemptingConnection" />
       </div>
     </div>
   </main>
@@ -40,8 +45,6 @@ div#start-connect-window {
   box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.2), 0 4px 14px 0 rgba(0, 0, 0, 0.8);
   padding: 12px 50px;
   position: absolute;
-  width: fit-content;
-  height: fit-content;
   left:50%;
   top:50%;
   transform: translate(-50%, -50%);
@@ -58,15 +61,15 @@ div#start-connect-title, div#start-connect-title i {
 input#username-input {
   margin-bottom: 15px;
   margin-top: 17px;
-  width: 90%;
+  width: var(--base-button-width-start-view);
 }
 
 button#connect-button {
-  width: calc(90% + 12px);
+  width: calc(var(--base-button-width-start-view) + 12px);
   margin-bottom: 7px;
 }
 
-button#connect-button:hover {
+button#connect-button:hover:enabled {
   color: #13ba58;
 }
 
