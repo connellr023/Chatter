@@ -2,7 +2,6 @@
 import {onBeforeUnmount, onMounted, ref} from "vue";
 
 const scroll = ref(0);
-
 let interval: number;
 
 onMounted((): void => {

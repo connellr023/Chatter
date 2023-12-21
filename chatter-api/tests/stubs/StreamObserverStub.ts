@@ -1,7 +1,7 @@
 import IStreamObserver from "../../src/stream/IStreamObserver";
 import Client from "../../src/lib/Client";
 
-import {ReceiveChatObject} from "../../src/lib/Utility";
+import {ReceiveChatObject} from "../../src/lib/utility";
 
 export default class StreamObserverStub implements IStreamObserver {
 

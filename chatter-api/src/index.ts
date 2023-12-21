@@ -9,7 +9,7 @@ import Stream from "./stream/Stream";
 import ChatRoom from "./chat/ChatRoom";
 
 import {Server} from "socket.io";
-import {config} from "./lib/Utility";
+import {config} from "./lib/utility";
 
 const port: number = config.DEV_PORT;
 

@@ -13,7 +13,7 @@ import {
     SendRoomsObject,
     StatusObject,
     StreamEvents
-} from "../src/lib/Utility";
+} from "../src/lib/utility";
 
 let io: Server;
 let stream: Stream;

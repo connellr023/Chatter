@@ -1,6 +1,6 @@
 import ChatRoom from "../../src/chat/ChatRoom";
 
-import {StatusObject} from "../../src/lib/Utility";
+import {StatusObject} from "../../src/lib/utility";
 
 let room: ChatRoom;
 

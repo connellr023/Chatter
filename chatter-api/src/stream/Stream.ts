@@ -4,7 +4,7 @@ import Client from "../lib/Client";
 import ChatRoom from "../chat/ChatRoom";
 
 import {Server, Socket} from "socket.io";
-import {config, ReceiveChatObject, ReceiveUserDataObject, StatusObject, StreamEvents} from "../lib/Utility";
+import {config, ReceiveChatObject, ReceiveUserDataObject, StatusObject, StreamEvents} from "../lib/utility";
 
 /**
  * Class for setting up socket.io stream

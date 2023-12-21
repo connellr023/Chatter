@@ -4,7 +4,7 @@ import Client from "../../src/lib/Client";
 import StreamObserverStub from "../stubs/StreamObserverStub";
 
 import {Server, Socket} from "socket.io";
-import {StatusObject, StreamEvents} from "../../src/lib/Utility";
+import {StatusObject, StreamEvents} from "../../src/lib/utility";
 
 const io: Server = new Server();
 let stream: Stream;

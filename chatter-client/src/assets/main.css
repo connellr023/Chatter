@@ -85,6 +85,19 @@ button.regular:active {
     transition: all 0.15s ease-in-out;
 }
 
+button.regular.invert {
+     color: var(--dark-text-color);
+     background-color: #e0e0e0;
+ }
+
+button.regular.invert:hover {
+    background-color: #b2b2b2;
+}
+
+button.regular.invert:active {
+    background-color: #969696;
+}
+
 ::-webkit-scrollbar {
     display: none;
 }

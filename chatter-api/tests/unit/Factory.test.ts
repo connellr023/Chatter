@@ -1,6 +1,6 @@
 import ChatRoom from "../../src/chat/ChatRoom";
 
-import {SendRoomsObject} from "../../src/lib/Utility";
+import {SendRoomsObject} from "../../src/lib/utility";
 
 beforeEach((): void => {
     ChatRoom.Factory.reset();

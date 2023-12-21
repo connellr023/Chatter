@@ -9,7 +9,7 @@ import {
     SendRoomsObject,
     StatusObject,
     StreamEvents
-} from "../lib/Utility";
+} from "../lib/utility";
 
 /**
  * Represents an individual server-side chat room <br />

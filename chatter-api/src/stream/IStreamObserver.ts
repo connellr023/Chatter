@@ -1,6 +1,6 @@
 import Client from "../lib/Client";
 
-import {ReceiveChatObject} from "../lib/Utility";
+import {ReceiveChatObject} from "../lib/utility";
 
 /**
  * Abstract representation of a class that observes events on a chat stream

@@ -1,11 +1,9 @@
 <script setup lang="ts">
 import ConnectButton from "@/components/ConnectButton.vue";
-import BackgroundEffect from "@/components/BackgroundEffect.vue";
 </script>
 
 <template>
   <main>
-    <BackgroundEffect />
     <div id="start-view-wrapper">
       <div id="start-connect-window">
         <div id="start-connect-title">Welcome to <i>Chatter</i>,</div>
