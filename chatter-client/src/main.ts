@@ -1,5 +1,5 @@
 /**
- * Main vue initialization
+ * Main Vue initialization
  * @author Connell Reffo
  */
 import "./assets/main.css";

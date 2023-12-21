@@ -1,5 +1,22 @@
 <script setup lang="ts">
-import ConnectButton from "@/components/ConnectButton.vue";
+import {useRouter} from "vue-router";
+import socket from "@/socket";
+import {useUserStore} from "@/stores/userStore";
+
+const router = useRouter();
+
+function connect() {
+  socket.connect();
+
+  socket.once("connect", (): void => {
+    router.push("/chat");
+  });
+
+  socket.once("connect_error", (): void => {
+    socket.disconnect();
+    console.log("uisdfuid")
+  });
+}
 </script>
 
 <template>
@@ -9,7 +26,7 @@ import ConnectButton from "@/components/ConnectButton.vue";
         <div id="start-connect-title">Welcome to <i>Chatter</i>,</div>
         <div class="regular">Please enter a username below</div>
         <input id="username-input" class="regular" placeholder="<username>" />
-        <ConnectButton />
+        <button id="connect-button" class="regular" @click="connect">&lt;connect&gt;</button>
       </div>
     </div>
   </main>
@@ -42,6 +59,15 @@ input#username-input {
   margin-bottom: 15px;
   margin-top: 17px;
   width: 90%;
+}
+
+button#connect-button {
+  width: calc(90% + 12px);
+  margin-bottom: 7px;
+}
+
+button#connect-button:hover {
+  color: #13ba58;
 }
 
 </style>

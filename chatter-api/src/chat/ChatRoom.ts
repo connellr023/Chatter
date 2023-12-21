@@ -1,4 +1,4 @@
-import Client from "../lib/Client";
+import Client from "../stream/Client";
 import IStreamObserver from "../stream/IStreamObserver";
 
 import {

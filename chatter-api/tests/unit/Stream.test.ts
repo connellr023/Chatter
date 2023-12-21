@@ -1,6 +1,6 @@
 import Stream from "../../src/stream/Stream";
 import IStreamObserver from "../../src/stream/IStreamObserver";
-import Client from "../../src/lib/Client";
+import Client from "../../src/stream/Client";
 import StreamObserverStub from "../stubs/StreamObserverStub";
 
 import {Server, Socket} from "socket.io";

@@ -1,4 +1,4 @@
-import Client from "../lib/Client";
+import Client from "./Client";
 
 import {ReceiveChatObject} from "../lib/utility";
 

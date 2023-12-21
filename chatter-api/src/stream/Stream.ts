@@ -1,6 +1,6 @@
 import IStreamObserver from "./IStreamObserver";
 import IObservable from "../lib/IObservable";
-import Client from "../lib/Client";
+import Client from "./Client";
 import ChatRoom from "../chat/ChatRoom";
 
 import {Server, Socket} from "socket.io";

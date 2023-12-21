@@ -1,5 +1,5 @@
 import {Socket} from "socket.io";
-import {StreamEvents} from "./utility";
+import {StreamEvents} from "../lib/utility";
 
 /**
  * Represents a client socket with restriction on access to socket functionality

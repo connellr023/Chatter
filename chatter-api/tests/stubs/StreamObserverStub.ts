@@ -1,5 +1,5 @@
 import IStreamObserver from "../../src/stream/IStreamObserver";
-import Client from "../../src/lib/Client";
+import Client from "../../src/stream/Client";
 
 import {ReceiveChatObject} from "../../src/lib/utility";
 
