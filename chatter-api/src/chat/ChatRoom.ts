@@ -99,7 +99,7 @@ export default class ChatRoom implements IStreamObserver {
     }
 
     /**
-     * Emits a message to every client socket connected to this room
+     * Emits a message to every client stream connected to this room
      * @param event The event to emit
      * @param data The data to be sent
      */
@@ -132,7 +132,7 @@ export default class ChatRoom implements IStreamObserver {
         /**
          * List of rooms instantiated by this factory
          */
-        private static rooms: ChatRoom[];
+        private static rooms: ChatRoom[] = [];
 
         /**
          * Creates a new chat room object

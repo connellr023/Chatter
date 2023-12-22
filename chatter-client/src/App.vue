@@ -3,25 +3,28 @@ import {RouterView} from "vue-router";
 import {useUserStore} from "@/stores/userStore";
 
 import NameLabel from "@/components/NameLabel.vue";
-import FadeIn from "@/components/FadeIn.vue";
+import FadeInEffect from "@/components/FadeInEffect.vue";
 import BackgroundEffect from "@/components/BackgroundEffect.vue";
-import socket from "@/socket";
+import Notifications from "@/components/Notifications.vue";
+import stream from "@/stream";
+
 
 const userStore = useUserStore();
 
-socket.once("connect", (): void => {
+stream.once("connect", (): void => {
   userStore.connected = true;
 });
 
-socket.once("disconnect", (): void => {
+stream.once("disconnect", (): void => {
   userStore.connected = false;
 });
 </script>
 
 <template>
   <main>
-    <FadeIn />
+    <FadeInEffect />
     <BackgroundEffect />
+    <Notifications />
     <RouterView />
     <NameLabel />
   </main>

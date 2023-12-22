@@ -1,26 +1,47 @@
 <script setup lang="ts">
 import {useRouter} from "vue-router";
 import {ref} from "vue";
+import {useUserStore} from "@/stores/userStore";
+import {config, type SendUserDataObject, type StatusObject, StreamEvents} from "@/utility";
 
-import socket from "@/socket";
+import stream from "@/stream";
 import LoadingButton from "@/components/LoadingButton.vue";
 
 const router = useRouter();
-const attemptingConnection = ref(false);
+const userStore = useUserStore();
+
+const attemptingConnection = ref(false)
+const enteredName = ref("");
 
 function connect() {
-  socket.connect();
-  attemptingConnection.value = true;
+  const userData: SendUserDataObject = {username: enteredName.value};
 
-  socket.once("connect", (): void => {
-    attemptingConnection.value = false;
-    router.push("/chat");
-  });
+  if (userData.username.length >= config.MIN_NAME_LENGTH && userData.username.length <= config.MAX_NAME_LENGTH) {
+    attemptingConnection.value = true;
 
-  socket.once("connect_error", (): void => {
-    attemptingConnection.value = false;
-    socket.disconnect();
-  });
+    stream.connect();
+    stream.once(StreamEvents.CLIENT_CONNECTED, (): void => {
+      attemptingConnection.value = false;
+
+      stream.emit(StreamEvents.CLIENT_SEND_USERDATA, userData);
+      stream.once(StreamEvents.SERVER_SEND_STATUS, (status: StatusObject): void => {
+        if (status.success) {
+          userStore.username = userData.username;
+          router.push("/chat");
+        }
+        else {
+          //emit("pushNotification", {body: "Server Rejected Request"});
+        }
+      });
+    });
+
+    stream.once(StreamEvents.ERROR, (): void => {
+      stream.disconnect();
+      attemptingConnection.value = false;
+
+      //emit("pushNotification", {body: "Connection Failed"});
+    });
+  }
 }
 </script>
 
@@ -30,7 +51,7 @@ function connect() {
       <div id="start-connect-window">
         <div id="start-connect-title">Welcome to <i>Chatter</i>,</div>
         <div class="regular">Please enter a username below</div>
-        <input id="username-input" class="regular" placeholder="<username>" /><br />
+        <input v-model="enteredName" id="username-input" class="regular" placeholder="<username>" /><br />
         <LoadingButton id="connect-button" text="connect" @pressed="connect" :is-loading="attemptingConnection" />
       </div>
     </div>

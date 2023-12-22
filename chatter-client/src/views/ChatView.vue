@@ -7,9 +7,9 @@ const router = useRouter();
 const userStore = useUserStore();
 
 onMounted((): void => {
-  // if (!userStore.getUserState.connected) {
-  //   router.push({name: "error", params: {code: "405", "message": "Not Allowed"}});
-  // }
+  if (!userStore.getUserState.connected) {
+    router.push({name: "error", params: {code: "405", "message": "Not Allowed"}});
+  }
 });
 </script>
 

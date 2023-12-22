@@ -1,9 +1,8 @@
 /**
- * Object to represent constants used to configure certain aspects of this API
+ * Object to represent constants used to configure certain aspects of the client
  * @author Connell Reffo
  */
 export const config = {
-    DEV_PORT: 8000,                                     // Port to be used for development testing
     MIN_MESSAGE_LENGTH: 1,                              // The minimum length of a chat message
     MAX_MESSAGE_LENGTH: 30,                             // The maximum length of a chat message
     MIN_NAME_LENGTH: 1,                                 // The minimum length of a client username
@@ -11,12 +10,13 @@ export const config = {
 };
 
 /**
- * Enumeration of events that are permissible to occur on the stream
+ * Enumeration of events that are permissible to occur on the stream stream
  * @author Connell Reffo
  */
 export enum StreamEvents {
     CLIENT_CONNECTED = "connection",
     CLIENT_DISCONNECTED = "disconnect",
+    ERROR = "connect_error",
     CLIENT_REQUEST_ROOMS = "client_request_rooms",
     CLIENT_SEND_CHAT = "client_send_chat",
     CLIENT_SEND_USERDATA = "client_send_userdata",
@@ -43,36 +43,51 @@ export interface RoomObject {
 }
 
 /**
- * Represents an object that encodes a sent chat message
+ * Represents an object that encodes a chat message that was received
  * @author Connell Reffo
  */
-export interface SendChatObject {
+export interface ReceiveChatObject {
     username: string,
     roomId: number,
     message: string
 }
 
 /**
- * Represents an object that encodes a list of room objects to be sent
+ * Represents an object that encodes a list of room objects to be received
  * @author Connell Reffo
  */
-export interface SendRoomsObject {
+export interface ReceiveRoomsObject {
     rooms: RoomObject[]
 }
 
 /**
- * Represents an object that encodes a chat message that was received
+ * Represents an object that encodes a chat message that was sent
  * @author Connell Reffo
  */
-export interface ReceiveChatObject {
+export interface SendChatObject {
     roomId: number,
     text: string
 }
 
 /**
- * Represents an object that encodes user data that was received
+ * Represents an object that encodes user data that was sent
  * @author Connell Reffo
  */
-export interface ReceiveUserDataObject {
+export interface SendUserDataObject {
     username: string
+}
+
+/**
+ * Represents a client side notification
+ * @author Connell Reffo
+ */
+export interface NotificationObject {
+    id: number
+    sender: string,
+    body: string,
+    alert: {
+        symbol: string,
+        color: string
+    },
+    onClear: () => void
 }

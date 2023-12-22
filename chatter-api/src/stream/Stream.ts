@@ -7,7 +7,7 @@ import {Server, Socket} from "socket.io";
 import {config, ReceiveChatObject, ReceiveUserDataObject, StatusObject, StreamEvents} from "../lib/utility";
 
 /**
- * Class for setting up socket.io stream
+ * Class for setting up stream.io stream
  * @author Connell Reffo
  */
 export default class Stream implements IObservable<number, IStreamObserver> {
@@ -23,13 +23,13 @@ export default class Stream implements IObservable<number, IStreamObserver> {
     protected observers: Map<number, IStreamObserver[]>;
 
     /**
-     * Map clients indexed by their corresponding socket connection
+     * Map clients indexed by their corresponding stream connection
      */
     protected connections: Map<Socket, Client>;
 
     /**
      * Base constructor
-     * @param io The socket.io server object to listen on
+     * @param io The stream.io server object to listen on
      */
     public constructor(io: Server) {
         this.io = io;
@@ -77,7 +77,7 @@ export default class Stream implements IObservable<number, IStreamObserver> {
     }
 
     /**
-     * Starts listening on the socket server
+     * Starts listening on the stream server
      */
     public listen(): void {
         this.io.on(StreamEvents.CLIENT_CONNECTED, (socket: Socket): void => {
@@ -101,7 +101,7 @@ export default class Stream implements IObservable<number, IStreamObserver> {
 
     /**
      * Triggered when <b>RECEIVE_USER</b> is triggered
-     * @param socket The socket that triggered this event
+     * @param socket The stream that triggered this event
      * @param data The object that encodes the user data received
      * @return An encoding of a status that can be sent back to the client
      */
@@ -123,7 +123,7 @@ export default class Stream implements IObservable<number, IStreamObserver> {
 
     /**
      * Triggered when <b>DISCONNECT</b> is triggered
-     * @param socket The socket that triggered this event
+     * @param socket The stream that triggered this event
      */
     public onDisconnect(socket: Socket): void {
         const client: Client = this.connections.get(socket);
@@ -155,7 +155,7 @@ export default class Stream implements IObservable<number, IStreamObserver> {
     }
 
     /**
-     * Gets a map of clients indexed by their corresponding socket connection
+     * Gets a map of clients indexed by their corresponding stream connection
      */
     public getConnections(): Map<Socket, Client> {
         return this.connections;

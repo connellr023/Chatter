@@ -54,7 +54,7 @@ test("Test get exactly one of each observer", (): void => {
 });
 
 test("Test on receive user valid username", (): void => {
-    const socket: Socket = null as Socket; // Hack to mock socket.io socket object
+    const socket: Socket = null as Socket; // Hack to mock stream.io stream object
     const client: Client = new Client(socket, "alice");
 
     const expected: Map<Socket, Client> = new Map<Socket, Client>([[socket, client]]);
