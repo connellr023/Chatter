@@ -3,11 +3,13 @@
 :root {
     --main-bg-color: #090909;
     --foreground-bg-color: #0a0a0a;
-    --highlight-color: #0d0d0d;
+    --dark-highlight-color: #0d0d0d;
     --modal-bg-color: #dddddd;
     --main-theme-color: #d00b3b;
     --light-text-color: #adadad;
     --dark-text-color: #090909;
+    --invert-bg-color: #e0e0e0;
+    --invert-highlight-color: #b2b2b2;
     --base-button-width-start-view: 275px;
 }
 
@@ -59,7 +61,7 @@ input.regular::placeholder {
 }
 
 input.regular:hover, input.regular:focus {
-    background-color: var(--highlight-color);
+    background-color: var(--dark-highlight-color);
     transition: all 0.15s ease-in-out;
 }
 
@@ -75,7 +77,7 @@ button.regular {
 }
 
 button.regular:hover:enabled {
-    background-color: var(--highlight-color);
+    background-color: var(--dark-highlight-color);
     cursor: pointer;
     text-decoration: underline;
     transition: all 0.15s ease-in-out;
@@ -93,11 +95,11 @@ button.regular:disabled {
 
 button.regular.invert {
      color: var(--dark-text-color);
-     background-color: #e0e0e0;
+     background-color: var(--invert-bg-color);
  }
 
 button.regular.invert:hover {
-    background-color: #b2b2b2;
+    background-color: var(--invert-highlight-color);
 }
 
 button.regular.invert:active {

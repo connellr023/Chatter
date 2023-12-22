@@ -26,6 +26,14 @@ export enum StreamEvents {
 }
 
 /**
+ * Enumeration of events that can happen globally over the Vue app
+ * @author Connell Reffo
+ */
+export enum GlobalEvents {
+    NOTIFICATION = "notification"
+}
+
+/**
  * Represents an object that encodes of a status message sent over a stream
  * @author Connell Reffo
  */

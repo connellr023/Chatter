@@ -2,13 +2,15 @@
 import {useRouter} from "vue-router";
 import {ref} from "vue";
 import {useUserStore} from "@/stores/userStore";
-import {config, type SendUserDataObject, type StatusObject, StreamEvents} from "@/utility";
+import {useEventBus} from "@/lib/eventBus";
+import {config, GlobalEvents, type SendUserDataObject, type StatusObject, StreamEvents} from "@/lib/utility";
 
-import stream from "@/stream";
+import stream from "@/lib/stream";
 import LoadingButton from "@/components/LoadingButton.vue";
 
 const router = useRouter();
 const userStore = useUserStore();
+const eventBus = useEventBus();
 
 const attemptingConnection = ref(false)
 const enteredName = ref("");
@@ -30,7 +32,7 @@ function connect() {
           router.push("/chat");
         }
         else {
-          //emit("pushNotification", {body: "Server Rejected Request"});
+          eventBus.emit(GlobalEvents.NOTIFICATION, {body: "Server rejected request"});
         }
       });
     });
@@ -39,8 +41,11 @@ function connect() {
       stream.disconnect();
       attemptingConnection.value = false;
 
-      //emit("pushNotification", {body: "Connection Failed"});
+      eventBus.emit(GlobalEvents.NOTIFICATION, {body: "Connection failed"});
     });
+  }
+  else {
+    eventBus.emit(GlobalEvents.NOTIFICATION, {body: `Username must be within ${config.MIN_NAME_LENGTH} and ${config.MAX_NAME_LENGTH} characters`});
   }
 }
 </script>

@@ -6,7 +6,7 @@ import NameLabel from "@/components/NameLabel.vue";
 import FadeInEffect from "@/components/FadeInEffect.vue";
 import BackgroundEffect from "@/components/BackgroundEffect.vue";
 import Notifications from "@/components/Notifications.vue";
-import stream from "@/stream";
+import stream from "@/lib/stream";
 
 
 const userStore = useUserStore();
