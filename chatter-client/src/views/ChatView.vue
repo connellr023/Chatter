@@ -14,9 +14,7 @@ onMounted((): void => {
 </script>
 
 <template>
-  <main>
-    <div>chat view</div>
-  </main>
+  <div>chat view</div>
 </template>
 
 <style scoped>

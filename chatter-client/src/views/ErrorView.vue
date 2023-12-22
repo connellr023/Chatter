@@ -14,13 +14,11 @@ function navigateToStart(): void {
 </script>
 
 <template>
-  <main>
-    <div class="error-header">
-      &lt;{{props.code}}&gt;
-      <div>{{props.message}}</div>
-      <button id="return-button" class="regular invert" @click="navigateToStart">&lt;return&gt;</button>
-    </div>
-  </main>
+  <div class="error-header">
+    &lt;{{props.code}}&gt;
+    <div>{{props.message}}</div>
+    <button id="return-button" class="regular invert" @click="navigateToStart">&lt;return&gt;</button>
+  </div>
 </template>
 
 <style scoped>

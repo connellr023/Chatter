@@ -2,15 +2,15 @@
 import {useRouter} from "vue-router";
 import {ref} from "vue";
 import {useUserStore} from "@/stores/userStore";
-import {useEventBus} from "@/lib/eventBus";
 import {config, GlobalEvents, type SendUserDataObject, type StatusObject, StreamEvents} from "@/lib/utility";
 
 import stream from "@/lib/stream";
 import LoadingButton from "@/components/LoadingButton.vue";
+import EventBus from "@/lib/EventBus";
 
 const router = useRouter();
 const userStore = useUserStore();
-const eventBus = useEventBus();
+const eventBus = EventBus.getInstance();
 
 const attemptingConnection = ref(false)
 const enteredName = ref("");
@@ -24,7 +24,7 @@ function connect() {
     stream.connect();
     stream.once(StreamEvents.CLIENT_CONNECTED, (): void => {
       attemptingConnection.value = false;
-
+      console.log("connected");
       stream.emit(StreamEvents.CLIENT_SEND_USERDATA, userData);
       stream.once(StreamEvents.SERVER_SEND_STATUS, (status: StatusObject): void => {
         if (status.success) {
@@ -51,16 +51,14 @@ function connect() {
 </script>
 
 <template>
-  <main>
-    <div id="start-view-wrapper">
-      <div id="start-connect-window">
-        <div id="start-connect-title">Welcome to <i>Chatter</i>,</div>
-        <div class="regular">Please enter a username below</div>
-        <input v-model="enteredName" id="username-input" class="regular" placeholder="<username>" /><br />
-        <LoadingButton id="connect-button" text="connect" @pressed="connect" :is-loading="attemptingConnection" />
-      </div>
+  <div id="start-view-wrapper">
+    <div id="start-connect-window">
+      <div id="start-connect-title">Welcome to <i>Chatter</i>,</div>
+      <div class="regular">Please enter a username below</div>
+      <input v-model="enteredName" id="username-input" class="regular" placeholder="<username>" /><br />
+      <LoadingButton id="connect-button" text="connect" @pressed="connect" :is-loading="attemptingConnection" />
     </div>
-  </main>
+  </div>
 </template>
 
 <style scoped>

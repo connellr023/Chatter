@@ -10,11 +10,11 @@ export const config = {
 };
 
 /**
- * Enumeration of events that are permissible to occur on the stream stream
+ * Enumeration of events that are permissible to occur on the stream
  * @author Connell Reffo
  */
 export enum StreamEvents {
-    CLIENT_CONNECTED = "connection",
+    CLIENT_CONNECTED = "connect",
     CLIENT_DISCONNECTED = "disconnect",
     ERROR = "connect_error",
     CLIENT_REQUEST_ROOMS = "client_request_rooms",
@@ -97,5 +97,5 @@ export interface NotificationObject {
         symbol: string,
         color: string
     },
-    onClear: () => void
+    clear: () => void
 }
