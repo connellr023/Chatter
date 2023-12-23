@@ -30,7 +30,6 @@ const io: Server = new Server(server, {
     httpCompression: false,
     transports: ["websocket", "polling"],
     allowUpgrades: false,
-    allowEIO3: true,
     cors: {
         origin: "*",
         methods: ["GET", "POST"],
