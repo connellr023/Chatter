@@ -8,7 +8,7 @@ const {notifications} = useNotifications();
   <div id="notifications-wrapper">
     <div v-for="notification in [...notifications]" id="notifications-container">
       <div class="notification-element" @click="notification.clear()">
-        <div :style="`color: ${notification.alert.color}`" class="notification-alert">{{notification.alert.symbol}}</div>
+        <div :style="`color: ${notification.color}`" class="notification-alert">{{notification.symbol}}</div>
         <div class="notification-body">{{notification.body}}</div>
       </div>
     </div>
@@ -52,6 +52,7 @@ div.notification-element {
   div.notification-alert {
     background-color: var(--main-bg-color);
     border-radius: 5px;
+    box-shadow: 0 2px 4px 0 rgba(0, 0, 0, 0.2), 0 3px 14px 0 rgba(0, 0, 0, 0.32);
     display: inline;
     font-size: 20px;
     font-weight: bolder;

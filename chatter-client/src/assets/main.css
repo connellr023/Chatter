@@ -4,8 +4,8 @@
     --main-bg-color: #090909;
     --foreground-bg-color: #0a0a0a;
     --dark-highlight-color: #0d0d0d;
-    --modal-bg-color: #dddddd;
     --main-theme-color: #d00b3b;
+    --main-green-color: #006666;
     --light-text-color: #adadad;
     --dark-text-color: #090909;
     --invert-bg-color: #e0e0e0;
@@ -74,24 +74,24 @@ button.regular {
     box-shadow: 0 2px 4px 0 rgba(0, 0, 0, 0.2), 0 3px 14px 0 rgba(0, 0, 0, 0.65);
     font-size: 16px;
     padding: 7px;
-    transition: all 0.15s ease-in-out;
+    transition: all 0.1s ease-in-out;
 }
 
 button.regular:hover:enabled {
     background-color: var(--dark-highlight-color);
     cursor: pointer;
     text-decoration: underline;
-    transition: all 0.15s ease-in-out;
+    transition: all 0.1s ease-in-out;
 }
 
 button.regular:active:enabled, button.regular:disabled {
     box-shadow: 0 2px 4px 0 rgba(0, 0, 0, 0.2), 0 3px 14px 0 rgba(0, 0, 0, 0.45);
-    transition: all 0.15s ease-in-out;
+    transition: all 0.1s ease-in-out;
 }
 
 button.regular:disabled {
     color: #3c3c3c;
-    transition: all 0.30s ease-in-out;
+    transition: all 0.25s ease-in-out;
 }
 
 button.regular.invert {

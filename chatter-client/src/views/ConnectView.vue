@@ -1,8 +1,13 @@
 <script setup lang="ts">
 import LoadingButton from "@/components/LoadingButton.vue";
 import {useConnection} from "@/hooks/useConnection";
+import {onMounted} from "vue";
 
-const {connect, enteredName, attemptingConnection} = useConnection();
+const {connect, disconnect, enteredName, attemptingConnection} = useConnection();
+
+onMounted((): void => {
+  disconnect();
+});
 </script>
 
 <template>
@@ -19,13 +24,13 @@ const {connect, enteredName, attemptingConnection} = useConnection();
 <style scoped>
 
 div#start-connect-window {
-  background-color: var(--modal-bg-color);
+  background-color: var(--invert-bg-color);
   border-radius: 5px;
   box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.2), 0 4px 14px 0 rgba(0, 0, 0, 0.8);
   padding: 12px 50px;
   position: absolute;
-  left:50%;
-  top:50%;
+  left: 50%;
+  top: 50%;
   transform: translate(-50%, -50%);
   text-align: center;
 }

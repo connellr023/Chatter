@@ -1,5 +1,6 @@
 <script setup lang="ts">
-import {ref} from "vue";
+import {ref, watch} from "vue";
+import {useAnimate} from "@/hooks/useAnimate";
 
 const props = defineProps({
   isLoading: {
@@ -10,28 +11,14 @@ const props = defineProps({
   text: String
 });
 
+const shouldContinue = ref(props.isLoading);
 const frames: string[] = ["—", "\\", "|", "/"];
-const frame = ref(frames[frames.length - 2]);
 
-function animate() {
-  let i: number = 0;
+watch((): boolean => props.isLoading, (value: boolean): void => {
+  shouldContinue.value = value;
+});
 
-  const interval = window.setInterval((): void => {
-    if (props.isLoading) {
-      frame.value = frames[i];
-
-      if (i >= frames.length - 1) {
-        i = 0;
-      }
-      else {
-        i++;
-      }
-    }
-    else {
-      window.clearInterval(interval);
-    }
-  }, 200);
-}
+const {frame, animate} = useAnimate(frames, shouldContinue, 200);
 </script>
 
 <template>

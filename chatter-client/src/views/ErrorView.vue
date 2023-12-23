@@ -7,17 +7,13 @@ const props = defineProps({
   code: String,
   message: String
 });
-
-function navigateToStart(): void {
-  router.push("/");
-}
 </script>
 
 <template>
   <div class="error-header">
     &lt;{{props.code}}&gt;
     <div>{{props.message}}</div>
-    <button id="return-button" class="regular invert" @click="navigateToStart">&lt;return&gt;</button>
+    <button id="return-button" class="regular invert" @click="router.push('/')">&lt;return&gt;</button>
   </div>
 </template>
 

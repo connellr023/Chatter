@@ -1,16 +1,18 @@
 <script setup lang="ts">
-import {ref} from "vue";
+import {onMounted, ref} from "vue";
 
 const hideYet = ref(false);
 const disableYet = ref(false);
 
-window.setTimeout((): void => {
-  hideYet.value = true;
-
+onMounted((): void => {
   window.setTimeout((): void => {
-    disableYet.value = true;
-  }, 400);
-}, 10);
+    hideYet.value = true;
+
+    window.setTimeout((): void => {
+      disableYet.value = true;
+    }, 400);
+  }, 10);
+});
 </script>
 
 <template>

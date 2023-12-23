@@ -1,9 +1,10 @@
-import {useRouter} from "vue-router";
+import {type Router, useRouter} from "vue-router";
 import {useUserStore} from "@/hooks/useUserStore";
-import EventBus from "@/lib/EventBus";
-import {ref} from "vue";
+import {type Ref, ref} from "vue";
 import type {SendUserDataObject, StatusObject} from "@/lib/utility";
 import {config, GlobalEvents, StreamEvents} from "@/lib/utility";
+
+import EventBus from "@/lib/EventBus";
 import stream from "@/lib/stream";
 
 const eventBus: EventBus = EventBus.getInstance();
@@ -13,13 +14,13 @@ const eventBus: EventBus = EventBus.getInstance();
  * @author Connell Reffo
  */
 export function useConnection() {
-    const router = useRouter();
+    const router: Router = useRouter();
     const userStore = useUserStore();
 
-    const attemptingConnection = ref(false)
-    const enteredName = ref("");
+    const attemptingConnection: Ref<boolean> = ref(false);
+    const enteredName: Ref<string> = ref("");
 
-    function connect() {
+    function connect(): void {
         const userData: SendUserDataObject = {username: enteredName.value};
 
         if (userData.username.length >= config.MIN_NAME_LENGTH && userData.username.length <= config.MAX_NAME_LENGTH) {
@@ -28,7 +29,9 @@ export function useConnection() {
             stream.connect();
             stream.once(StreamEvents.CLIENT_CONNECTED, (): void => {
                 attemptingConnection.value = false;
-                console.log("connected");
+                userStore.connected = true;
+
+                eventBus.emit(GlobalEvents.NOTIFICATION, {body: "Connected", color: "var(--main-green-color)"});
                 stream.emit(StreamEvents.CLIENT_SEND_USERDATA, userData);
                 stream.once(StreamEvents.SERVER_SEND_STATUS, (status: StatusObject): void => {
                     if (status.success) {
@@ -43,8 +46,8 @@ export function useConnection() {
 
             stream.once(StreamEvents.ERROR, (): void => {
                 stream.disconnect();
-                attemptingConnection.value = false;
 
+                attemptingConnection.value = false;
                 eventBus.emit(GlobalEvents.NOTIFICATION, {body: "Connection failed"});
             });
         }
@@ -53,9 +56,20 @@ export function useConnection() {
         }
     }
 
+    function disconnect(): void {
+        if (stream.connected) {
+            userStore.connected = false;
+            userStore.username = "";
+
+            eventBus.emit(GlobalEvents.NOTIFICATION, {body: "Disconnected"});
+            stream.disconnect();
+        }
+    }
+
     return {
         attemptingConnection,
         enteredName,
         connect,
+        disconnect
     };
 }

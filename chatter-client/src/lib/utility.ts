@@ -93,9 +93,7 @@ export interface NotificationObject {
     id: number
     sender: string,
     body: string,
-    alert: {
-        symbol: string,
-        color: string
-    },
+    symbol: string,
+    color: string,
     clear: () => void
 }

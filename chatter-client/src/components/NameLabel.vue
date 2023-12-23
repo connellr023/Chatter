@@ -10,6 +10,10 @@ function openGithub(): void {
 
 <style scoped>
 
+* {
+  transition: color 0.2s ease-in-out;
+}
+
 span#name-copy {
   font-size: 25px;
 }
