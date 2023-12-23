@@ -33,8 +33,11 @@ div.notification-element {
   border-radius: 5px;
   box-shadow: 0 2px 4px 0 rgba(0, 0, 0, 0.2), 0 3px 14px 0 rgba(0, 0, 0, 0.75);
   cursor: pointer;
-  padding: 6px 17px;
+  padding-left: 17px;
+  font-size: 16px;
   margin: 10px;
+  padding-top: 10px;
+  padding-bottom: 10px;
   user-select: none;
   width: fit-content;
   float: right;
@@ -47,6 +50,7 @@ div.notification-element {
     color: var(--dark-text-color);
     font-size: 17px;
     text-align: right;
+    margin-right: 10px;
   }
 
   div.notification-alert {
@@ -57,7 +61,7 @@ div.notification-element {
     font-size: 20px;
     font-weight: bolder;
     margin-right: 12px;
-    margin-left: -12px;
+    margin-left: -11px;
     padding: 5px 4px;
   }
 }

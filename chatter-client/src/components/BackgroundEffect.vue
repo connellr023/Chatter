@@ -6,8 +6,8 @@ let interval: number;
 
 onMounted((): void => {
   interval = window.setInterval(() => {
-    scroll.value += 0.35;
-  }, 1);
+    scroll.value += 0.5;
+  }, 25); // 25 ms seems to be the minimum number that works the same for both firefox and chrome
 });
 
 onBeforeUnmount((): void => {

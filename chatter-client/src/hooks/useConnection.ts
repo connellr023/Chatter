@@ -58,11 +58,13 @@ export function useConnection() {
 
     function disconnect(): void {
         if (stream.connected) {
-            userStore.connected = false;
-            userStore.username = "";
-
-            eventBus.emit(GlobalEvents.NOTIFICATION, {body: "Disconnected"});
             stream.disconnect();
+            stream.once(StreamEvents.CLIENT_DISCONNECTED, (): void => {
+                userStore.connected = false;
+                userStore.username = "";
+
+                eventBus.emit(GlobalEvents.NOTIFICATION, {body: "Disconnected"});
+            });
         }
     }
 
