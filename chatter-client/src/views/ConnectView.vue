@@ -33,6 +33,10 @@ div#start-connect-window {
   top: 50%;
   transform: translate(-50%, -50%);
   text-align: center;
+
+  div {
+    user-select: none;
+  }
 }
 
 div#start-connect-title, div#start-connect-title i {
