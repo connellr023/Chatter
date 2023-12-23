@@ -1,53 +1,8 @@
 <script setup lang="ts">
-import {useRouter} from "vue-router";
-import {ref} from "vue";
-import {useUserStore} from "@/stores/userStore";
-import {config, GlobalEvents, type SendUserDataObject, type StatusObject, StreamEvents} from "@/lib/utility";
-
-import stream from "@/lib/stream";
 import LoadingButton from "@/components/LoadingButton.vue";
-import EventBus from "@/lib/EventBus";
+import {useConnection} from "@/hooks/useConnection";
 
-const router = useRouter();
-const userStore = useUserStore();
-const eventBus = EventBus.getInstance();
-
-const attemptingConnection = ref(false)
-const enteredName = ref("");
-
-function connect() {
-  const userData: SendUserDataObject = {username: enteredName.value};
-
-  if (userData.username.length >= config.MIN_NAME_LENGTH && userData.username.length <= config.MAX_NAME_LENGTH) {
-    attemptingConnection.value = true;
-
-    stream.connect();
-    stream.once(StreamEvents.CLIENT_CONNECTED, (): void => {
-      attemptingConnection.value = false;
-      console.log("connected");
-      stream.emit(StreamEvents.CLIENT_SEND_USERDATA, userData);
-      stream.once(StreamEvents.SERVER_SEND_STATUS, (status: StatusObject): void => {
-        if (status.success) {
-          userStore.username = userData.username;
-          router.push("/chat");
-        }
-        else {
-          eventBus.emit(GlobalEvents.NOTIFICATION, {body: "Server rejected request"});
-        }
-      });
-    });
-
-    stream.once(StreamEvents.ERROR, (): void => {
-      stream.disconnect();
-      attemptingConnection.value = false;
-
-      eventBus.emit(GlobalEvents.NOTIFICATION, {body: "Connection failed"});
-    });
-  }
-  else {
-    eventBus.emit(GlobalEvents.NOTIFICATION, {body: `Username must be within ${config.MIN_NAME_LENGTH} and ${config.MAX_NAME_LENGTH} characters`});
-  }
-}
+const {connect, enteredName, attemptingConnection} = useConnection();
 </script>
 
 <template>

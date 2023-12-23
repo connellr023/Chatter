@@ -3,7 +3,7 @@ name: Chatter Client CI (Vitest)
 on: [push]
 
 jobs:
-  jest:
+  vitest:
     runs-on: ubuntu-latest
 
     strategy:

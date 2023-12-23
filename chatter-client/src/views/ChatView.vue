@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import {useUserStore} from "@/stores/userStore";
+import {useUserStore} from "@/hooks/useUserStore";
 import {onMounted} from "vue";
 import {useRouter} from "vue-router";
 

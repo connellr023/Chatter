@@ -1,41 +1,7 @@
 <script setup lang="ts">
-import EventBus from "@/lib/EventBus";
+import {useNotifications} from "@/hooks/useNotifications";
 
-import {onUnmounted, ref} from "vue";
-import {GlobalEvents, type NotificationObject} from "@/lib/utility";
-
-const eventBus = EventBus.getInstance();
-const notifications = ref(new Set<NotificationObject>);
-let counter: number = 0;
-
-function handlePushNotification(body: string, sender="", symbol="!", color="var(--main-theme-color)"): void {
-  const notification = ref({
-    id: counter++,
-    sender: sender,
-    body: body,
-    alert: {
-      symbol: symbol,
-      color: color
-    },
-    clear: (): void => {
-      notifications.value.delete(notification.value);
-    }
-  } as NotificationObject);
-
-  window.setTimeout((): void => {
-    notification.value.clear();
-  }, notification.value.body.length * 200);
-
-  notifications.value.add(notification.value)
-}
-
-const off = eventBus.on(GlobalEvents.NOTIFICATION, (notification): void => {
-  handlePushNotification(notification.body);
-});
-
-onUnmounted((): void => {
-  off();
-});
+const {notifications} = useNotifications();
 </script>
 
 <template>

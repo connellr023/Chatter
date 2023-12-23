@@ -1,6 +1,6 @@
 <script setup lang="ts">
 import {RouterView} from "vue-router";
-import {useUserStore} from "@/stores/userStore";
+import {useUserStore} from "@/hooks/useUserStore";
 
 import NameLabel from "@/components/NameLabel.vue";
 import FadeInEffect from "@/components/FadeInEffect.vue";
