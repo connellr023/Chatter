@@ -51,12 +51,7 @@ export default class GlobalChatRoom implements IStreamObserver {
      */
     public onClientConnected(client: Client): void {
         this.clients.add(client);
-
-        const connections: ConnectedUsersObject = {
-            connections: Array.from(this.clients).map((c: Client) => ({username: c.getName()}))
-        };
-
-        this.broadcast(StreamEvents.SERVER_UPDATE_CONNECTIONS, connections);
+        this.broadcast(StreamEvents.SERVER_UPDATE_CONNECTIONS, this.encodeConnections());
     }
 
     /**
@@ -64,6 +59,7 @@ export default class GlobalChatRoom implements IStreamObserver {
      */
     public onClientDisconnected(client: Client): void {
         this.clients.delete(client);
+        this.broadcast(StreamEvents.SERVER_UPDATE_CONNECTIONS, this.encodeConnections());
     }
 
     /**
@@ -84,6 +80,16 @@ export default class GlobalChatRoom implements IStreamObserver {
         else {
             client.emit(StreamEvents.SERVER_SEND_STATUS, status);
         }
+    }
+
+    /**
+     * Encodes the connections of this room as an object
+     */
+    public encodeConnections(): ConnectedUsersObject {
+        return {
+            roomId: this.id,
+            connections: Array.from(this.clients).map((c: Client) => ({username: c.getName()}))
+        };
     }
 
     /**

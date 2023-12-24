@@ -16,8 +16,7 @@ import stream from "@/lib/stream";
  */
 export function useChat() {
     let rooms: RoomObject[] = reactive([] as RoomObject[]);
-    let messages: Map<number, MessageObject[]> = reactive(new Map<number, MessageObject[]>());
-
+    const messages: Map<number, MessageObject[]> = reactive(new Map<number, MessageObject[]>());
     const selectedRoomId: Ref<number> = ref(0);
 
     function queryRooms(select: boolean = false): void {

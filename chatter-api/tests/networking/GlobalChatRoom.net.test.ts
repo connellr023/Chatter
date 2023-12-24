@@ -19,7 +19,7 @@ let stream: Stream;
 let clientSocket1: ioc.Socket;
 let clientSocket2: ioc.Socket;
 
-const port: number = 8000;
+const port: number = 5000;
 
 beforeEach((): void => {
     GlobalChatRoom.Factory.reset();
@@ -49,7 +49,7 @@ afterAll((): void => {
     clientSocket2.disconnect();
 });
 
-test("Test clients receive updated list of connected users on client join", (done): void => {
+test("Test clients receive updated list of connected users on client connect", (done): void => {
     const r1: GlobalChatRoom = GlobalChatRoom.Factory.instantiate("1");
 
     const user1: UserDataObject = {username: "arhp"};
@@ -59,21 +59,67 @@ test("Test clients receive updated list of connected users on client join", (don
 
     clientSocket1.once(StreamEvents.SERVER_UPDATE_CONNECTIONS, (data: ConnectedUsersObject): void => {
         expect(data).toStrictEqual({
+            roomId: r1.getID(),
             connections: [user1]
         });
     });
 
     clientSocket1.once(StreamEvents.SERVER_SEND_STATUS, (status: StatusObject): void => {
         if (!status.success) {
-            throw new Error("Expected successful status for receiving userdata");
+            throw new Error("Expected successful status for receiving userdata for user1");
         }
 
         clientSocket2.once(StreamEvents.SERVER_UPDATE_CONNECTIONS, (data: ConnectedUsersObject): void => {
             expect(data).toStrictEqual({
+                roomId: r1.getID(),
                 connections: [user1, user2]
             });
 
             done();
+        });
+
+        clientSocket2.once(StreamEvents.SERVER_SEND_STATUS, (status: StatusObject): void => {
+            if (!status.success) {
+                throw new Error("Expected successful status for receiving userdata for user2");
+            }
+        });
+
+        clientSocket2.emit(StreamEvents.CLIENT_SEND_USERDATA, user2);
+    });
+
+    clientSocket1.emit(StreamEvents.CLIENT_SEND_USERDATA, user1);
+});
+
+test("Test clients receive updated list of connected users on client disconnect", (done): void => {
+    const r1: GlobalChatRoom = GlobalChatRoom.Factory.instantiate("1");
+
+    const user1: UserDataObject = {username: "crisp"};
+    const user2: UserDataObject = {username: "hp123"};
+
+    stream.attach(0, r1);
+
+    clientSocket1.once(StreamEvents.SERVER_UPDATE_CONNECTIONS, (): void => {
+        clientSocket1.once(StreamEvents.SERVER_UPDATE_CONNECTIONS, (data: ConnectedUsersObject): void => {
+            expect(data).toStrictEqual({
+                roomId: r1.getID(),
+                connections: [user1]
+            });
+
+            done();
+        });
+
+        clientSocket2.disconnect();
+    });
+
+    clientSocket1.once(StreamEvents.SERVER_SEND_STATUS, (status: StatusObject): void => {
+        if (!status.success) {
+            throw new Error("Expected successful status for receiving userdata for user1");
+        }
+
+        clientSocket2.once(StreamEvents.SERVER_SEND_STATUS, (status: StatusObject): void => {
+            if (!status.success) {
+                throw new Error("Expected successful status for receiving userdata for user2");
+            }
         });
 
         clientSocket2.emit(StreamEvents.CLIENT_SEND_USERDATA, user2);

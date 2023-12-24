@@ -1,14 +1,17 @@
 <script setup lang="ts">
+import {config} from "@/lib/utility";
 import {useUserStore} from "@/hooks/useUserStore";
 import {useChat} from "@/hooks/useChat";
 import {onMounted, ref} from "vue";
 import {useRouter} from "vue-router";
 import {pushNotification} from "@/hooks/useNotifications";
-import {config} from "@/lib/utility";
+import {useMembers} from "@/hooks/useMembers";
 
 const router = useRouter();
 const userStore = useUserStore();
 const {rooms, messages, selectedRoomId, sendMessage, queryRooms} = useChat();
+const {members} = useMembers();
+
 const messageBody = ref("");
 
 function message() {
@@ -58,6 +61,10 @@ onMounted((): void => {
         <button id="send-button" class="regular" @click="message">&minus;&gt;</button>
         <input id="chat-input" class="regular" placeholder="<message>" v-model="messageBody" @keyup.enter="message"/>
       </div>
+    </div>
+    <div id="members-panel" class="panel">
+      <div>Members: {{members.get(selectedRoomId)?.length || 0}}</div>
+      <div v-for="member in members.get(selectedRoomId)">{{member.username}}</div>
     </div>
   </div>
 </template>

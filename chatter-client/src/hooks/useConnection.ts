@@ -1,11 +1,12 @@
 import {type Router, useRouter} from "vue-router";
 import {type Ref, ref} from "vue";
-import type {UserDataObject, StatusObject} from "@/lib/utility";
+import type {UserDataObject, StatusObject, ConnectedUsersObject} from "@/lib/utility";
 import {useUserStore} from "@/hooks/useUserStore";
-import {config, GlobalEvents, StreamEvents} from "@/lib/utility";
+import {config, StreamEvents} from "@/lib/utility";
 import {pushNotification} from "@/hooks/useNotifications";
 
 import stream from "@/lib/stream";
+import {useMembers} from "@/hooks/useMembers";
 
 /**
  * Function implementing socket connection with client view
@@ -18,6 +19,8 @@ export function useConnection() {
     const attemptingConnection: Ref<boolean> = ref(false);
     const enteredName: Ref<string> = ref("");
 
+    useMembers();
+
     function connect(): void {
         const userData: UserDataObject = {username: enteredName.value};
 
@@ -26,11 +29,13 @@ export function useConnection() {
 
             stream.connect();
             stream.once(StreamEvents.CONNECT, (): void => {
+                stream.emit(StreamEvents.CLIENT_SEND_USERDATA, userData);
+
                 attemptingConnection.value = false;
                 userStore.connected = true;
 
                 pushNotification({body: "Connected", color: "var(--main-green-color)"});
-                stream.emit(StreamEvents.CLIENT_SEND_USERDATA, userData);
+
                 stream.once(StreamEvents.SERVER_SEND_STATUS, (status: StatusObject): void => {
                     if (status.success) {
                         userStore.username = userData.username;

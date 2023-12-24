@@ -39,6 +39,7 @@ export enum GlobalEvents {
  * @author Connell Reffo
  */
 export interface ConnectedUsersObject {
+    roomId: number,
     connections: UserDataObject[]
 }
 
