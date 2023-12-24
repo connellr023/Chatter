@@ -1,51 +1,51 @@
-import ChatRoom from "../../src/chat/ChatRoom";
+import GlobalChatRoom from "../../src/chat/GlobalChatRoom";
 
 import {StatusObject} from "../../src/lib/utility";
 
-let room: ChatRoom;
+let room: GlobalChatRoom;
 
 beforeEach((): void => {
-    ChatRoom.Factory.reset();
-    room = ChatRoom.Factory.instantiate("test");
+    GlobalChatRoom.Factory.reset();
+    room = GlobalChatRoom.Factory.instantiate("test");
 });
 
-test("Test verify valid client message", (): void => {
+test("Test verifyClientMessage() with valid message", (): void => {
     const result: StatusObject = room.verifyClientMessage({roomId: 0, text: "sample"})
 
     expect(result.success).toBe(true);
 });
 
-test("Test verify client message with wrong room ID", (): void => {
+test("Test verifyClientMessage() with wrong room ID", (): void => {
     const result: StatusObject = room.verifyClientMessage({roomId: 1, text: "sample"})
 
     expect(result.success).toBe(false);
 });
 
-test("Test verify garbage client message", (): void => {
+test("Test verifyClientMessage() with garbage data", (): void => {
     const result: StatusObject = room.verifyClientMessage({roomId: 0, text: null})
 
     expect(result.success).toBe(false);
 });
 
-test("Test verify client message 1 too long", (): void => {
+test("Test verifyClientMessage() message text 1 character too long", (): void => {
     const result: StatusObject = room.verifyClientMessage({roomId: 0, text: "aaaaaaaaaaaaaaaaaaaaaaaaaaaaaa1"})
 
     expect(result.success).toBe(false);
 });
 
-test("Test verify client message exactly right at maximum length", (): void => {
+test("Test verifyClientMessage() with message exactly at maximum length", (): void => {
     const result: StatusObject = room.verifyClientMessage({roomId: 0, text: "aaaaaaaaaaaaaaaaaaaaaaaaaaaaaa"})
 
     expect(result.success).toBe(true);
 });
 
-test("Test verify client message 1 too short", (): void => {
+test("Test verifyClientMessage() with message 1 character too short", (): void => {
     const result: StatusObject = room.verifyClientMessage({roomId: 0, text: ""})
 
     expect(result.success).toBe(false);
 });
 
-test("Test verify client message exactly at minimum length", (): void => {
+test("Test verifyClientMessage() with message exactly at minimum length", (): void => {
     const result: StatusObject = room.verifyClientMessage({roomId: 0, text: "a"})
 
     expect(result.success).toBe(true);

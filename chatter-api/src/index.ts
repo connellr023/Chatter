@@ -7,10 +7,10 @@ import * as http from "http";
 import Logger from "./lib/Logger";
 import express, {Application} from "express";
 import Stream from "./stream/Stream";
-import ChatRoom from "./chat/ChatRoom";
+import GlobalChatRoom from "./chat/GlobalChatRoom";
 import cors from "cors";
 
-import {Server, Socket} from "socket.io";
+import {Server, type Socket} from "socket.io";
 import {config, StreamEvents} from "./lib/utility";
 
 const port: number = config.DEV_PORT;
@@ -49,7 +49,7 @@ const stream: Stream = new Stream(io);
 const defaultRoomCount: number = 3;
 
 for (let i: number = 0; i < defaultRoomCount; i++) {
-    stream.attach(i, ChatRoom.Factory.instantiate(`Global Chat Room ${i + 1}`));
+    stream.attach(i, GlobalChatRoom.Factory.instantiate(`Global Chat Room ${i + 1}`));
 }
 
 // Listen

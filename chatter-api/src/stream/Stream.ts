@@ -1,9 +1,9 @@
 import IStreamObserver from "./IStreamObserver";
 import IObservable from "../lib/IObservable";
 import Client from "./Client";
-import ChatRoom from "../chat/ChatRoom";
+import GlobalChatRoom from "../chat/GlobalChatRoom";
 
-import {Server, Socket} from "socket.io";
+import {Server, type Socket} from "socket.io";
 import {config, ReceiveChatObject, ReceiveUserDataObject, StatusObject, StreamEvents} from "../lib/utility";
 
 /**
@@ -90,7 +90,7 @@ export default class Stream implements IObservable<number, IStreamObserver> {
             });
 
             socket.on(StreamEvents.CLIENT_REQUEST_ROOMS, (): void => {
-                socket.emit(StreamEvents.SERVER_SEND_ROOMS, ChatRoom.Factory.encode());
+                socket.emit(StreamEvents.SERVER_SEND_ROOMS, GlobalChatRoom.Factory.encode());
             });
 
             socket.on(StreamEvents.CLIENT_DISCONNECTED, (): void => {

@@ -2,7 +2,7 @@ import * as http from "http";
 import * as ioc from "socket.io-client";
 
 import Stream from "../src/stream/Stream";
-import ChatRoom from "../src/chat/ChatRoom";
+import GlobalChatRoom from "../src/chat/GlobalChatRoom";
 
 import {Server} from "socket.io";
 import {
@@ -23,7 +23,7 @@ let clientSocket2: ioc.Socket;
 const port: number = config.DEV_PORT;
 
 beforeEach((): void => {
-    ChatRoom.Factory.reset();
+    GlobalChatRoom.Factory.reset();
 });
 
 beforeAll((done): void => {
@@ -101,11 +101,11 @@ test("Test receive garbage user data", (done): void => {
 });
 
 test("Test receive room encodings", (done): void => {
-    ChatRoom.Factory.instantiate("1");
-    ChatRoom.Factory.instantiate("34");
+    GlobalChatRoom.Factory.instantiate("1");
+    GlobalChatRoom.Factory.instantiate("34");
 
     clientSocket1.once(StreamEvents.SERVER_SEND_ROOMS, (data: SendRoomsObject): void => {
-        expect(data).toStrictEqual(ChatRoom.Factory.encode());
+        expect(data).toStrictEqual(GlobalChatRoom.Factory.encode());
         done();
     });
 
@@ -113,7 +113,7 @@ test("Test receive room encodings", (done): void => {
 });
 
 test("Test receive valid chat message", (done): void => {
-    const r1: ChatRoom = ChatRoom.Factory.instantiate("test1");
+    const r1: GlobalChatRoom = GlobalChatRoom.Factory.instantiate("test1");
     const message: string = "test message";
     const user: ReceiveUserDataObject = {username: "alice"};
     const chat: ReceiveChatObject = {roomId: 0, text: message};
@@ -136,8 +136,8 @@ test("Test receive valid chat message", (done): void => {
 });
 
 test("Test only clients in room receive chat message", (done): void => {
-    const r1: ChatRoom = ChatRoom.Factory.instantiate("test1");
-    const r2: ChatRoom = ChatRoom.Factory.instantiate("test2");
+    const r1: GlobalChatRoom = GlobalChatRoom.Factory.instantiate("test1");
+    const r2: GlobalChatRoom = GlobalChatRoom.Factory.instantiate("test2");
 
     const message: string = "test message";
     const chat: ReceiveChatObject = {roomId: 0, text: message};
@@ -176,7 +176,7 @@ test("Test only clients in room receive chat message", (done): void => {
 });
 
 test("Test receive message too long", (done): void => {
-    const r1: ChatRoom = ChatRoom.Factory.instantiate("test1");
+    const r1: GlobalChatRoom = GlobalChatRoom.Factory.instantiate("test1");
     const message: string = "dhfguidfifodshjiodfhgfdiuohjgifodfigduohosjsdklsdlf";
     const user: ReceiveUserDataObject = {username: "bob"};
     const chat: ReceiveChatObject = {roomId: 0, text: message};
@@ -203,7 +203,7 @@ test("Test receive message too long", (done): void => {
 });
 
 test("Test receive message too short", (done): void => {
-    const r1: ChatRoom = ChatRoom.Factory.instantiate("test1");
+    const r1: GlobalChatRoom = GlobalChatRoom.Factory.instantiate("test1");
     const message: string = "";
     const user: ReceiveUserDataObject = {username: "frank"};
     const chat: ReceiveChatObject = {roomId: 0, text: message};
@@ -230,7 +230,7 @@ test("Test receive message too short", (done): void => {
 });
 
 test("Test receive garbage message", (done): void => {
-    const r1: ChatRoom = ChatRoom.Factory.instantiate("test1");
+    const r1: GlobalChatRoom = GlobalChatRoom.Factory.instantiate("test1");
     const message: string = null;
     const user: ReceiveUserDataObject = {username: "frank"};
     const chat: ReceiveChatObject = {roomId: 0, text: message};

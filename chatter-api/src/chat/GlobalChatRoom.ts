@@ -16,7 +16,7 @@ import {
  * Listens for global client connections, disconnections, and messages to this room
  * @author Connell Reffo
  */
-export default class ChatRoom implements IStreamObserver {
+export default class GlobalChatRoom implements IStreamObserver {
 
     /**
      * Set of clients connected to this chat room
@@ -132,15 +132,15 @@ export default class ChatRoom implements IStreamObserver {
         /**
          * List of rooms instantiated by this factory
          */
-        private static rooms: ChatRoom[] = [];
+        private static rooms: GlobalChatRoom[] = [];
 
         /**
          * Creates a new chat room object
          * @static
          * @param name The name of the room
          */
-        public static instantiate(name: string): ChatRoom {
-            let room: ChatRoom = new ChatRoom(name, this.rooms.length);
+        public static instantiate(name: string): GlobalChatRoom {
+            let room: GlobalChatRoom = new GlobalChatRoom(name, this.rooms.length);
             this.rooms.push(room);
 
             return room;
@@ -152,7 +152,7 @@ export default class ChatRoom implements IStreamObserver {
         public static encode(): SendRoomsObject {
             let roomObjects: RoomObject[] = [];
 
-            this.rooms.forEach((room: ChatRoom): void => {
+            this.rooms.forEach((room: GlobalChatRoom): void => {
                 roomObjects.push({
                     name: room.getName(),
                     id: room.getID()
