@@ -1,6 +1,6 @@
 import Client from "./Client";
 
-import {ReceiveChatObject} from "../lib/utility";
+import {ChatObject} from "../lib/utility";
 
 /**
  * Abstract representation of a class that observes events on a chat stream
@@ -26,5 +26,5 @@ export default interface IStreamObserver {
      * @param client The client that sent the message
      * @param message The object that encodes the received message
      */
-    onClientMessage(client: Client, message: ReceiveChatObject): void;
+    onClientMessage(client: Client, message: ChatObject): void;
 }

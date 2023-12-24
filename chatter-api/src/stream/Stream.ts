@@ -4,7 +4,7 @@ import Client from "./Client";
 import GlobalChatRoom from "../chat/GlobalChatRoom";
 
 import {Server, type Socket} from "socket.io";
-import {config, ReceiveChatObject, ReceiveUserDataObject, StatusObject, StreamEvents} from "../lib/utility";
+import {config, ChatObject, UserDataObject, StatusObject, StreamEvents} from "../lib/utility";
 
 /**
  * Class for setting up stream.io stream
@@ -48,7 +48,8 @@ export default class Stream implements IObservable<number, IStreamObserver> {
      * Notifies <i>exactly one</i> of each stream observer that a client has either connected or disconnected from a room
      * @param event Either <b>RECEIVE_USER</b> or <b>DISCONNECT</b>
      * @param client The object that represents the client that triggered the specified stream event
-     * @param additional Is additional optional data that is supplied to observers on client connection
+     * @param additional Is additional optional data that is supplied to observers on client connection;
+     *                   for instance, private rooms can be implemented by supplying: `{roomId: ...}`
      */
     public notifyClientConnectionStatus(event: StreamEvents.CLIENT_SEND_USERDATA|StreamEvents.CLIENT_DISCONNECTED, client: Client, additional: {} = {}): void {
         this.getEachObserver().forEach((observer: IStreamObserver): void => {
@@ -71,7 +72,7 @@ export default class Stream implements IObservable<number, IStreamObserver> {
      * @param client The client that sent the message
      * @param data The object that encodes the message
      */
-    public notifyClientMessage(roomId: number, client: Client, data: ReceiveChatObject): void {
+    public notifyClientMessage(roomId: number, client: Client, data: ChatObject): void {
         this.observers.get(roomId).forEach((observer: IStreamObserver): void => {
             observer.onClientMessage(client, data);
         });
@@ -82,11 +83,11 @@ export default class Stream implements IObservable<number, IStreamObserver> {
      */
     public listen(): void {
         this.io.on(StreamEvents.CLIENT_CONNECTED, (socket: Socket): void => {
-            socket.on(StreamEvents.CLIENT_SEND_USERDATA, (data: ReceiveUserDataObject): void => {
+            socket.on(StreamEvents.CLIENT_SEND_USERDATA, (data: UserDataObject): void => {
                 socket.emit(StreamEvents.SERVER_SEND_STATUS, this.onReceiveUser(socket, data));
             });
 
-            socket.on(StreamEvents.CLIENT_SEND_CHAT, (data: ReceiveChatObject): void => {
+            socket.on(StreamEvents.CLIENT_SEND_CHAT, (data: ChatObject): void => {
                 this.notifyClientMessage(data.roomId, this.connections.get(socket), data);
             });
 
@@ -106,7 +107,7 @@ export default class Stream implements IObservable<number, IStreamObserver> {
      * @param data The object that encodes the user data received
      * @return An encoding of a status that can be sent back to the client
      */
-    public onReceiveUser(socket: Socket, data: ReceiveUserDataObject): StatusObject {
+    public onReceiveUser(socket: Socket, data: UserDataObject): StatusObject {
         const client: Client = new Client(socket, data.username);
         let status: StatusObject = {success: false};
 

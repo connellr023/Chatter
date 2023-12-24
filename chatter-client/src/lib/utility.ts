@@ -39,7 +39,7 @@ export enum GlobalEvents {
  * @author Connell Reffo
  */
 export interface ConnectedUsersObject {
-    connections: {username: string}[]
+    connections: UserDataObject[]
 }
 
 /**
@@ -82,7 +82,7 @@ export interface ReceiveChatObject {
  * Represents an object that encodes a list of room objects to be received
  * @author Connell Reffo
  */
-export interface ReceiveRoomsObject {
+export interface RoomsListObject {
     rooms: RoomObject[]
 }
 
@@ -90,7 +90,7 @@ export interface ReceiveRoomsObject {
  * Represents an object that encodes a chat message that was sent
  * @author Connell Reffo
  */
-export interface SendChatObject {
+export interface ChatObject {
     roomId: number,
     text: string
 }
@@ -99,7 +99,7 @@ export interface SendChatObject {
  * Represents an object that encodes user data that was sent
  * @author Connell Reffo
  */
-export interface SendUserDataObject {
+export interface UserDataObject {
     username: string
 }
 

@@ -1,26 +1,25 @@
 import * as http from "http";
 import * as ioc from "socket.io-client";
 
-import Stream from "../src/stream/Stream";
-import GlobalChatRoom from "../src/chat/GlobalChatRoom";
+import Stream from "../../src/stream/Stream";
+import GlobalChatRoom from "../../src/chat/GlobalChatRoom";
 
 import {Server} from "socket.io";
 import {
-    config,
-    ReceiveChatObject,
-    ReceiveUserDataObject,
+    ConnectedUsersObject,
+    ChatObject,
+    UserDataObject,
     SendChatObject,
-    SendRoomsObject,
     StatusObject,
     StreamEvents
-} from "../src/lib/utility";
+} from "../../src/lib/utility";
 
 let io: Server;
 let stream: Stream;
 let clientSocket1: ioc.Socket;
 let clientSocket2: ioc.Socket;
 
-const port: number = config.DEV_PORT;
+const port: number = 8000;
 
 beforeEach((): void => {
     GlobalChatRoom.Factory.reset();
@@ -50,73 +49,44 @@ afterAll((): void => {
     clientSocket2.disconnect();
 });
 
-test("Test receive user data success", (done): void => {
-    const data: ReceiveUserDataObject = {
-        username: "alice"
-    }
+test("Test clients receive updated list of connected users on client join", (done): void => {
+    const r1: GlobalChatRoom = GlobalChatRoom.Factory.instantiate("1");
+
+    const user1: UserDataObject = {username: "arhp"};
+    const user2: UserDataObject = {username: "phinger023"};
+
+    stream.attach(0, r1);
+
+    clientSocket1.once(StreamEvents.SERVER_UPDATE_CONNECTIONS, (data: ConnectedUsersObject): void => {
+        expect(data).toStrictEqual({
+            connections: [user1]
+        });
+    });
 
     clientSocket1.once(StreamEvents.SERVER_SEND_STATUS, (status: StatusObject): void => {
-        expect(status.success).toBe(true);
-        done();
+        if (!status.success) {
+            throw new Error("Expected successful status for receiving userdata");
+        }
+
+        clientSocket2.once(StreamEvents.SERVER_UPDATE_CONNECTIONS, (data: ConnectedUsersObject): void => {
+            expect(data).toStrictEqual({
+                connections: [user1, user2]
+            });
+
+            done();
+        });
+
+        clientSocket2.emit(StreamEvents.CLIENT_SEND_USERDATA, user2);
     });
 
-    clientSocket1.emit(StreamEvents.CLIENT_SEND_USERDATA, data);
-});
-
-test("Test receive bad user data with name too long", (done): void => {
-    const data: ReceiveUserDataObject = {
-        username: "sjdoifjiodsfgiodfjiogdf"
-    }
-
-    clientSocket1.once(StreamEvents.SERVER_SEND_STATUS, (status: StatusObject): void => {
-        expect(status.success).toBe(false);
-        done();
-    });
-
-    clientSocket1.emit(StreamEvents.CLIENT_SEND_USERDATA, data);
-});
-
-test("Test receive bad user data with name too short", (done): void => {
-    const data: ReceiveUserDataObject = {
-        username: ""
-    }
-
-    clientSocket1.once(StreamEvents.SERVER_SEND_STATUS, (status: StatusObject): void => {
-        expect(status.success).toBe(false);
-        done();
-    });
-
-    clientSocket1.emit(StreamEvents.CLIENT_SEND_USERDATA, data);
-});
-
-test("Test receive garbage user data", (done): void => {
-    const data: {} = {};
-
-    clientSocket1.once(StreamEvents.SERVER_SEND_STATUS, (status: StatusObject): void => {
-        expect(status.success).toBe(false);
-        done();
-    });
-
-    clientSocket1.emit(StreamEvents.CLIENT_SEND_USERDATA, data);
-});
-
-test("Test receive room encodings", (done): void => {
-    GlobalChatRoom.Factory.instantiate("1");
-    GlobalChatRoom.Factory.instantiate("34");
-
-    clientSocket1.once(StreamEvents.SERVER_SEND_ROOMS, (data: SendRoomsObject): void => {
-        expect(data).toStrictEqual(GlobalChatRoom.Factory.encode());
-        done();
-    });
-
-    clientSocket1.emit(StreamEvents.CLIENT_REQUEST_ROOMS);
+    clientSocket1.emit(StreamEvents.CLIENT_SEND_USERDATA, user1);
 });
 
 test("Test receive valid chat message", (done): void => {
     const r1: GlobalChatRoom = GlobalChatRoom.Factory.instantiate("test1");
     const message: string = "test message";
-    const user: ReceiveUserDataObject = {username: "alice"};
-    const chat: ReceiveChatObject = {roomId: 0, text: message};
+    const user: UserDataObject = {username: "alice"};
+    const chat: ChatObject = {roomId: 0, text: message};
 
     stream.attach(0, r1);
 
@@ -140,10 +110,10 @@ test("Test only clients in room receive chat message", (done): void => {
     const r2: GlobalChatRoom = GlobalChatRoom.Factory.instantiate("test2");
 
     const message: string = "test message";
-    const chat: ReceiveChatObject = {roomId: 0, text: message};
+    const chat: ChatObject = {roomId: 0, text: message};
 
-    const user1: ReceiveUserDataObject = {username: "phinger01"};
-    const user2: ReceiveUserDataObject = {username: "phinger02"};
+    const user1: UserDataObject = {username: "phinger01"};
+    const user2: UserDataObject = {username: "phinger02"};
 
     stream.attach(0, r1);
     stream.attach(1, r2);
@@ -178,8 +148,8 @@ test("Test only clients in room receive chat message", (done): void => {
 test("Test receive message too long", (done): void => {
     const r1: GlobalChatRoom = GlobalChatRoom.Factory.instantiate("test1");
     const message: string = "dhfguidfifodshjiodfhgfdiuohjgifodfigduohosjsdklsdlf";
-    const user: ReceiveUserDataObject = {username: "bob"};
-    const chat: ReceiveChatObject = {roomId: 0, text: message};
+    const user: UserDataObject = {username: "bob"};
+    const chat: ChatObject = {roomId: 0, text: message};
 
     stream.attach(0, r1);
 
@@ -205,8 +175,8 @@ test("Test receive message too long", (done): void => {
 test("Test receive message too short", (done): void => {
     const r1: GlobalChatRoom = GlobalChatRoom.Factory.instantiate("test1");
     const message: string = "";
-    const user: ReceiveUserDataObject = {username: "frank"};
-    const chat: ReceiveChatObject = {roomId: 0, text: message};
+    const user: UserDataObject = {username: "frank"};
+    const chat: ChatObject = {roomId: 0, text: message};
 
     stream.attach(0, r1);
 
@@ -232,8 +202,8 @@ test("Test receive message too short", (done): void => {
 test("Test receive garbage message", (done): void => {
     const r1: GlobalChatRoom = GlobalChatRoom.Factory.instantiate("test1");
     const message: string = null;
-    const user: ReceiveUserDataObject = {username: "frank"};
-    const chat: ReceiveChatObject = {roomId: 0, text: message};
+    const user: UserDataObject = {username: "frank"};
+    const chat: ChatObject = {roomId: 0, text: message};
 
     stream.attach(0, r1);
 

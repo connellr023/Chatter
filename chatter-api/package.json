@@ -5,7 +5,7 @@
   "main": "src/index.ts",
   "scripts": {
     "tsc": "tsc",
-    "test": "jest --silent --coverage",
+    "test": "jest --coverage",
     "start": "ts-node src/index.ts",
     "dev": "nodemon src/index.ts"
   },

@@ -3,10 +3,11 @@ import IStreamObserver from "../stream/IStreamObserver";
 
 import {
     config,
-    ReceiveChatObject,
+    ConnectedUsersObject,
+    ChatObject,
     RoomObject,
     SendChatObject,
-    SendRoomsObject,
+    RoomsListObject,
     StatusObject,
     StreamEvents
 } from "../lib/utility";
@@ -50,6 +51,12 @@ export default class GlobalChatRoom implements IStreamObserver {
      */
     public onClientConnected(client: Client): void {
         this.clients.add(client);
+
+        const connections: ConnectedUsersObject = {
+            connections: Array.from(this.clients).map((c: Client) => ({username: c.getName()}))
+        };
+
+        this.broadcast(StreamEvents.SERVER_UPDATE_CONNECTIONS, connections);
     }
 
     /**
@@ -62,7 +69,7 @@ export default class GlobalChatRoom implements IStreamObserver {
     /**
      * @inheritDoc
      */
-    public onClientMessage(client: Client, message: ReceiveChatObject): void {
+    public onClientMessage(client: Client, message: ChatObject): void {
         const data: SendChatObject = {
             username: client.getName(),
             roomId: message.roomId,
@@ -84,7 +91,7 @@ export default class GlobalChatRoom implements IStreamObserver {
      * Essentially a filter
      * @param message The message to be verified
      */
-    public verifyClientMessage(message: ReceiveChatObject): StatusObject {
+    public verifyClientMessage(message: ChatObject): StatusObject {
         let success: boolean = false;
 
         if (typeof message.text == "string") {
@@ -149,7 +156,7 @@ export default class GlobalChatRoom implements IStreamObserver {
         /**
          * Encodes the rooms this factory has instantiated as an object
          */
-        public static encode(): SendRoomsObject {
+        public static encode(): RoomsListObject {
             let roomObjects: RoomObject[] = [];
 
             this.rooms.forEach((room: GlobalChatRoom): void => {

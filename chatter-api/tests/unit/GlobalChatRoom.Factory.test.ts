@@ -1,6 +1,6 @@
 import GlobalChatRoom from "../../src/chat/GlobalChatRoom";
 
-import {SendRoomsObject} from "../../src/lib/utility";
+import {RoomsListObject} from "../../src/lib/utility";
 
 beforeEach((): void => {
     GlobalChatRoom.Factory.reset();
@@ -18,7 +18,7 @@ test("Test encode()", (): void => {
     GlobalChatRoom.Factory.instantiate("2");
     GlobalChatRoom.Factory.instantiate("3");
 
-    const expected: SendRoomsObject = {
+    const expected: RoomsListObject = {
         rooms: [
             {
                 name: "1",

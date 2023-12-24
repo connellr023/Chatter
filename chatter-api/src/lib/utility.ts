@@ -31,7 +31,7 @@ export enum StreamEvents {
  * @author Connell Reffo
  */
 export interface ConnectedUsersObject {
-    connections: {username: string}[]
+    connections: UserDataObject[]
 }
 
 /**
@@ -52,7 +52,7 @@ export interface RoomObject {
 }
 
 /**
- * Represents an object that encodes a sent chat message
+ * Represents an object that encodes a message that was sent
  * @author Connell Reffo
  */
 export interface SendChatObject {
@@ -65,7 +65,7 @@ export interface SendChatObject {
  * Represents an object that encodes a list of room objects to be sent
  * @author Connell Reffo
  */
-export interface SendRoomsObject {
+export interface RoomsListObject {
     rooms: RoomObject[]
 }
 
@@ -73,7 +73,7 @@ export interface SendRoomsObject {
  * Represents an object that encodes a chat message that was received
  * @author Connell Reffo
  */
-export interface ReceiveChatObject {
+export interface ChatObject {
     roomId: number,
     text: string
 }
@@ -82,6 +82,6 @@ export interface ReceiveChatObject {
  * Represents an object that encodes user data that was received
  * @author Connell Reffo
  */
-export interface ReceiveUserDataObject {
+export interface UserDataObject {
     username: string
 }

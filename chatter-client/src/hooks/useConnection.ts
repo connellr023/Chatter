@@ -1,6 +1,6 @@
 import {type Router, useRouter} from "vue-router";
 import {type Ref, ref} from "vue";
-import type {SendUserDataObject, StatusObject} from "@/lib/utility";
+import type {UserDataObject, StatusObject} from "@/lib/utility";
 import {useUserStore} from "@/hooks/useUserStore";
 import {config, GlobalEvents, StreamEvents} from "@/lib/utility";
 import {pushNotification} from "@/hooks/useNotifications";
@@ -19,7 +19,7 @@ export function useConnection() {
     const enteredName: Ref<string> = ref("");
 
     function connect(): void {
-        const userData: SendUserDataObject = {username: enteredName.value};
+        const userData: UserDataObject = {username: enteredName.value};
 
         if (userData.username.length >= config.MIN_NAME_LENGTH && userData.username.length <= config.MAX_NAME_LENGTH) {
             attemptingConnection.value = true;

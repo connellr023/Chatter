@@ -1,11 +1,11 @@
 import {type Ref, onUnmounted, reactive, ref} from "vue";
 import {
     StreamEvents,
-    type ReceiveRoomsObject,
+    type RoomsListObject,
     type MessageObject,
     type RoomObject,
     type ReceiveChatObject,
-    type SendChatObject
+    type ChatObject
 } from "@/lib/utility";
 
 import stream from "@/lib/stream";
@@ -22,7 +22,7 @@ export function useChat() {
 
     function queryRooms(select: boolean = false): void {
         stream.emit(StreamEvents.CLIENT_REQUEST_ROOMS);
-        stream.once(StreamEvents.SERVER_SEND_ROOMS, (data: ReceiveRoomsObject): void => {
+        stream.once(StreamEvents.SERVER_SEND_ROOMS, (data: RoomsListObject): void => {
             data.rooms.forEach((room: RoomObject): void => {
                 if (!rooms.includes(room)) {
                     rooms.push(room);
@@ -36,7 +36,7 @@ export function useChat() {
     }
 
     function sendMessage(body: string): void {
-        const data: SendChatObject = {
+        const data: ChatObject = {
           roomId: selectedRoomId.value,
           text: body
         };

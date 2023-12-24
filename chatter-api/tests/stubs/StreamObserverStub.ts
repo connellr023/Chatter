@@ -1,7 +1,7 @@
 import IStreamObserver from "../../src/stream/IStreamObserver";
 import Client from "../../src/stream/Client";
 
-import {ReceiveChatObject} from "../../src/lib/utility";
+import {ChatObject} from "../../src/lib/utility";
 
 export default class StreamObserverStub implements IStreamObserver {
 
@@ -22,7 +22,7 @@ export default class StreamObserverStub implements IStreamObserver {
         this.trigger = "left";
     }
 
-    public onClientMessage(client: Client, message: ReceiveChatObject): void {
+    public onClientMessage(client: Client, message: ChatObject): void {
         this.trigger = message.text;
     }
 
