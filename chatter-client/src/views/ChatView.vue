@@ -1,12 +1,19 @@
 <script setup lang="ts">
 import {useUserStore} from "@/hooks/useUserStore";
 import {useChat} from "@/hooks/useChat";
-import {onMounted} from "vue";
+import {onMounted, ref, watch} from "vue";
 import {useRouter} from "vue-router";
 
 const router = useRouter();
 const userStore = useUserStore();
-const {rooms, messages, selectedRoomId, queryRooms} = useChat();
+const {rooms, messages, selectedRoomId, sendMessage, queryRooms} = useChat();
+
+const messageBody = ref("");
+
+function message() {
+  sendMessage(messageBody.value);
+  messageBody.value = "";
+}
 
 onMounted((): void => {
   if (!userStore.connected) {
@@ -14,6 +21,14 @@ onMounted((): void => {
   }
 
   queryRooms();
+
+  watch(() => messages.get(selectedRoomId.value)?.length, (value, oldValue): void => {
+    const messagesList = document.getElementById("messages-list");
+
+    if (messagesList) {
+      messagesList.scrollTop = messagesList.scrollHeight;
+    }
+  });
 });
 </script>
 
@@ -23,7 +38,7 @@ onMounted((): void => {
       <div id="select-rooms-container" class="content-container">
         <div id="empty-rooms" class="empty" v-if="rooms.length == 0">&lt;empty&gt;</div>
         <div id="room-list" v-else>
-          <button v-for="room in rooms" :class="{'selected': selectedRoomId == room.id}" class="room-option regular lighter-shadow" @click="selectedRoomId = room.id">{{room.name}}</button>
+          <button v-for="room in rooms" :class="{'selected': selectedRoomId == room.id}" class="room-option regular lighter-shadow" @click="selectedRoomId = room.id">{{selectedRoomId == room.id ? "&gt; "+ room.name : room.name}}</button>
         </div>
       </div>
       <div id="user-info">
@@ -33,17 +48,17 @@ onMounted((): void => {
     </div>
     <div id="chat-panel" class="panel">
       <div id="messages-container" class="content-container">
-        <div id="empty-messages" class="empty" v-if="messages.size == 0 || messages.get(selectedRoomId)?.length == 0">&lt;empty&gt;</div>
+        <div id="empty-messages" class="empty" v-if="messages.size == 0 || !messages.get(selectedRoomId)">&lt;empty&gt;</div>
         <div id="messages-list" v-else>
-          <div v-for="message in messages.get(selectedRoomId)">
-            {{message.sender}}
-            {{message.body}}
+          <div v-for="message in messages.get(selectedRoomId)" class="message-element lighter-shadow">
+            <div class="message-sender">{{message.sender}}</div>
+            <div class="message-body">{{message.body}}</div>
           </div>
         </div>
       </div>
       <div id="message-input-container">
-        <button id="send-button" class="regular">&minus;&gt;</button>
-        <input id="chat-input" class="regular" placeholder="<message>" />
+        <button id="send-button" class="regular" @click="message">&minus;&gt;</button>
+        <input id="chat-input" class="regular" placeholder="<message>" v-model="messageBody" @keyup.enter="message"/>
       </div>
     </div>
   </div>
@@ -56,10 +71,6 @@ div.empty {
   user-select: none;
   font-size: 35px;
   margin-top: 10px;
-}
-
-div#empty-messages {
-  margin-top: 25%;
 }
 
 div#room-list {
@@ -76,6 +87,39 @@ div#room-list {
   button.room-option.selected {
     color: var(--main-green-color);
     transition: color 0.15s ease-in-out;
+  }
+}
+
+div#messages-list {
+  height: calc(100% + 10px);
+  overflow-x: hidden;
+  overflow-y: scroll;
+
+  div.message-element {
+    background-color: var(--main-bg-color);
+    border-radius: 5px;
+    text-align: left;
+    margin: 3px 12px 7px 2px;
+    padding: 7px 7px 7px 12px;
+
+    div {
+      width: fit-content;
+    }
+
+    div.message-sender {
+      color: var(--main-theme-color);
+      font-style: italic;
+      user-select: none;
+      margin-bottom: 4px;
+    }
+
+    div.message-sender:hover {
+      text-decoration: underline;
+    }
+  }
+
+  div.message-element:hover {
+    background-color: var(--dark-highlight-color);
   }
 }
 

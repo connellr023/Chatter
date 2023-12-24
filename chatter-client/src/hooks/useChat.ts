@@ -4,7 +4,8 @@ import {
     type ReceiveRoomsObject,
     type MessageObject,
     type RoomObject,
-    type ReceiveChatObject
+    type ReceiveChatObject,
+    type SendChatObject
 } from "@/lib/utility";
 
 import stream from "@/lib/stream";
@@ -34,6 +35,15 @@ export function useChat() {
         });
     }
 
+    function sendMessage(body: string): void {
+        const data: SendChatObject = {
+          roomId: selectedRoomId.value,
+          text: body
+        };
+
+        stream.emit(StreamEvents.CLIENT_SEND_CHAT, data);
+    }
+
     function messageListener(data: ReceiveChatObject): void {
         if (!messages.has(data.roomId)) {
             messages.set(data.roomId, []);
@@ -58,6 +68,7 @@ export function useChat() {
         rooms,
         messages,
         selectedRoomId,
+        sendMessage,
         queryRooms
     };
 }
