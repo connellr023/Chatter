@@ -22,6 +22,7 @@ Dependencies for the API and client projects can be installed by running,
 ```bash
 npm i
 ```
+in their respective directories.
 
 <br />
 

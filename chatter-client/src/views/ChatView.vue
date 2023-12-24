@@ -14,6 +14,9 @@ const {members} = useMembers();
 
 const messageBody = ref("");
 
+/**
+ * Helper function for sending messages through Vue events
+ */
 function message() {
   if (messageBody.value.length >= config.MIN_MESSAGE_LENGTH && messageBody.value.length <= config.MAX_MESSAGE_LENGTH) {
     sendMessage(messageBody.value);
@@ -29,7 +32,7 @@ onMounted((): void => {
     router.push({name: "error", params: {code: "405", "message": "Not Allowed"}});
   }
 
-  queryRooms();
+  queryRooms(true);
 });
 </script>
 

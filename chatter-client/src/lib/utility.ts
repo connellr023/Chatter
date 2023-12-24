@@ -110,7 +110,6 @@ export interface UserDataObject {
  */
 export interface NotificationObject {
     id: number
-    sender: string,
     body: string,
     symbol: string,
     color: string,

@@ -21,6 +21,10 @@ export function useConnection() {
 
     useMembers();
 
+    /**
+     * Attempts to establish a connection with the server <br />
+     * Notifications and reactive properties are updated accordingly
+     */
     function connect(): void {
         const userData: UserDataObject = {username: enteredName.value};
 
@@ -59,6 +63,10 @@ export function useConnection() {
         }
     }
 
+    /**
+     * Disconnects from the server <br />
+     * Notifications and reactive properties are updated accordingly
+     */
     function disconnect(): void {
         if (stream.connected) {
             stream.disconnect();

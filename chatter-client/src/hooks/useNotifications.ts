@@ -14,10 +14,15 @@ export function useNotifications() {
     const notifications = reactive(new Set<NotificationObject>);
     let counter: number = 0;
 
-    function handlePushNotification(body: string, sender: string = "", symbol: string = "!", color: string = "var(--main-theme-color)"): void {
+    /**
+     * Updates the reactive notifications set accordingly
+     * @param body The body of the notification
+     * @param symbol The sender of the notification
+     * @param color The color of the notification symbol
+     */
+    function handlePushNotification(body: string, symbol: string = "!", color: string = "var(--main-theme-color)"): void {
         const notification = reactive({
             id: counter++,
-            sender: sender,
             body: body,
             symbol: symbol,
             color: color,
@@ -34,7 +39,7 @@ export function useNotifications() {
     }
 
     const off = eventBus.on(GlobalEvents.NOTIFICATION, (notification: NotificationObject): void => {
-        handlePushNotification(notification.body, notification.sender, notification.symbol, notification.color);
+        handlePushNotification(notification.body, notification.symbol, notification.color);
     });
 
     onUnmounted((): void => {

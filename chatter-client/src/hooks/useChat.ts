@@ -19,6 +19,10 @@ export function useChat() {
     const messages: Map<number, MessageObject[]> = reactive(new Map<number, MessageObject[]>());
     const selectedRoomId: Ref<number> = ref(0);
 
+    /**
+     * Requests a list of available rooms from the server
+     * @param select If the `selectedRoomId` variable should be updated to the ID of the first room that is received by the response object
+     */
     function queryRooms(select: boolean = false): void {
         stream.emit(StreamEvents.CLIENT_REQUEST_ROOMS);
         stream.once(StreamEvents.SERVER_SEND_ROOMS, (data: RoomsListObject): void => {
@@ -34,6 +38,10 @@ export function useChat() {
         });
     }
 
+    /**
+     * Sends a message to the chat room indicated by `selectedRoomId`
+     * @param body The body of the message to send
+     */
     function sendMessage(body: string): void {
         const data: ChatObject = {
           roomId: selectedRoomId.value,
@@ -43,6 +51,10 @@ export function useChat() {
         stream.emit(StreamEvents.CLIENT_SEND_CHAT, data);
     }
 
+    /**
+     * Listens for messages sent by other clients across all chat rooms this client is a member of
+     * @param data The data received
+     */
     function messageListener(data: ReceiveChatObject): void {
         if (!messages.has(data.roomId)) {
             messages.set(data.roomId, []);

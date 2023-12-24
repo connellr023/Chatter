@@ -1,5 +1,5 @@
 /**
- * Main stream.io initialization
+ * Main socket.io initialization
  * @author Connell Reffo
  */
 import {io, type Socket} from "socket.io-client";
