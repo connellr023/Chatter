@@ -1,29 +1,46 @@
 <script setup lang="ts">
 import {useUserStore} from "@/hooks/useUserStore";
+import {useChat} from "@/hooks/useChat";
 import {onMounted} from "vue";
 import {useRouter} from "vue-router";
 
 const router = useRouter();
 const userStore = useUserStore();
+const {rooms, messages, selectedRoomId, queryRooms} = useChat();
 
 onMounted((): void => {
   if (!userStore.connected) {
     router.push({name: "error", params: {code: "405", "message": "Not Allowed"}});
   }
+
+  queryRooms();
 });
 </script>
 
 <template>
   <div id="chat-view-container">
     <div id="user-options-panel" class="panel">
-      <div id="select-rooms-container" class="content-container"></div>
+      <div id="select-rooms-container" class="content-container">
+        <div id="empty-rooms" class="empty" v-if="rooms.length == 0">&lt;empty&gt;</div>
+        <div id="room-list" v-else>
+          <button v-for="room in rooms" :class="{'selected': selectedRoomId == room.id}" class="room-option regular lighter-shadow" @click="selectedRoomId = room.id">{{room.name}}</button>
+        </div>
+      </div>
       <div id="user-info">
         <button id="return-arrow" @click="router.push('/')">&lt;&minus;</button>
         <span id="username">{{userStore.username}}</span>
       </div>
     </div>
     <div id="chat-panel" class="panel">
-      <div id="messages-container" class="content-container"></div>
+      <div id="messages-container" class="content-container">
+        <div id="empty-messages" class="empty" v-if="messages.size == 0 || messages.get(selectedRoomId)?.length == 0">&lt;empty&gt;</div>
+        <div id="messages-list" v-else>
+          <div v-for="message in messages.get(selectedRoomId)">
+            {{message.sender}}
+            {{message.body}}
+          </div>
+        </div>
+      </div>
       <div id="message-input-container">
         <button id="send-button" class="regular">&minus;&gt;</button>
         <input id="chat-input" class="regular" placeholder="<message>" />
@@ -33,6 +50,34 @@ onMounted((): void => {
 </template>
 
 <style scoped>
+
+div.empty {
+  color: var(--invert-highlight-color);
+  user-select: none;
+  font-size: 35px;
+  margin-top: 10px;
+}
+
+div#empty-messages {
+  margin-top: 25%;
+}
+
+div#room-list {
+  padding-top: 3px;
+
+  button.room-option {
+    font-weight: bolder;
+    margin-bottom: 12px;
+    padding: 15px;
+    width: calc(100% - 4px);
+    text-align: left;
+  }
+
+  button.room-option.selected {
+    color: var(--main-green-color);
+    transition: color 0.15s ease-in-out;
+  }
+}
 
 div#chat-view-container {
   position: absolute;
@@ -52,7 +97,7 @@ div#chat-view-container {
     width: var(--user-panel-width);
 
     div#select-rooms-container {
-      width: calc(100% - var(--chat-panel-width) - 135px);
+      width: calc(100% - var(--chat-panel-width) - 124px);
     }
 
     div#user-info {
@@ -98,7 +143,7 @@ div#chat-view-container {
     --chat-input-right-padding: 40px;
 
     div#messages-container {
-      width: calc(100% - var(--user-panel-width) - var(--chat-input-right-padding) - 96px);
+      width: calc(100% - var(--user-panel-width) - var(--chat-input-right-padding) - 84px);
     }
 
     div#message-input-container {
@@ -144,15 +189,7 @@ div.panel {
 }
 
 div.content-container {
-  background: #cbcbcb;
-  border-radius: 5px;
-  box-shadow: 0 2px 4px 0 rgba(0, 0, 0, 0.2), 0 3px 14px 0 rgba(0, 0, 0, 0.1);
-  padding: 4px;
   position: absolute;
-  width: 50px;
-  height: 100px;
-  top: 8px;
-  margin-left: 2px;
 }
 
 </style>

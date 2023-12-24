@@ -5,27 +5,23 @@ const {notifications} = useNotifications();
 </script>
 
 <template>
-  <div id="notifications-wrapper">
-    <div v-for="notification in [...notifications]" id="notifications-container">
-      <div class="notification-element" @click="notification.clear()">
-        <div :style="`color: ${notification.color}`" class="notification-alert">{{notification.symbol}}</div>
-        <div class="notification-body">{{notification.body}}</div>
-      </div>
+  <div id="notifications-container">
+    <div v-for="notification in [...notifications]" class="notification-element" @click="notification.clear()">
+      <div :style="`color: ${notification.color}`" class="notification-alert">{{notification.symbol}}</div>
+      <div class="notification-body">{{notification.body}}</div>
     </div>
   </div>
 </template>
 
 <style scoped>
 
-div#notifications-wrapper {
+div#notifications-container {
+  display: block;
   position: absolute;
   right: 3px;
   top: 7px;
+  width: min(50%, 500px);
   z-index: 15;
-
-  div#notifications-container {
-    display: block;
-  }
 }
 
 div.notification-element {

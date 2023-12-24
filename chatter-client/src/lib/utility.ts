@@ -51,6 +51,15 @@ export interface RoomObject {
 }
 
 /**
+ * Object that the represents a single chat message
+ * @author Connell Reffo
+ */
+export interface MessageObject {
+    sender: string,
+    body: string
+}
+
+/**
  * Represents an object that encodes a chat message that was received
  * @author Connell Reffo
  */

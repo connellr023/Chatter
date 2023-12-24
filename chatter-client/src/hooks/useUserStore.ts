@@ -10,7 +10,7 @@ export interface UserStateObject {
 }
 
 /**
- * Function that allows of updating and reading the user store
+ * Function that allows for updating and reading the user store
  * @author Connell Reffo
  */
 export const useUserStore = defineStore("user", {

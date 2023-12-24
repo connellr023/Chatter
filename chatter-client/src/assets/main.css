@@ -77,6 +77,11 @@ button.regular {
     transition: all 0.1s ease-in-out;
 }
 
+button.regular.lighter-shadow {
+    box-shadow: 0 2px 4px 0 rgba(0, 0, 0, 0.15), 0 3px 14px 0 rgba(0, 0, 0, 0.3);
+    transition: all 0.2s ease-in-out;
+}
+
 button.regular:hover:enabled {
     background-color: var(--dark-highlight-color);
     cursor: pointer;
@@ -87,6 +92,11 @@ button.regular:hover:enabled {
 button.regular:active:enabled, button.regular:disabled {
     box-shadow: 0 2px 4px 0 rgba(0, 0, 0, 0.2), 0 3px 14px 0 rgba(0, 0, 0, 0.45);
     transition: all 0.1s ease-in-out;
+}
+
+button.regular.lighter-shadow:active {
+    box-shadow: 0 2px 4px 0 rgba(0, 0, 0, 0.1), 0 3px 14px 0 rgba(0, 0, 0, 0.13);
+    transition: all 0.2s ease-in-out;
 }
 
 button.regular:disabled {

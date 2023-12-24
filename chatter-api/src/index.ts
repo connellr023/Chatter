@@ -49,7 +49,7 @@ const stream: Stream = new Stream(io);
 const defaultRoomCount: number = 3;
 
 for (let i: number = 0; i < defaultRoomCount; i++) {
-    stream.attach(i, ChatRoom.Factory.instantiate(`Default Room ${i + 1}`));
+    stream.attach(i, ChatRoom.Factory.instantiate(`Global Chat Room ${i + 1}`));
 }
 
 // Listen
