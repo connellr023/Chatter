@@ -1,4 +1,4 @@
-# <img style="width: 280px" src="https://raw.githubusercontent.com/connellr023/Chatter/main/chatter-client/src/assets/logo_white.png?token=GHSAT0AAAAAACIW2HHX32FP53HCAHNVUK3EZMHQXKQ">
+# <img style="width: 280px" src="https://github.com/connellr023/Chatter/blob/main/chatter-client/src/assets/logo_white.png?raw=true">
 
 > Continuation of the Chatter project.
 
