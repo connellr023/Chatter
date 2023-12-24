@@ -14,15 +14,16 @@ export const config = {
  * @author Connell Reffo
  */
 export enum StreamEvents {
-    CLIENT_CONNECTED = "connect",
-    CLIENT_DISCONNECTED = "disconnect",
+    CONNECT = "connect",
+    DISCONNECT = "disconnect",
     ERROR = "connect_error",
     CLIENT_REQUEST_ROOMS = "client_request_rooms",
     CLIENT_SEND_CHAT = "client_send_chat",
     CLIENT_SEND_USERDATA = "client_send_userdata",
     SERVER_SEND_STATUS = "server_send_status",
     SERVER_SEND_ROOMS = "server_send_rooms",
-    SERVER_CHAT_RESPONSE = "server_send_chat"
+    SERVER_CHAT_RESPONSE = "server_send_chat",
+    SERVER_UPDATE_CONNECTIONS = "server_update_connection"
 }
 
 /**
@@ -31,6 +32,14 @@ export enum StreamEvents {
  */
 export enum GlobalEvents {
     NOTIFICATION = "notification"
+}
+
+/**
+ * Represents an object that encodes an array of connected users by their username
+ * @author Connell Reffo
+ */
+export interface ConnectedUsersObject {
+    connections: {username: string}[]
 }
 
 /**

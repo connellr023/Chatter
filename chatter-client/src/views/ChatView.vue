@@ -1,18 +1,24 @@
 <script setup lang="ts">
 import {useUserStore} from "@/hooks/useUserStore";
 import {useChat} from "@/hooks/useChat";
-import {onMounted, ref, watch} from "vue";
+import {onMounted, ref} from "vue";
 import {useRouter} from "vue-router";
+import {pushNotification} from "@/hooks/useNotifications";
+import {config} from "@/lib/utility";
 
 const router = useRouter();
 const userStore = useUserStore();
 const {rooms, messages, selectedRoomId, sendMessage, queryRooms} = useChat();
-
 const messageBody = ref("");
 
 function message() {
-  sendMessage(messageBody.value);
-  messageBody.value = "";
+  if (messageBody.value.length >= config.MIN_MESSAGE_LENGTH && messageBody.value.length <= config.MAX_MESSAGE_LENGTH) {
+    sendMessage(messageBody.value);
+    messageBody.value = "";
+  }
+  else {
+    pushNotification({body: `Message must be within ${config.MIN_MESSAGE_LENGTH} and ${config.MAX_MESSAGE_LENGTH} characters`});
+  }
 }
 
 onMounted((): void => {
@@ -21,14 +27,6 @@ onMounted((): void => {
   }
 
   queryRooms();
-
-  watch(() => messages.get(selectedRoomId.value)?.length, (value, oldValue): void => {
-    const messagesList = document.getElementById("messages-list");
-
-    if (messagesList) {
-      messagesList.scrollTop = messagesList.scrollHeight;
-    }
-  });
 });
 </script>
 

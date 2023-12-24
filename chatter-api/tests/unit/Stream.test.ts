@@ -116,11 +116,38 @@ test("Test notifyClientConnectionStatus() for client connection", (): void => {
     shouldRun.forEach((observer: StreamObserverStub): void => {
         if (observer.getTrigger() != expectedTrigger) {
             if (observer.getTrigger().length == 0) {
-                fail("Not triggered when should have");
+                throw new Error("Not triggered when should have");
             }
             else {
-                fail("Wrong trigger");
+                throw new Error("Wrong trigger");
             }
+        }
+    });
+});
+
+test("Test notifyClientConnectionStatus() for client connection with additional data", (): void => {
+    const o1: StreamObserverStub = new StreamObserverStub();
+    const o2: StreamObserverStub = new StreamObserverStub();
+
+    const shouldRun: StreamObserverStub[] = [o1, o2];
+    const expectedAdditional: {} = {testObj: 0};
+    const expectedTrigger: string = "join";
+
+    stream.attach(0, o1, o2);
+
+    stream.notifyClientConnectionStatus(StreamEvents.CLIENT_SEND_USERDATA, null, expectedAdditional);
+
+    shouldRun.forEach((observer: StreamObserverStub): void => {
+        if (observer.getTrigger() != expectedTrigger) {
+            if (observer.getTrigger().length == 0) {
+                throw new Error("Not triggered when should have");
+            }
+            else {
+                throw new Error("Wrong trigger");
+            }
+        }
+        else if (observer.getAdditionalData() != expectedAdditional) {
+            throw new Error("Incorrect additional data received");
         }
     });
 });

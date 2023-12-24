@@ -19,7 +19,7 @@ import {
 export default class GlobalChatRoom implements IStreamObserver {
 
     /**
-     * Set of clients connected to this chat room
+     * Set of unique clients connected to this chat room
      */
     protected clients: Set<Client>;
 

@@ -22,7 +22,16 @@ export enum StreamEvents {
     CLIENT_SEND_USERDATA = "client_send_userdata",
     SERVER_SEND_STATUS = "server_send_status",
     SERVER_SEND_ROOMS = "server_send_rooms",
-    SERVER_CHAT_RESPONSE = "server_send_chat"
+    SERVER_CHAT_RESPONSE = "server_send_chat",
+    SERVER_UPDATE_CONNECTIONS = "server_update_connection"
+}
+
+/**
+ * Represents an object that encodes an array of connected users by their username
+ * @author Connell Reffo
+ */
+export interface ConnectedUsersObject {
+    connections: {username: string}[]
 }
 
 /**

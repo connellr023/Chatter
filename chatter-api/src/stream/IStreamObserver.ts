@@ -11,8 +11,9 @@ export default interface IStreamObserver {
     /**
      * Triggered when a client connected to the stream
      * @param client The client object that connected
+     * @param additional Is additional data that can be passed to stream observers
      */
-    onClientConnected(client: Client): void;
+    onClientConnected(client: Client, additional?: {}): void;
 
     /**
      * Triggered when a client disconnects from the stream

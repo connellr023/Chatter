@@ -1,13 +1,11 @@
 import {type Router, useRouter} from "vue-router";
-import {useUserStore} from "@/hooks/useUserStore";
 import {type Ref, ref} from "vue";
 import type {SendUserDataObject, StatusObject} from "@/lib/utility";
+import {useUserStore} from "@/hooks/useUserStore";
 import {config, GlobalEvents, StreamEvents} from "@/lib/utility";
+import {pushNotification} from "@/hooks/useNotifications";
 
-import EventBus from "@/lib/EventBus";
 import stream from "@/lib/stream";
-
-const eventBus: EventBus = EventBus.getInstance();
 
 /**
  * Function implementing socket connection with client view
@@ -27,11 +25,11 @@ export function useConnection() {
             attemptingConnection.value = true;
 
             stream.connect();
-            stream.once(StreamEvents.CLIENT_CONNECTED, (): void => {
+            stream.once(StreamEvents.CONNECT, (): void => {
                 attemptingConnection.value = false;
                 userStore.connected = true;
 
-                eventBus.emit(GlobalEvents.NOTIFICATION, {body: "Connected", color: "var(--main-green-color)"});
+                pushNotification({body: "Connected", color: "var(--main-green-color)"});
                 stream.emit(StreamEvents.CLIENT_SEND_USERDATA, userData);
                 stream.once(StreamEvents.SERVER_SEND_STATUS, (status: StatusObject): void => {
                     if (status.success) {
@@ -39,7 +37,7 @@ export function useConnection() {
                         router.push("/chat").then();
                     }
                     else {
-                        eventBus.emit(GlobalEvents.NOTIFICATION, {body: "Server rejected request"});
+                        pushNotification({body: "Server rejected request"});
                     }
                 });
             });
@@ -48,22 +46,22 @@ export function useConnection() {
                 stream.disconnect();
 
                 attemptingConnection.value = false;
-                eventBus.emit(GlobalEvents.NOTIFICATION, {body: "Connection failed"});
+                pushNotification({body: "Connection failed"});
             });
         }
         else {
-            eventBus.emit(GlobalEvents.NOTIFICATION, {body: `Username must be within ${config.MIN_NAME_LENGTH} and ${config.MAX_NAME_LENGTH} characters`});
+            pushNotification({body: `Username must be within ${config.MIN_NAME_LENGTH} and ${config.MAX_NAME_LENGTH} characters`});
         }
     }
 
     function disconnect(): void {
         if (stream.connected) {
             stream.disconnect();
-            stream.once(StreamEvents.CLIENT_DISCONNECTED, (): void => {
+            stream.once(StreamEvents.DISCONNECT, (): void => {
                 userStore.connected = false;
                 userStore.username = "";
 
-                eventBus.emit(GlobalEvents.NOTIFICATION, {body: "Disconnected"});
+                pushNotification({body: "Disconnected"});
             });
         }
     }

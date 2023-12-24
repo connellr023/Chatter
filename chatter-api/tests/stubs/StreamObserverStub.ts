@@ -6,13 +6,16 @@ import {ReceiveChatObject} from "../../src/lib/utility";
 export default class StreamObserverStub implements IStreamObserver {
 
     private trigger: string;
+    private additional: {};
 
     public constructor() {
         this.trigger = "";
+        this.additional = {};
     }
 
-    public onClientConnected(client: Client): void {
+    public onClientConnected(client: Client, additional: {}): void {
         this.trigger = "join";
+        this.additional = additional;
     }
 
     public onClientDisconnected(client: Client): void {
@@ -25,5 +28,9 @@ export default class StreamObserverStub implements IStreamObserver {
 
     public getTrigger(): string {
         return this.trigger;
+    }
+
+    public getAdditionalData(): {} {
+        return this.additional;
     }
 }

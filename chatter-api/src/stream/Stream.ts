@@ -48,12 +48,13 @@ export default class Stream implements IObservable<number, IStreamObserver> {
      * Notifies <i>exactly one</i> of each stream observer that a client has either connected or disconnected from a room
      * @param event Either <b>RECEIVE_USER</b> or <b>DISCONNECT</b>
      * @param client The object that represents the client that triggered the specified stream event
+     * @param additional Is additional optional data that is supplied to observers on client connection
      */
-    public notifyClientConnectionStatus(event: StreamEvents.CLIENT_SEND_USERDATA|StreamEvents.CLIENT_DISCONNECTED, client: Client): void {
+    public notifyClientConnectionStatus(event: StreamEvents.CLIENT_SEND_USERDATA|StreamEvents.CLIENT_DISCONNECTED, client: Client, additional: {} = {}): void {
         this.getEachObserver().forEach((observer: IStreamObserver): void => {
             switch (event) {
                 case StreamEvents.CLIENT_SEND_USERDATA:
-                    observer.onClientConnected(client);
+                    observer.onClientConnected(client, additional);
                     break;
                 case StreamEvents.CLIENT_DISCONNECTED:
                     observer.onClientDisconnected(client);

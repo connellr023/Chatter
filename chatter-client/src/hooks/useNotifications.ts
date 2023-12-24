@@ -42,6 +42,14 @@ export function useNotifications() {
     });
 
     return {
-      notifications
+        notifications
     };
+}
+
+/**
+ * Function for pushing notifications through the event bus
+ * @param notification An object that contains notification data
+ */
+export function pushNotification(notification: {body: string, color?: string, symbol?: string}): void {
+    eventBus.emit(GlobalEvents.NOTIFICATION, notification);
 }
