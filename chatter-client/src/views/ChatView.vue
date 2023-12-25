@@ -115,7 +115,7 @@ div#messages-list {
     }
 
     div.message-sender {
-      color: var(--main-theme-color);
+      color: var(--main-red-color);
       font-style: italic;
       user-select: none;
       margin-bottom: 4px;
@@ -174,7 +174,7 @@ div#chat-view-container {
       button#return-arrow {
         background: none;
         border: none;
-        color: var(--main-theme-color);
+        color: var(--main-red-color);
         cursor: pointer;
         margin-left: 7px;
       }

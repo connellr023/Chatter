@@ -1,0 +1,31 @@
+@import url("https://fonts.googleapis.com/css2?family=Ubuntu+Mono&family=Ubuntu:ital,wght@0,400;0,500;1,400;1,500&display=swap");
+@import "base";
+@import "variables";
+
+* {
+    margin: auto;
+}
+
+body {
+    background-color: $main-bg-color;
+    font-family: $sans-serif-font;
+    font-size: 16px;
+    overflow: hidden;
+
+    * {
+        color: $light-text-color;
+    }
+}
+
+img {
+    pointer-events: none;
+    -webkit-user-drag: none;
+    user-select: none;
+    -moz-user-select: none;
+    -webkit-user-select: none;
+    -ms-user-select: none;
+}
+
+textarea:focus, input:focus{
+    outline: none;
+}

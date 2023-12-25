@@ -25,7 +25,7 @@ button#return-button {
 }
 
 .error-header {
-  color: var(--main-theme-color);
+  color: var(--main-red-color);
   font-weight: bolder;
   font-size: max(3.3vw, 50px);
   position: absolute;

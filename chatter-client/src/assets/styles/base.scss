@@ -1,0 +1,45 @@
+@import "variables";
+
+%base-regular {
+  $time: 0.25s;
+  $method: ease-in-out;
+
+  border-radius: 5px;
+  color: $invert-highlight-color;
+  font-size: 15px;
+  font-family: $sans-serif-font;
+  padding: 8px;
+  transition: border-color $time $method,
+              color $time $method,
+              background-color $time $method,
+              background-position $time $method;
+}
+
+input.regular {
+  @extend %base-regular;
+
+  border: 2px solid $invert-highlight-color;
+  background-color: $main-bg-color;
+  font-family: $sans-serif-font;
+
+  &:focus {
+    border-color: $invert-bg-color;
+    color: $light-text-color;
+  }
+
+  &::placeholder {
+    color: $invert-highlight-color;
+    opacity: 1;
+  }
+}
+
+button.regular {
+  @extend %base-regular;
+
+  border: none;
+  cursor: pointer;
+
+  &:hover:enabled {
+    color: $invert-bg-color;
+  }
+}

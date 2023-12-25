@@ -8,30 +8,22 @@ const props = defineProps({
     default: false
   },
   id: String,
+  classes: String,
   text: String
 });
 
 const shouldContinue = ref(props.isLoading);
-const frames: string[] = ["—", "\\", "|", "/"];
+const frames: string[] = ["•", "••", "•••", "••••", "•••••", "••••", "•••", "••"];
 
 watch((): boolean => props.isLoading, (value: boolean): void => {
   shouldContinue.value = value;
 });
 
-const {frame, animate} = useAnimate(frames, shouldContinue, 200);
+const {frame, animate} = useAnimate(frames, shouldContinue, 250);
 </script>
 
 <template>
-  <button :disabled="isLoading" :id="id" class="regular loading" @click="$emit('pressed'); animate();">
-    {{isLoading ? frame : ("&lt;" + text + "&gt;")}}
+  <button :disabled="isLoading" :id="id" :class="classes" class="regular loading" @click="$emit('pressed'); animate()">
+    {{isLoading ? frame : text}}
   </button>
 </template>
-
-<style scoped>
-
-button.loading:disabled {
-  color: var(--light-text-color);
-  transition: none;
-}
-
-</style>

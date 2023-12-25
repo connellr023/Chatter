@@ -2,6 +2,7 @@
 import LoadingButton from "@/components/LoadingButton.vue";
 import {useConnection} from "@/hooks/useConnection";
 import {onMounted} from "vue";
+import NameLabel from "@/components/NameLabel.vue";
 
 const {connect, disconnect, enteredName, attemptingConnection} = useConnection();
 
@@ -11,54 +12,91 @@ onMounted((): void => {
 </script>
 
 <template>
-  <div id="start-view-wrapper">
+  <div id="start-view-container">
+    <img id="logo" alt="Chatter logo" src="@/assets/logo_white.png" />
     <div id="start-connect-window">
-      <div id="start-connect-title">Welcome to <i>Chatter</i>,</div>
-      <div class="regular">Please enter a username below</div>
-      <input v-model="enteredName" id="username-input" class="regular" placeholder="<username>" /><br />
-      <LoadingButton id="connect-button" text="connect" @pressed="connect" :is-loading="attemptingConnection" />
+      <div id="start-connect-title">Welcome back!</div>
+      <input v-model="enteredName" id="username-input" class="regular" placeholder="Enter name..." /><br />
+      <LoadingButton id="connect-button" classes="regular" text="Connect" @pressed="connect" :is-loading="attemptingConnection" />
+      <div id="prompt" class="regular">Please enter a username above.</div>
     </div>
+    <NameLabel />
   </div>
 </template>
 
-<style scoped>
+<style scoped lang="scss">
+@import "@/assets/styles/variables";
+
+img#logo {
+  $distance: 20px;
+
+  position: absolute;
+  width: 180px;
+
+  left: $distance;
+  top: $distance - 2px;
+}
+
+div#start-view-container {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  height: 100vh;
+  width: 100vw;
+  text-align: center;
+}
 
 div#start-connect-window {
-  background-color: var(--invert-bg-color);
-  border-radius: 5px;
-  box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.2), 0 4px 14px 0 rgba(0, 0, 0, 0.8);
-  padding: 12px 50px;
-  position: absolute;
-  left: 50%;
-  top: 50%;
-  transform: translate(-50%, -50%);
-  text-align: center;
+  $size: 30vw;
+  $max-size: 350px;
+  $min-size: 250px;
 
-  div {
-    user-select: none;
+  display: block;
+  align-items: center;
+  text-align: center;
+  width: 50%;
+  min-width: $min-size + 10px;
+
+  $c1: #5e00ff;
+  $c2: #7b00ff;
+  $darken-amount: 15%;
+
+  button#connect-button {
+    background: linear-gradient(to top, $c1, $c2);
+    width: $size;
+    min-width: $min-size;
+    max-width: $max-size;
+
+    &:active:enabled, &:disabled {
+      background: linear-gradient(to top, darken($c1, $darken-amount), darken($c2, $darken-amount));
+    }
+  }
+
+  input {
+    $offset: 20px;
+
+    width: calc($size - $offset);
+    min-width: $min-size - $offset;
+    max-width: $max-size - $offset;
   }
 }
 
-div#start-connect-title, div#start-connect-title i {
-  color: var(--dark-text-color);
+div#start-connect-title {
   font-weight: bolder;
-  font-size: 23px;
+  font-size: 30px;
   margin-bottom: 10px;
+  user-select: none;
 }
 
 input#username-input {
   margin-bottom: 15px;
   margin-top: 17px;
-  width: var(--base-button-width-start-view);
 }
 
-button#connect-button {
-  width: calc(var(--base-button-width-start-view) + 12px);
-  margin-bottom: 7px;
-}
-
-button#connect-button:hover:enabled {
-  color: #13ba58;
+div#prompt {
+  font-size: 17px;
+  margin-top: 27px;
+  user-select: none;
 }
 
 </style>

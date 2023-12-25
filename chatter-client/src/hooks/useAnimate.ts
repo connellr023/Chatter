@@ -8,11 +8,12 @@ import {type Ref, ref} from "vue";
  * @param ms The number of milliseconds between each frame
  */
 export function useAnimate(frames: string[], shouldContinue: Ref<boolean>, ms: number) {
-    const frame: Ref<string> = ref(frames[frames.length - 1]);
+    const frame: Ref<string> = ref("");
 
     function animate(): void {
         let i: number = 0;
 
+        frame.value = frames[frames.length - 1];
         const interval: number = window.setInterval((): void => {
             if (shouldContinue.value) {
                 frame.value = frames[i];
