@@ -20,7 +20,7 @@ export default class IRoomObserverStub implements IRoomObserver {
     }
 
     public onClientDisconnected(client: Client): void {
-        this.trigger = "left";
+        this.trigger = "disconnect";
     }
 
     public onClientMessage(client: Client, message: ChatObject): void {

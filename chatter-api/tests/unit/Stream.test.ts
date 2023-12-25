@@ -1,10 +1,9 @@
 import Stream from "../../src/services/Stream";
 import IRoomObserver from "../../src/connections/IRoomObserver";
-import Client from "../../src/connections/Client";
 import IRoomObserverStub from "../stubs/IRoomObserverStub";
 
 import {Server, type Socket} from "socket.io";
-import {StatusObject, StreamEvents} from "../../src/lib/utility";
+import {StatusObject} from "../../src/lib/utility";
 
 const io: Server = new Server();
 let stream: Stream;
@@ -53,62 +52,49 @@ test("Test getEachObserver() has no duplicate instances", (): void => {
     expect(actual).toStrictEqual(expected);
 });
 
-test("Test onReceiveUser() with valid username", (): void => {
-    const socket: Socket = null as Socket; // Hack to mock services.io services object
-    const client: Client = new Client(socket, "alice");
-
-    const expected: Map<Socket, Client> = new Map<Socket, Client>([[socket, client]]);
-
-    stream.handleReceiveUser(client, {username: "alice"});
-
-    expect(stream.getConnections()).toStrictEqual(expected);
-});
-
-test("Test onReceiveUser() with username exactly at maximum length", (): void => {
-    const socket: Socket = null as Socket;
-    const client: Client = new Client(socket, "bob");
-
-    const status: StatusObject = stream.handleReceiveUser(client, {username: "aaaaaaaaaaaaaaa"});
-
-    expect(status.success).toBe(true);
-});
-
-test("Test onReceiveUser() with username exactly at minimum length", (): void => {
-    const socket: Socket = null as Socket;
-    const client: Client = new Client(socket, "charlie");
-
-    const status: StatusObject = stream.handleReceiveUser(client, {username: "a"});
-
-    expect(status.success).toBe(true);
-});
-
 test("Test onReceiveUser() with username too long", (): void => {
     const socket: Socket = null as Socket;
-    const client: Client = new Client(socket, "charlie");
-
-    const status: StatusObject = stream.handleReceiveUser(client, {username: "aaaaaaaaaaaaaaaa"});
+    const status: StatusObject = stream.handleVerifyClient(socket, {username: "aaaaaaaaaaaaaaaa"});
 
     expect(status.success).toBe(false);
 });
 
 test("Test onReceiveUser() with username too short", (): void => {
     const socket: Socket = null as Socket;
-    const client: Client = new Client(socket, "charlie");
-
-    const status: StatusObject = stream.handleReceiveUser(client, {username: ""});
+    const status: StatusObject = stream.handleVerifyClient(socket, {username: ""});
 
     expect(status.success).toBe(false);
 });
 
-test("Test onDisconnect()", (): void => {
-    const socket: Socket = null as Socket;
-    const client: Client = new Client(socket, "charlie");
-    const expected: Map<Socket, Client> = new Map<Socket, Client>();
+test("Test notifyJoin()", (): void => {
+    const o1: IRoomObserverStub = new IRoomObserverStub();
+    const o2: IRoomObserverStub = new IRoomObserverStub();
 
-    stream.handleReceiveUser(client, {username: "alice"});
-    stream.handleDisconnect(client);
+    const shouldRun: IRoomObserverStub[] = [o1];
+    const shouldNotRun: IRoomObserver[] = [o2];
 
-    expect(stream.getConnections()).toStrictEqual(expected);
+    const expectedTrigger: string = "join";
+
+    stream.attach(0, o1);
+    stream.attach(1, o2);
+    stream.notifyJoin(null, 0);
+
+    shouldRun.forEach((observer: IRoomObserverStub): void => {
+        if (observer.getTrigger() != expectedTrigger) {
+            if (observer.getTrigger().length == 0) {
+                throw new Error("Not triggered when should have");
+            }
+            else {
+                throw new Error("Wrong trigger");
+            }
+        }
+    });
+
+    shouldNotRun.forEach((observer: IRoomObserverStub): void => {
+        if (observer.getTrigger() != "") {
+            throw new Error("Triggered when not expected to");
+        }
+    });
 });
 
 test("Test notifyConnect()", (): void => {
@@ -116,11 +102,10 @@ test("Test notifyConnect()", (): void => {
     const o2: IRoomObserverStub = new IRoomObserverStub();
 
     const shouldRun: IRoomObserverStub[] = [o1, o2];
-    const expectedTrigger: string = "join";
+    const expectedTrigger: string = "connect";
 
     stream.attach(0, o1, o2);
-
-    stream.notifyClientConnectionStatus(StreamEvents.CLIENT_SEND_USERDATA, null);
+    stream.notifyConnect(null);
 
     shouldRun.forEach((observer: IRoomObserverStub): void => {
         if (observer.getTrigger() != expectedTrigger) {
@@ -134,43 +119,15 @@ test("Test notifyConnect()", (): void => {
     });
 });
 
-test("Test notifyClientConnectionStatus() for client services with additional data", (): void => {
+test("Test notifyDisconnect()", (): void => {
     const o1: IRoomObserverStub = new IRoomObserverStub();
     const o2: IRoomObserverStub = new IRoomObserverStub();
 
     const shouldRun: IRoomObserverStub[] = [o1, o2];
-    const expectedAdditional: {} = {testObj: 0};
-    const expectedTrigger: string = "join";
+    const expectedTrigger: string = "disconnect";
 
     stream.attach(0, o1, o2);
-
-    stream.notifyClientConnectionStatus(StreamEvents.CLIENT_SEND_USERDATA, null, expectedAdditional);
-
-    shouldRun.forEach((observer: IRoomObserverStub): void => {
-        if (observer.getTrigger() != expectedTrigger) {
-            if (observer.getTrigger().length == 0) {
-                throw new Error("Not triggered when should have");
-            }
-            else {
-                throw new Error("Wrong trigger");
-            }
-        }
-        else if (observer.getAdditionalData() != expectedAdditional) {
-            throw new Error("Incorrect additional data received");
-        }
-    });
-});
-
-test("Test notifyClientConnectionStatus() for client disconnection", (): void => {
-    const o1: IRoomObserverStub = new IRoomObserverStub();
-    const o2: IRoomObserverStub = new IRoomObserverStub();
-
-    const shouldRun: IRoomObserverStub[] = [o1, o2];
-    const expectedTrigger: string = "left";
-
-    stream.attach(0, o1, o2);
-
-    stream.notifyClientConnectionStatus(StreamEvents.CLIENT_DISCONNECTED, null);
+    stream.notifyDisconnect(null);
 
     shouldRun.forEach((observer: IRoomObserverStub): void => {
         if (observer.getTrigger() != expectedTrigger) {
@@ -182,12 +139,6 @@ test("Test notifyClientConnectionStatus() for client disconnection", (): void =>
             }
         }
     });
-});
-
-test("Test notifyClientConnectionStatus() with null arguments", (): void => {
-    stream.attach(0, new IRoomObserverStub());
-
-    expect((): void => stream.notifyClientConnectionStatus(null, null)).toThrow(Error);
 });
 
 test("Test notifyClientMessage()", (): void => {

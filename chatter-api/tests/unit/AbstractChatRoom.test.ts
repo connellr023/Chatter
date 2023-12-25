@@ -1,12 +1,13 @@
-import ChatRoom from "../../src/chat/ChatRoom";
+import {ConnectedUsersObject, StatusObject} from "../../src/lib/utility";
 
-import {StatusObject} from "../../src/lib/utility";
+import AbstractChatRoom from "../../src/chat/AbstractChatRoom";
+import AbstractChatRoomStub from "../stubs/AbstractChatRoomStub";
+import Client from "../../src/connections/Client";
 
-let room: ChatRoom;
+let room: AbstractChatRoom;
 
 beforeEach((): void => {
-    ChatRoom.Factory.reset();
-    room = ChatRoom.Factory.instantiate("test");
+    room = new AbstractChatRoomStub("stub", 0);
 });
 
 test("Test verifyClientMessage() with valid message", (): void => {
@@ -49,4 +50,24 @@ test("Test verifyClientMessage() with message exactly at minimum length", (): vo
     const result: StatusObject = room.verifyClientMessage({roomId: 0, text: "a"})
 
     expect(result.success).toBe(true);
+});
+
+test("Test encodeConnections()", (): void => {
+    const c: Client = new Client(null, "arhp");
+
+    try {
+        room.addClient(c);
+    }
+    catch (e) {}
+
+    const expected: ConnectedUsersObject = {
+        roomId: room.getID(),
+        connections: [
+            {
+                username: c.getName()
+            }
+        ]
+    };
+
+    expect(room.encodeConnections()).toStrictEqual(expected);
 });

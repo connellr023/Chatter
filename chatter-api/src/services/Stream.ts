@@ -22,11 +22,6 @@ export default class Stream {
     protected roomObservers: Map<number, IRoomObserver[]>;
 
     /**
-     * Map of client listeners indexed by the services event they listen for
-     */
-    protected clientListeners: Map<StreamEvents|string, ClientListenerCallback[]>;
-
-    /**
      * Map clients indexed by their corresponding socket ID
      */
     protected connections: Map<string, Client>;
@@ -38,7 +33,6 @@ export default class Stream {
     public constructor(io: Server) {
         this.io = io;
         this.roomObservers = new Map<number, IRoomObserver[]>();
-        this.clientListeners = new Map<StreamEvents|string, ClientListenerCallback[]>();
         this.connections = new Map<string, Client>();
     }
 
@@ -47,27 +41,21 @@ export default class Stream {
      * <b>All observers and listeners must be attached prior to this function being run</b>
      */
     public listen(): void {
-        this.register(StreamEvents.CLIENT_SEND_CHAT, (client: Client, data: ChatObject): void => {
-            this.notifyClientMessage(data.roomId, client, data);
-        });
-
-        this.register(StreamEvents.CLIENT_REQUEST_ROOMS, (client: Client): void => {
-            client.emit(StreamEvents.SERVER_SEND_ROOMS, ChatRoomFactory.encode(ChatRoomFactory.memberOf(client)));
-        });
-
-        this.register(StreamEvents.CLIENT_SEND_USERDATA, (client: Client, data: UserDataObject): void => {
-            client.emit(StreamEvents.SERVER_SEND_STATUS, this.handleReceiveUser(client, data));
-        });
-
-        this.register(StreamEvents.CLIENT_DISCONNECTED, this.handleDisconnect);
-
         this.io.on(StreamEvents.CLIENT_CONNECTED, (socket: Socket): void => {
+            socket.on(StreamEvents.CLIENT_SEND_USERDATA, (data: UserDataObject): void => {
+                socket.emit(StreamEvents.SERVER_SEND_STATUS, this.handleVerifyClient(socket, data));
+            });
 
-            // Activate client listeners
-            this.clientListeners.forEach((listeners: ClientListenerCallback[], event: StreamEvents|string): void => {
-                socket.on(event, (data: any): void => {
-                    listeners.forEach((listener: ClientListenerCallback): void => listener(this.connections.get(socket.id), data));
-                });
+            socket.on(StreamEvents.CLIENT_SEND_CHAT, (data: ChatObject): void => {
+                this.notifyClientMessage(data.roomId, this.connections.get(socket.id), data);
+            });
+
+            socket.on(StreamEvents.CLIENT_REQUEST_ROOMS, (): void => {
+                socket.emit(StreamEvents.SERVER_SEND_ROOMS, ChatRoomFactory.encode(ChatRoomFactory.memberOf(this.connections.get(socket.id))));
+            });
+
+            socket.on(StreamEvents.CLIENT_DISCONNECTED, (): void => {
+                this.handleDisconnect(socket);
             });
         });
     }
@@ -83,19 +71,6 @@ export default class Stream {
         }
 
         this.roomObservers.get(roomId).push(...observers);
-    }
-
-    /**
-     * Facade for listening for socket interactions through a client object
-     * @param event The services event to listen for
-     * @param listeners A sequence of callbacks to be executed when the event is triggered
-     */
-    public register(event: StreamEvents|string, ...listeners: ClientListenerCallback[]): void {
-        if (!this.clientListeners.has(event)) {
-            this.clientListeners.set(event, []);
-        }
-
-        this.clientListeners.get(event).push(...listeners);
     }
 
     /**
@@ -143,18 +118,20 @@ export default class Stream {
 
     /**
      * Executed when <b>RECEIVE_USER</b> is triggered
-     * @param client The client that triggered this event
+     * @param socket The socket connection that triggered this event
      * @param data The object that encodes the user data received
      * @return An encoding of a status that can be sent back to the client
      */
-    public handleReceiveUser(client: Client, data: UserDataObject): StatusObject {
+    public handleVerifyClient(socket: Socket, data: UserDataObject): StatusObject {
         let status: StatusObject = {success: false};
 
         if (typeof data.username == "string") {
             if (data.username.length >= config.MIN_NAME_LENGTH && data.username.length <= config.MAX_NAME_LENGTH) {
                 status.success = true;
 
-                this.connections.set(client.getSocketID(), client);
+                const client: Client = new Client(socket, data.username);
+
+                this.connections.set(socket.id, client);
                 this.notifyConnect(client);
             }
         }
@@ -164,10 +141,12 @@ export default class Stream {
 
     /**
      * Executed when <b>DISCONNECT</b> is triggered
-     * @param client The client that disconnected
+     * @param socket The socket that disconnected
      */
-    public handleDisconnect(client: Client): void {
-        this.connections.delete(client.getSocketID());
+    public handleDisconnect(socket: Socket): void {
+        const client: Client = this.connections.get(socket.id);
+
+        this.connections.delete(socket.id);
         this.notifyDisconnect(client);
     }
 
@@ -200,5 +179,3 @@ export default class Stream {
         return this.connections;
     }
 }
-
-type ClientListenerCallback = (client: Client, data?: any) => void;

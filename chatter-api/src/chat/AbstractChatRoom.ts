@@ -75,7 +75,11 @@ export default abstract class AbstractChatRoom implements IRoomObserver {
         }
     }
 
-    protected addClient(client: Client): void {
+    /**
+     * Adds a client as a member to this chat room and broadcasts that a client was added to the rest of the room
+     * @param client The client to add
+     */
+    public addClient(client: Client): void {
         this.clients.add(client);
         this.broadcast(StreamEvents.SERVER_UPDATE_CONNECTIONS, this.encodeConnections());
     }

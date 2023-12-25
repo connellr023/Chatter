@@ -11,6 +11,7 @@ import {
     StatusObject,
     StreamEvents
 } from "../../src/lib/utility";
+import AbstractChatRoom from "../../src/chat/AbstractChatRoom";
 
 let io: Server;
 let stream: Stream;
@@ -50,7 +51,7 @@ afterAll((): void => {
 test("Test receive user data success", (done): void => {
     const data: UserDataObject = {
         username: "alice"
-    }
+    };
 
     clientSocket1.once(StreamEvents.SERVER_SEND_STATUS, (status: StatusObject): void => {
         expect(status.success).toBe(true);
@@ -63,7 +64,7 @@ test("Test receive user data success", (done): void => {
 test("Test receive bad user data with name too long", (done): void => {
     const data: UserDataObject = {
         username: "sjdoifjiodsfgiodfjiogdf"
-    }
+    };
 
     clientSocket1.once(StreamEvents.SERVER_SEND_STATUS, (status: StatusObject): void => {
         expect(status.success).toBe(false);
@@ -76,7 +77,7 @@ test("Test receive bad user data with name too long", (done): void => {
 test("Test receive bad user data with name too short", (done): void => {
     const data: UserDataObject = {
         username: ""
-    }
+    };
 
     clientSocket1.once(StreamEvents.SERVER_SEND_STATUS, (status: StatusObject): void => {
         expect(status.success).toBe(false);
@@ -98,9 +99,17 @@ test("Test receive garbage user data", (done): void => {
 });
 
 test("Test receive room encodings", (done): void => {
-    ChatRoomFactory.instantiate("1");
-    ChatRoomFactory.instantiate("34");
-    ChatRoomFactory.instantiate("private", false);
+    const r1: AbstractChatRoom = ChatRoomFactory.instantiate("1");
+    const r2: AbstractChatRoom = ChatRoomFactory.instantiate("34");
+    const r3: AbstractChatRoom = ChatRoomFactory.instantiate("private", false);
+
+    stream.attach(r1.getID(), r1);
+    stream.attach(r2.getID(), r2);
+    stream.attach(r3.getID(), r3);
+
+    const data: UserDataObject = {
+        username: "arhp"
+    };
 
     const expected: RoomsListObject = {
       rooms: [
@@ -115,10 +124,18 @@ test("Test receive room encodings", (done): void => {
       ]
     };
 
-    clientSocket1.once(StreamEvents.SERVER_SEND_ROOMS, (data: RoomsListObject): void => {
-        expect(data).toStrictEqual(expected);
-        done();
+    clientSocket1.once(StreamEvents.SERVER_SEND_STATUS, (status: StatusObject): void => {
+        if (!status.success) {
+            throw Error("Expected successful status when sending user data");
+        }
+
+        clientSocket1.once(StreamEvents.SERVER_SEND_ROOMS, (data: RoomsListObject): void => {
+            expect(data).toStrictEqual(expected);
+            done();
+        });
+
+        clientSocket1.emit(StreamEvents.CLIENT_REQUEST_ROOMS);
     });
 
-    clientSocket1.emit(StreamEvents.CLIENT_REQUEST_ROOMS);
+    clientSocket1.emit(StreamEvents.CLIENT_SEND_USERDATA, data);
 });
