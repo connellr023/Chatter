@@ -1,21 +1,22 @@
-import IStreamObserver from "../../src/stream/IStreamObserver";
-import Client from "../../src/stream/Client";
+import IRoomObserver from "../../src/connections/IRoomObserver";
+import Client from "../../src/connections/Client";
 
 import {ChatObject} from "../../src/lib/utility";
 
-export default class StreamObserverStub implements IStreamObserver {
+export default class IRoomObserverStub implements IRoomObserver {
 
     private trigger: string;
-    private additional: {};
 
     public constructor() {
         this.trigger = "";
-        this.additional = {};
     }
 
-    public onClientConnected(client: Client, additional: {}): void {
+    public onClientJoined(client: Client): void {
         this.trigger = "join";
-        this.additional = additional;
+    }
+
+    public onClientConnected(client: Client): void {
+        this.trigger = "connect";
     }
 
     public onClientDisconnected(client: Client): void {
@@ -28,9 +29,5 @@ export default class StreamObserverStub implements IStreamObserver {
 
     public getTrigger(): string {
         return this.trigger;
-    }
-
-    public getAdditionalData(): {} {
-        return this.additional;
     }
 }

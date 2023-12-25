@@ -4,10 +4,11 @@
  */
 import * as http from "http";
 
+import AbstractChatRoom from "./chat/AbstractChatRoom";
+import ChatRoomFactory from "./lib/ChatRoomFactory";
 import Logger from "./lib/Logger";
 import express, {Application} from "express";
-import Stream from "./stream/Stream";
-import GlobalChatRoom from "./chat/GlobalChatRoom";
+import Stream from "./services/Stream";
 import cors from "cors";
 
 import {Server, type Socket} from "socket.io";
@@ -25,7 +26,7 @@ const server: http.Server = app.listen(port, (): void => {
     Logger.ok(`Server started on port ${port}`);
 });
 
-// Setup stream
+// Setup services
 const io: Server = new Server(server, {
     httpCompression: false,
     transports: ["websocket", "polling"],
@@ -45,11 +46,13 @@ io.on(StreamEvents.CLIENT_CONNECTED, (socket: Socket): void => {
 
 const stream: Stream = new Stream(io);
 
-// Setup chat rooms
-const defaultRoomCount: number = 3;
+// Setup global chat rooms
+const globalChatRoomsCount: number = 3;
 
-for (let i: number = 0; i < defaultRoomCount; i++) {
-    stream.attach(i, GlobalChatRoom.Factory.instantiate(`Global Chat Room ${i + 1}`));
+for (let i: number = 0; i < globalChatRoomsCount; i++) {
+    const globalChatRoom: AbstractChatRoom = ChatRoomFactory.instantiate(`Global Chat Room ${i + 1}`);
+
+    stream.attach(i, globalChatRoom);
 }
 
 // Listen

@@ -1,8 +1,8 @@
 import * as http from "http";
 import * as ioc from "socket.io-client";
 
-import Stream from "../../src/stream/Stream";
-import GlobalChatRoom from "../../src/chat/GlobalChatRoom";
+import Stream from "../../src/services/Stream";
+import ChatRoomFactory from "../../src/lib/ChatRoomFactory";
 
 import {Server} from "socket.io";
 import {
@@ -20,7 +20,7 @@ let clientSocket2: ioc.Socket;
 const port: number = 8001;
 
 beforeEach((): void => {
-    GlobalChatRoom.Factory.reset();
+    ChatRoomFactory.reset();
 });
 
 beforeAll((done): void => {
@@ -98,11 +98,25 @@ test("Test receive garbage user data", (done): void => {
 });
 
 test("Test receive room encodings", (done): void => {
-    GlobalChatRoom.Factory.instantiate("1");
-    GlobalChatRoom.Factory.instantiate("34");
+    ChatRoomFactory.instantiate("1");
+    ChatRoomFactory.instantiate("34");
+    ChatRoomFactory.instantiate("private", false);
+
+    const expected: RoomsListObject = {
+      rooms: [
+          {
+              name: "1",
+              id: 0
+          },
+          {
+              name: "34",
+              id: 1
+          }
+      ]
+    };
 
     clientSocket1.once(StreamEvents.SERVER_SEND_ROOMS, (data: RoomsListObject): void => {
-        expect(data).toStrictEqual(GlobalChatRoom.Factory.encode());
+        expect(data).toStrictEqual(expected);
         done();
     });
 

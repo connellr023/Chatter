@@ -11,7 +11,7 @@ export const config = {
 };
 
 /**
- * Enumeration of events that are permissible to occur on the stream
+ * Enumeration of events that are permissible to occur on the services
  * @author Connell Reffo
  */
 export enum StreamEvents {
@@ -36,7 +36,7 @@ export interface ConnectedUsersObject {
 }
 
 /**
- * Represents an object that encodes of a status message sent over a stream
+ * Represents an object that encodes of a status message sent over a services
  * @author Connell Reffo
  */
 export interface StatusObject {

@@ -1,12 +1,12 @@
-import GlobalChatRoom from "../../src/chat/GlobalChatRoom";
+import ChatRoom from "../../src/chat/ChatRoom";
 
 import {StatusObject} from "../../src/lib/utility";
 
-let room: GlobalChatRoom;
+let room: ChatRoom;
 
 beforeEach((): void => {
-    GlobalChatRoom.Factory.reset();
-    room = GlobalChatRoom.Factory.instantiate("test");
+    ChatRoom.Factory.reset();
+    room = ChatRoom.Factory.instantiate("test");
 });
 
 test("Test verifyClientMessage() with valid message", (): void => {

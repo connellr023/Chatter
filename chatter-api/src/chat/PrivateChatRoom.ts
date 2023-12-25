@@ -2,15 +2,16 @@ import AbstractChatRoom from "./AbstractChatRoom";
 import Client from "../connections/Client";
 
 /**
- * Represents a global chat room that everyone is automatically connected to
+ * Represents a private chat room with select clients as members
  * @author Connell Reffo
  */
-export default class GlobalChatRoom extends AbstractChatRoom {
+export default class PrivateChatRoom extends AbstractChatRoom {
 
     /**
      * @inheritDoc
+     * Unused
      */
-    public onClientConnected(client: Client): void {
+    public onClientJoined(client: Client): void {
         super.addClient(client);
     }
 
@@ -18,5 +19,5 @@ export default class GlobalChatRoom extends AbstractChatRoom {
      * @inheritDoc
      * Unused
      */
-    public onClientJoined(client: Client): void {}
+    public onClientConnected(client: Client): void {}
 }
