@@ -8,10 +8,11 @@ function openGithub(): void {
   <div id="name-label" @click="openGithub"><span id="name-copy">&copy;</span> Connell Reffo</div>
 </template>
 
-<style scoped>
+<style scoped lang="scss">
+@import "@/assets/styles/variables";
 
 * {
-  color: var(--invert-highlight-color);
+  color: $invert-highlight-color;
   font-family: "Ubuntu Mono", monospace;
   transition: color 0.05s ease-in-out;
 }
@@ -29,7 +30,7 @@ div#name-label {
 }
 
 div#name-label:hover, div#name-label:hover #name-copy {
-  color: var(--main-red-color);
+  color: $main-red-hue;
   cursor: pointer;
   text-decoration: underline;
 }

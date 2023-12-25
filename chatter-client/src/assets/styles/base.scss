@@ -1,26 +1,45 @@
 @import "variables";
 
-%main-transition {
-  transition: all 0.2s ease-in-out;
+%base-regular {
+  $time: 0.25s;
+  $method: ease-in-out;
+
+  border-radius: 5px;
+  color: $invert-highlight-color;
+  font-size: 15px;
+  font-family: $sans-serif-font;
+  padding: 8px;
+  transition: border-color $time $method,
+              color $time $method,
+              background-color $time $method,
+              background-position $time $method;
 }
 
 input.regular {
-  @extend %main-transition;
+  @extend %base-regular;
 
-  border-radius: 5px;
-  border: 1px solid $invert-highlight-color;
+  border: 2px solid $invert-highlight-color;
   background-color: $main-bg-color;
   font-family: $sans-serif-font;
-  font-size: 15px;
-  color: $invert-highlight-color;
-  padding: 6px;
+
+  &:focus {
+    border-color: $invert-bg-color;
+    color: $light-text-color;
+  }
+
+  &::placeholder {
+    color: $invert-highlight-color;
+    opacity: 1;
+  }
 }
 
-input.regular:focus {
-  border-color: $invert-bg-color;
-  color: $light-text-color;
-}
+button.regular {
+  @extend %base-regular;
 
-input.regular::placeholder {
-  color: $invert-highlight-color;
+  border: none;
+  cursor: pointer;
+
+  &:hover:enabled {
+    color: $invert-bg-color;
+  }
 }

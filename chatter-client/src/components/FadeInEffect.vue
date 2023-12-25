@@ -11,7 +11,7 @@ onMounted((): void => {
     window.setTimeout((): void => {
       disableYet.value = true;
     }, 400);
-  }, 100);
+  }, 70);
 });
 </script>
 
@@ -19,10 +19,11 @@ onMounted((): void => {
   <div id="overlay" :class="{'hide': hideYet, 'disable': disableYet}"></div>
 </template>
 
-<style scoped>
+<style scoped lang="scss">
+@import "@/assets/styles/variables";
 
 div#overlay {
-  background-color: var(--main-bg-color);
+  background-color: $main-bg-color;
   position: absolute;
   width: 100vw;
   height: 100vh;
