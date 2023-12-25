@@ -11,7 +11,7 @@ onMounted((): void => {
     window.setTimeout((): void => {
       disableYet.value = true;
     }, 400);
-  }, 10);
+  }, 100);
 });
 </script>
 

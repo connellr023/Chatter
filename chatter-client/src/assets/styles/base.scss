@@ -1,0 +1,26 @@
+@import "variables";
+
+%main-transition {
+  transition: all 0.2s ease-in-out;
+}
+
+input.regular {
+  @extend %main-transition;
+
+  border-radius: 5px;
+  border: 1px solid $invert-highlight-color;
+  background-color: $main-bg-color;
+  font-family: $sans-serif-font;
+  font-size: 15px;
+  color: $invert-highlight-color;
+  padding: 6px;
+}
+
+input.regular:focus {
+  border-color: $invert-bg-color;
+  color: $light-text-color;
+}
+
+input.regular::placeholder {
+  color: $invert-highlight-color;
+}

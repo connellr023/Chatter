@@ -11,7 +11,9 @@ function openGithub(): void {
 <style scoped>
 
 * {
-  transition: color 0.2s ease-in-out;
+  color: var(--invert-highlight-color);
+  font-family: "Ubuntu Mono", monospace;
+  transition: color 0.05s ease-in-out;
 }
 
 span#name-copy {
@@ -20,17 +22,14 @@ span#name-copy {
 
 div#name-label {
   font-size: 17px;
+  bottom: 15px;
   position: absolute;
-  bottom: 11px;
-  left: 13px;
-  opacity: 0.5;
   text-decoration: none;
   user-select: none;
-  z-index: 10;
 }
 
 div#name-label:hover, div#name-label:hover #name-copy {
-  color: var(--main-theme-color);
+  color: var(--main-red-color);
   cursor: pointer;
   text-decoration: underline;
 }

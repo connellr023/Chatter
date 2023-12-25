@@ -2,7 +2,7 @@
  * Main Vue initialization
  * @author Connell Reffo
  */
-import "./assets/main.css";
+import "./assets/styles/main.scss";
 
 import App from "./App.vue";
 import router from "./router/router";
