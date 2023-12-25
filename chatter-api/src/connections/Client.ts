@@ -42,11 +42,4 @@ export default class Client {
     public getName(): string {
         return this.name;
     }
-
-    /**
-     * Gets the ID of this client's socket.io object
-     */
-    public getSocketID(): string {
-        return this.socket.id;
-    }
 }
