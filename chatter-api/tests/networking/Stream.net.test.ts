@@ -115,11 +115,13 @@ test("Test receive room encodings", (done): void => {
       rooms: [
           {
               name: "1",
-              id: 0
+              id: 0,
+              isGlobal: true
           },
           {
               name: "34",
-              id: 1
+              id: 1,
+              isGlobal: true
           }
       ]
     };

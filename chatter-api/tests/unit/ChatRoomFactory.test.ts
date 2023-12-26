@@ -59,7 +59,7 @@ test("Test memberOf() with private chat rooms", (): void => {
 
 test("Test encode()", (): void => {
     const f1: AbstractChatRoom = ChatRoomFactory.instantiate("1");
-    const f2: AbstractChatRoom = ChatRoomFactory.instantiate("2");
+    const f2: AbstractChatRoom = ChatRoomFactory.instantiate("2", false);
 
     const arr: AbstractChatRoom[] = [f1, f2];
 
@@ -67,11 +67,13 @@ test("Test encode()", (): void => {
         rooms: [
             {
                 name: "1",
-                id: 0
+                id: 0,
+                isGlobal: true
             },
             {
                 name: "2",
-                id: 1
+                id: 1,
+                isGlobal: false
             }
         ]
     };
