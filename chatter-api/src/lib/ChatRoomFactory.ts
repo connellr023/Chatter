@@ -1,7 +1,7 @@
 import AbstractChatRoom from "../chat/AbstractChatRoom";
 import GlobalChatRoom from "../chat/GlobalChatRoom";
 import PrivateChatRoom from "../chat/PrivateChatRoom";
-import Client from "../connections/Client";
+import Client from "../stream/Client";
 
 import {RoomObject, RoomsListObject} from "./utility";
 
@@ -38,6 +38,7 @@ export default class ChatRoomFactory {
 
     /**
      * Gets a list of rooms that a specified client is a member of
+     * @static
      * @param client The client to check
      */
     public static memberOf(client: Client): AbstractChatRoom[] {
@@ -53,7 +54,7 @@ export default class ChatRoomFactory {
     }
 
     /**
-     * Encodes an array of rooms in a JSON format
+     * Encodes an array of rooms in JSON format
      * @static
      */
     public static encode(rooms: AbstractChatRoom[]): RoomsListObject {
@@ -62,7 +63,8 @@ export default class ChatRoomFactory {
         rooms.forEach((room: AbstractChatRoom): void => {
             roomObjects.push({
                 name: room.getName(),
-                id: room.getID()
+                id: room.getID(),
+                isGlobal: (room instanceof GlobalChatRoom)
             });
         });
 
@@ -74,6 +76,7 @@ export default class ChatRoomFactory {
     /**
      * Resets the chat room factory <br />
      * <b>Should only be used for testing</b>
+     * @static
      */
     public static reset(): void {
         this.rooms = [];

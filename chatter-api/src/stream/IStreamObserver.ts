@@ -6,7 +6,7 @@ import {ChatObject} from "../lib/utility";
  * Abstract representation of a class that observes events on a chat room
  * @author Connell Reffo
  */
-export default interface IRoomObserver {
+export default interface IStreamObserver {
 
     /**
      * Triggered when a client joins the room this observer watches

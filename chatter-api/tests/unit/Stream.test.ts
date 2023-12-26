@@ -1,6 +1,6 @@
-import Stream from "../../src/services/Stream";
-import IRoomObserver from "../../src/connections/IRoomObserver";
-import IRoomObserverStub from "../stubs/IRoomObserverStub";
+import Stream from "../../src/stream/Stream";
+import IStreamObserver from "../../src/stream/IStreamObserver";
+import IStreamObserverStub from "../stubs/IStreamObserverStub";
 
 import {Server, type Socket} from "socket.io";
 import {StatusObject} from "../../src/lib/utility";
@@ -13,10 +13,10 @@ beforeEach((): void => {
 });
 
 test("Test attach() with multiple observers to single event", (): void => {
-    const o1: IRoomObserver = new IRoomObserverStub();
-    const o2: IRoomObserver = new IRoomObserverStub();
+    const o1: IStreamObserver = new IStreamObserverStub();
+    const o2: IStreamObserver = new IStreamObserverStub();
 
-    const expected: Map<number, IRoomObserver[]> = new Map<number, IRoomObserver[]>([[0, [o1, o2]]]);
+    const expected: Map<number, IStreamObserver[]> = new Map<number, IStreamObserver[]>([[0, [o1, o2]]]);
 
     stream.attach(0, o1, o2);
 
@@ -24,11 +24,11 @@ test("Test attach() with multiple observers to single event", (): void => {
 });
 
 test("Test attach() with multiple observers to multiple events", (): void => {
-    const o1: IRoomObserver = new IRoomObserverStub();
-    const o2: IRoomObserver = new IRoomObserverStub();
-    const o3: IRoomObserver = new IRoomObserverStub();
+    const o1: IStreamObserver = new IStreamObserverStub();
+    const o2: IStreamObserver = new IStreamObserverStub();
+    const o3: IStreamObserver = new IStreamObserverStub();
 
-    const expected: Map<number, IRoomObserver[]> = new Map<number, IRoomObserver[]>([[0, [o1, o2]], [1, [o1, o2, o3]], [2, [o2]]]);
+    const expected: Map<number, IStreamObserver[]> = new Map<number, IStreamObserver[]>([[0, [o1, o2]], [1, [o1, o2, o3]], [2, [o2]]]);
 
     stream.attach(0, o1, o2);
     stream.attach(1, o1, o2, o3);
@@ -38,16 +38,16 @@ test("Test attach() with multiple observers to multiple events", (): void => {
 });
 
 test("Test getEachObserver() has no duplicate instances", (): void => {
-    const o1: IRoomObserver = new IRoomObserverStub();
-    const o2: IRoomObserver = new IRoomObserverStub();
-    const o3: IRoomObserver = o1;
+    const o1: IStreamObserver = new IStreamObserverStub();
+    const o2: IStreamObserver = new IStreamObserverStub();
+    const o3: IStreamObserver = o1;
 
-    const expected: IRoomObserver[] = [o1, o2];
+    const expected: IStreamObserver[] = [o1, o2];
 
     stream.attach(0, o1);
     stream.attach(1, o2, o3);
 
-    const actual: IRoomObserver[] = Array.from(stream.getEachObserver());
+    const actual: IStreamObserver[] = Array.from(stream.getEachObserver());
 
     expect(actual).toStrictEqual(expected);
 });
@@ -67,11 +67,11 @@ test("Test onReceiveUser() with username too short", (): void => {
 });
 
 test("Test notifyJoin()", (): void => {
-    const o1: IRoomObserverStub = new IRoomObserverStub();
-    const o2: IRoomObserverStub = new IRoomObserverStub();
+    const o1: IStreamObserverStub = new IStreamObserverStub();
+    const o2: IStreamObserverStub = new IStreamObserverStub();
 
-    const shouldRun: IRoomObserverStub[] = [o1];
-    const shouldNotRun: IRoomObserver[] = [o2];
+    const shouldRun: IStreamObserverStub[] = [o1];
+    const shouldNotRun: IStreamObserver[] = [o2];
 
     const expectedTrigger: string = "join";
 
@@ -79,7 +79,7 @@ test("Test notifyJoin()", (): void => {
     stream.attach(1, o2);
     stream.notifyJoin(null, 0);
 
-    shouldRun.forEach((observer: IRoomObserverStub): void => {
+    shouldRun.forEach((observer: IStreamObserverStub): void => {
         if (observer.getTrigger() != expectedTrigger) {
             if (observer.getTrigger().length == 0) {
                 throw new Error("Not triggered when should have");
@@ -90,7 +90,7 @@ test("Test notifyJoin()", (): void => {
         }
     });
 
-    shouldNotRun.forEach((observer: IRoomObserverStub): void => {
+    shouldNotRun.forEach((observer: IStreamObserverStub): void => {
         if (observer.getTrigger() != "") {
             throw new Error("Triggered when not expected to");
         }
@@ -98,16 +98,16 @@ test("Test notifyJoin()", (): void => {
 });
 
 test("Test notifyConnect()", (): void => {
-    const o1: IRoomObserverStub = new IRoomObserverStub();
-    const o2: IRoomObserverStub = new IRoomObserverStub();
+    const o1: IStreamObserverStub = new IStreamObserverStub();
+    const o2: IStreamObserverStub = new IStreamObserverStub();
 
-    const shouldRun: IRoomObserverStub[] = [o1, o2];
+    const shouldRun: IStreamObserverStub[] = [o1, o2];
     const expectedTrigger: string = "connect";
 
     stream.attach(0, o1, o2);
     stream.notifyConnect(null);
 
-    shouldRun.forEach((observer: IRoomObserverStub): void => {
+    shouldRun.forEach((observer: IStreamObserverStub): void => {
         if (observer.getTrigger() != expectedTrigger) {
             if (observer.getTrigger().length == 0) {
                 throw new Error("Not triggered when should have");
@@ -120,16 +120,16 @@ test("Test notifyConnect()", (): void => {
 });
 
 test("Test notifyDisconnect()", (): void => {
-    const o1: IRoomObserverStub = new IRoomObserverStub();
-    const o2: IRoomObserverStub = new IRoomObserverStub();
+    const o1: IStreamObserverStub = new IStreamObserverStub();
+    const o2: IStreamObserverStub = new IStreamObserverStub();
 
-    const shouldRun: IRoomObserverStub[] = [o1, o2];
+    const shouldRun: IStreamObserverStub[] = [o1, o2];
     const expectedTrigger: string = "disconnect";
 
     stream.attach(0, o1, o2);
     stream.notifyDisconnect(null);
 
-    shouldRun.forEach((observer: IRoomObserverStub): void => {
+    shouldRun.forEach((observer: IStreamObserverStub): void => {
         if (observer.getTrigger() != expectedTrigger) {
             if (observer.getTrigger().length == 0) {
                 throw new Error("Not triggered when should have");
@@ -142,19 +142,19 @@ test("Test notifyDisconnect()", (): void => {
 });
 
 test("Test notifyClientMessage()", (): void => {
-    const o1: IRoomObserverStub = new IRoomObserverStub();
-    const o2: IRoomObserverStub = new IRoomObserverStub();
-    const o3: IRoomObserverStub = new IRoomObserverStub();
+    const o1: IStreamObserverStub = new IStreamObserverStub();
+    const o2: IStreamObserverStub = new IStreamObserverStub();
+    const o3: IStreamObserverStub = new IStreamObserverStub();
 
-    const shouldReceive: IRoomObserverStub[] = [o1, o2];
-    const shouldNotReceive: IRoomObserverStub[] = [o3];
+    const shouldReceive: IStreamObserverStub[] = [o1, o2];
+    const shouldNotReceive: IStreamObserverStub[] = [o3];
     const expectedTrigger: string = "test message"
 
     stream.attach(0, o1, o2);
     stream.attach(1, o3);
     stream.notifyClientMessage(0, null, {roomId: 0, text: expectedTrigger});
 
-    shouldReceive.forEach((observer: IRoomObserverStub): void => {
+    shouldReceive.forEach((observer: IStreamObserverStub): void => {
         if (observer.getTrigger() != expectedTrigger) {
             if (observer.getTrigger().length == 0) {
                 throw new Error("Not triggered when expected");
@@ -165,7 +165,7 @@ test("Test notifyClientMessage()", (): void => {
         }
     });
 
-    shouldNotReceive.forEach((observer: IRoomObserverStub): void => {
+    shouldNotReceive.forEach((observer: IStreamObserverStub): void => {
         if (observer.getTrigger().length > 0) {
             throw new Error("Triggered when not expected");
         }

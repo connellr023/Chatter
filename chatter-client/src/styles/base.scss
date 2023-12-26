@@ -2,7 +2,7 @@
 @import "utility";
 
 input.regular {
-  @extend %base, %base-border;
+  @extend %base-main, %base-border;
 
   background-color: $main-bg-color;
   font-family: $sans-serif-font;
@@ -18,7 +18,7 @@ input.regular {
 }
 
 button.regular {
-  @extend %base;
+  @extend %base-main;
 
   border: none;
   cursor: pointer;
@@ -29,7 +29,7 @@ button.regular {
 }
 
 button.outline {
-  @extend %base, %base-border;
+  @extend %base-main, %base-border;
 
   background: $main-bg-color;
   cursor: pointer;
@@ -39,58 +39,22 @@ button.outline {
   }
 }
 
-div.notification-element {
-  @extend %base;
+button.bubble {
+  @include base-props(7px, 15px, 10px, 0.15s);
 
-  background-color: $invert-bg-color;
+  padding-left: 7px;
+  background-color: transparent;
   border: none;
-  box-shadow: 0 2px 4px 0 rgba(0, 0, 0, 0.2), 0 3px 14px 0 rgba(0, 0, 0, 0.6);
+  color: $invert-highlight-color;
   cursor: pointer;
-  padding-left: 17px;
-  font-size: 16px;
-  margin: 10px;
-  padding-top: 10px;
-  padding-bottom: 10px;
-  user-select: none;
-  float: right;
+  text-align: left;
 
-  animation: fade-in 0.15s ease-in-out both;
-
-  @keyframes fade-in {
-    0% {
-      opacity: 0;
-    }
-    100% {
-      opacity: 1;
-    }
+  &:hover, &.selected {
+    background-color: $main-highlight-color;
   }
 
-  &:hover {
-    background-color: $invert-highlight-color;
-    transition: all 0.15s ease-in-out;
-  }
-
-  $base-font-size: 16px;
-
-  div.notification-body {
-    display: inline;
-    color: $dark-text-color;
-    font-size: $base-font-size;
-    text-align: right;
-    margin-right: 10px;
-  }
-
-  div.notification-alert {
-    background-color: $main-bg-color;
-    border-radius: inherit;
-    color: $main-red-hue;
-    font-family: $monospace-font;
-    display: inline;
-    font-size: $base-font-size + 5px;
-    font-weight: bold;
-    margin-right: 12px;
-    margin-left: -4px;
-    padding: 5px 7px 5px 6px;
+  &.selected {
+    color: $light-text-color;
   }
 }
 

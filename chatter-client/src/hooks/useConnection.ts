@@ -9,7 +9,7 @@ import stream from "@/lib/stream";
 import {useMembers} from "@/hooks/useMembers";
 
 /**
- * Function implementing socket services with client view
+ * Function implementing socket stream with client view
  * @author Connell Reffo
  */
 export function useConnection() {
@@ -22,7 +22,7 @@ export function useConnection() {
     useMembers();
 
     /**
-     * Attempts to establish a services with the server <br />
+     * Attempts to establish a stream with the server <br />
      * Notifications and reactive properties are updated accordingly
      */
     function connect(): void {

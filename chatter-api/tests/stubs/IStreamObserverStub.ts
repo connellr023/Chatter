@@ -1,9 +1,9 @@
-import IRoomObserver from "../../src/connections/IRoomObserver";
-import Client from "../../src/connections/Client";
+import IStreamObserver from "../../src/stream/IStreamObserver";
+import Client from "../../src/stream/Client";
 
 import {ChatObject} from "../../src/lib/utility";
 
-export default class IRoomObserverStub implements IRoomObserver {
+export default class IStreamObserverStub implements IStreamObserver {
 
     private trigger: string;
 

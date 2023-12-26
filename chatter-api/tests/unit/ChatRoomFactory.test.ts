@@ -1,6 +1,6 @@
 import AbstractChatRoom from "../../src/chat/AbstractChatRoom";
 import ChatRoomFactory from "../../src/lib/ChatRoomFactory";
-import Client from "../../src/connections/Client";
+import Client from "../../src/stream/Client";
 
 import {RoomsListObject} from "../../src/lib/utility";
 

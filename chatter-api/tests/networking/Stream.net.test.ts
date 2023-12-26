@@ -1,7 +1,7 @@
 import * as http from "http";
 import * as ioc from "socket.io-client";
 
-import Stream from "../../src/services/Stream";
+import Stream from "../../src/stream/Stream";
 import ChatRoomFactory from "../../src/lib/ChatRoomFactory";
 
 import {Server} from "socket.io";

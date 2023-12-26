@@ -1,27 +1,17 @@
 @import "variables";
 
-%base {
-  $time: 0.25s;
+@mixin base-props($br, $fs, $p, $time) {
   $method: ease-in-out;
 
-  border-radius: 5px;
+  border-radius: $br;
   color: $invert-highlight-color;
-  font-size: 15px;
+  font-size: $fs;
   font-family: $sans-serif-font;
-  padding: 8px;
+  padding: $p;
   transition: border-color $time $method,
               color $time $method,
               background-color $time $method,
               background-position $time $method;
-}
-
-%base-highlight {
-  border-color: $invert-bg-color;
-  color: $light-text-color;
-}
-
-%base-border {
-  border: 2px solid $invert-highlight-color;
 }
 
 @mixin gradient-button($c1, $c2) {
@@ -33,4 +23,17 @@
   &:active:enabled, &:disabled {
     background: linear-gradient($direction, darken($c1, $darken-amount), darken($c2, $darken-amount));
   }
+}
+
+%base-main {
+  @include base-props(5px, 15px, 8px, 0.25s);
+}
+
+%base-highlight {
+  border-color: $invert-bg-color;
+  color: $light-text-color;
+}
+
+%base-border {
+  border: 2px solid $invert-highlight-color;
 }

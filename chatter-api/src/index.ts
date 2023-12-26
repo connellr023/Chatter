@@ -8,7 +8,7 @@ import AbstractChatRoom from "./chat/AbstractChatRoom";
 import ChatRoomFactory from "./lib/ChatRoomFactory";
 import Logger from "./lib/Logger";
 import express, {Application} from "express";
-import Stream from "./services/Stream";
+import Stream from "./stream/Stream";
 import cors from "cors";
 
 import {Server, type Socket} from "socket.io";
@@ -26,7 +26,7 @@ const server: http.Server = app.listen(port, (): void => {
     Logger.ok(`Server started on port ${port}`);
 });
 
-// Setup services
+// Setup stream
 const io: Server = new Server(server, {
     httpCompression: false,
     transports: ["websocket", "polling"],
@@ -40,7 +40,6 @@ const io: Server = new Server(server, {
 
 io.on(StreamEvents.CLIENT_CONNECTED, (socket: Socket): void => {
     Logger.ok(`${socket.id} connected`)
-
     socket.on(StreamEvents.CLIENT_DISCONNECTED, (): void => Logger.error(`${socket.id} disconnected`));
 });
 
@@ -51,7 +50,6 @@ const globalChatRoomsCount: number = 3;
 
 for (let i: number = 0; i < globalChatRoomsCount; i++) {
     const globalChatRoom: AbstractChatRoom = ChatRoomFactory.instantiate(`Global Chat Room ${i + 1}`);
-
     stream.attach(i, globalChatRoom);
 }
 

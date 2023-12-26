@@ -2,7 +2,7 @@ import {ConnectedUsersObject, StatusObject} from "../../src/lib/utility";
 
 import AbstractChatRoom from "../../src/chat/AbstractChatRoom";
 import AbstractChatRoomStub from "../stubs/AbstractChatRoomStub";
-import Client from "../../src/connections/Client";
+import Client from "../../src/stream/Client";
 
 let room: AbstractChatRoom;
 

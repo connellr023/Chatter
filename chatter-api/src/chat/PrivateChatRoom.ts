@@ -1,5 +1,5 @@
 import AbstractChatRoom from "./AbstractChatRoom";
-import Client from "../connections/Client";
+import Client from "../stream/Client";
 
 /**
  * Represents a private chat room with select clients as members

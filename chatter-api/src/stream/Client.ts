@@ -2,13 +2,13 @@ import {type Socket} from "socket.io";
 import {StreamEvents} from "../lib/utility";
 
 /**
- * Represents a client services with restriction on access to services functionality
+ * Represents a client stream with restriction on access to stream functionality
  * @author Connell Reffo
  */
 export default class Client {
 
     /**
-     * The services.io services object this client corresponds to
+     * The stream.io stream object this client corresponds to
      */
     protected socket: Socket;
 
@@ -19,7 +19,7 @@ export default class Client {
 
     /**
      * Base constructor
-     * @param socket The corresponding services object for this client
+     * @param socket The corresponding stream object for this client
      * @param name The name of this client
      */
     public constructor(socket: Socket, name: string) {
@@ -28,7 +28,7 @@ export default class Client {
     }
 
     /**
-     * Emits an event and message over this client's services services
+     * Emits an event and message over this client's stream stream
      * @param event The event to emit
      * @param data The data to be sent
      */

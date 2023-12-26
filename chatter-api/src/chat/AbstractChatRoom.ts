@@ -1,4 +1,4 @@
-import Client from "../connections/Client";
+import Client from "../stream/Client";
 import {
     config,
     ChatObject,
@@ -6,9 +6,13 @@ import {
     StreamEvents,
     ConnectedUsersObject, UserDataObject, SendChatObject
 } from "../lib/utility";
-import IRoomObserver from "../connections/IRoomObserver";
+import IStreamObserver from "../stream/IStreamObserver";
 
-export default abstract class AbstractChatRoom implements IRoomObserver {
+/**
+ * Class containing base logic every chat room should include
+ * @author Connell Reffo
+ */
+export default abstract class AbstractChatRoom implements IStreamObserver {
 
     /**
      * Set of unique clients connected to this chat room
@@ -114,7 +118,7 @@ export default abstract class AbstractChatRoom implements IRoomObserver {
     }
 
     /**
-     * Emits a message to every client services connected to this room
+     * Emits a message to every client connected to this room
      * @param event The event to emit
      * @param data The data to be sent
      */

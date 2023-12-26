@@ -1,5 +1,5 @@
-import IRoomObserver from "../connections/IRoomObserver";
-import Client from "../connections/Client";
+import IStreamObserver from "./IStreamObserver";
+import Client from "./Client";
 import ChatRoomFactory from "../lib/ChatRoomFactory";
 
 import {Server, type Socket} from "socket.io";
@@ -19,7 +19,7 @@ export default class Stream {
     /**
      * Map of observers indexed by the room ID they listen for messages from
      */
-    protected roomObservers: Map<number, IRoomObserver[]>;
+    protected roomObservers: Map<number, IStreamObserver[]>;
 
     /**
      * Map clients indexed by their corresponding socket ID
@@ -28,17 +28,17 @@ export default class Stream {
 
     /**
      * Base constructor
-     * @param io The services.io server object to listen on
+     * @param io The stream.io server object to listen on
      */
     public constructor(io: Server) {
         this.io = io;
-        this.roomObservers = new Map<number, IRoomObserver[]>();
+        this.roomObservers = new Map<number, IStreamObserver[]>();
         this.connections = new Map<string, Client>();
     }
 
     /**
      * Starts listening for incoming socket events <br />
-     * <b>All observers and listeners must be attached prior to this function being run</b>
+     * <b>All observers must be attached prior to this function being run</b>
      */
     public listen(): void {
         this.io.on(StreamEvents.CLIENT_CONNECTED, (socket: Socket): void => {
@@ -65,7 +65,7 @@ export default class Stream {
      * @param roomId The room ID to listen for
      * @param observers The sequence of observers to attach
      */
-    public attach(roomId: number, ...observers: IRoomObserver[]): void {
+    public attach(roomId: number, ...observers: IStreamObserver[]): void {
         if (!this.roomObservers.has(roomId)) {
             this.roomObservers.set(roomId, []);
         }
@@ -79,7 +79,7 @@ export default class Stream {
      * @param roomId The ID of the room they joined
      */
     public notifyJoin(client: Client, roomId: number): void {
-        this.roomObservers.get(roomId).forEach((observer: IRoomObserver): void => {
+        this.roomObservers.get(roomId).forEach((observer: IStreamObserver): void => {
             observer.onClientJoined(client);
         });
     }
@@ -89,7 +89,7 @@ export default class Stream {
      * @param client The client that connected
      */
     public notifyConnect(client: Client): void {
-        this.getEachObserver().forEach((observer: IRoomObserver): void => {
+        this.getEachObserver().forEach((observer: IStreamObserver): void => {
             observer.onClientConnected(client);
         });
     }
@@ -99,19 +99,19 @@ export default class Stream {
      * @param client The client that disconnected
      */
     public notifyDisconnect(client: Client): void {
-        this.getEachObserver().forEach((observer: IRoomObserver): void => {
+        this.getEachObserver().forEach((observer: IStreamObserver): void => {
             observer.onClientDisconnected(client);
         });
     }
 
     /**
-     * Notifies services observers of a specified room ID that a client sent a message
+     * Notifies stream observers of a specified room ID that a client sent a message
      * @param roomId The room ID the message was sent to
      * @param client The client that sent the message
      * @param data The object that encodes the message
      */
     public notifyClientMessage(roomId: number, client: Client, data: ChatObject): void {
-        this.roomObservers.get(roomId).forEach((observer: IRoomObserver): void => {
+        this.roomObservers.get(roomId).forEach((observer: IStreamObserver): void => {
             observer.onClientMessage(client, data);
         });
     }
@@ -153,18 +153,18 @@ export default class Stream {
     /**
      * Gets a map of observers indexed by the event they listen for
      */
-    public getObserverMap(): Map<number, IRoomObserver[]> {
+    public getObserverMap(): Map<number, IStreamObserver[]> {
         return this.roomObservers;
     }
 
     /**
      * Gets <i>exactly one</i> of each observer attached to this as a set
      */
-    public getEachObserver(): Set<IRoomObserver> {
-        let final: Set<IRoomObserver> = new Set<IRoomObserver>();
+    public getEachObserver(): Set<IStreamObserver> {
+        let final: Set<IStreamObserver> = new Set<IStreamObserver>();
 
-        this.roomObservers.forEach((observerArray: IRoomObserver[]): void => {
-           observerArray.forEach((observer: IRoomObserver): void => {
+        this.roomObservers.forEach((observerArray: IStreamObserver[]): void => {
+           observerArray.forEach((observer: IStreamObserver): void => {
                 final.add(observer);
            });
         });
