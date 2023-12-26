@@ -25,6 +25,14 @@
   }
 }
 
+@mixin circle($c, $size) {
+  background-color: $c;
+  border: none;
+  border-radius: $size * 100;
+  padding: $size;
+  width: fit-content;
+}
+
 %base-main {
   @include base-props(5px, 15px, 8px, 0.25s);
 }

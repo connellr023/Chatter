@@ -18,7 +18,7 @@ const props = defineProps({
     <div class="error-header">
       &lt;{{props.code}}&gt;
       <div>{{props.message}}</div>
-      <button id="return-button" class="outline" @click="router.push('/')">Return</button>
+      <button id="return-button" class="bubble" @click="router.push('/')">Return</button>
     </div>
     <NameLabel />
   </div>
@@ -29,8 +29,12 @@ const props = defineProps({
 @import "@/styles/utility.scss";
 
 button#return-button {
-  font-size: 18px;
-  padding: 8px;
+  font-size: 0.32em;
+  padding: 12px;
+
+  &:hover {
+    color: $light-text-color;
+  }
 }
 
 div.error-header {

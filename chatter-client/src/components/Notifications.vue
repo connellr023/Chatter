@@ -78,7 +78,7 @@ div.notification-element {
     font-size: $base-font-size + 5px;
     font-weight: bold;
     margin-right: 12px;
-    margin-left: -4px;
+    margin-left: -10px;
     padding: 5px 7px 5px 6px;
   }
 }

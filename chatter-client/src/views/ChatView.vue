@@ -4,13 +4,14 @@ import {useUserStore} from "@/hooks/useUserStore";
 import {useChat} from "@/hooks/useChat";
 import {onMounted, ref} from "vue";
 import {useRouter} from "vue-router";
-import {pushNotification} from "@/hooks/useNotifications";
 import {useMembers} from "@/hooks/useMembers";
+import {useNotifications} from "@/hooks/useNotifications";
 
 const router = useRouter();
 const userStore = useUserStore();
 const {rooms, messages, selectedRoomId, sendMessage, queryRooms} = useChat();
 const {members} = useMembers();
+const {pushNotification} = useNotifications();
 
 const messageBody = ref("");
 
@@ -42,7 +43,7 @@ onMounted((): void => {
   <div id="chat-view-container">
     <div id="user-options-panel" class="panel">
       <div id="select-rooms-container" class="content-container">
-        <div class="select-room-prompt">My rooms</div>
+        <div class="select-room-prompt">My connections</div>
         <div id="empty-rooms" class="empty" v-if="rooms.length == 0">&lt;empty&gt;</div>
         <div id="room-list" v-else>
           <button v-for="room in rooms" :class="{'selected': selectedRoomId == room.id}" class="room-option bubble" @click="selectedRoomId = room.id">
@@ -51,9 +52,10 @@ onMounted((): void => {
           </button>
         </div>
       </div>
-      <div id="user-info">
-        <button id="return-arrow" @click="router.push('/')">&lt;&minus;</button>
+      <div id="user-info" class="bubble" @click="router.push('/')">
+        <div id="username-green-circle"></div>
         <span id="username">{{userStore.username}}</span>
+        <img id="return-home" alt="Arrow icon" src="@/assets/arrow.svg" />
       </div>
     </div>
     <div id="chat-panel" class="panel">
@@ -80,6 +82,7 @@ onMounted((): void => {
 
 <style scoped lang="scss">
 @import "@/styles/variables";
+@import "@/styles/utility";
 
 div#chat-view-container {
   display: flex;
@@ -104,8 +107,10 @@ div#chat-view-container {
     width: $user-options-panel-width;
     display: block;
 
+    $edge-padding: 15px;
+
     div#select-rooms-container {
-      padding: 15px;
+      padding:$edge-padding;
 
       div.select-room-prompt {
         font-size: 15px;
@@ -133,8 +138,46 @@ div#chat-view-container {
       }
     }
 
-    div#user-info {
+    $margin-bottom-offset: -3px;
 
+    div#user-info {
+      text-align: left;
+      position: absolute;
+      height: fit-content;
+      left: $edge-padding;
+      bottom: $edge-padding + 3px;
+      width: calc($user-options-panel-width - ($edge-padding * 2));
+
+      span#username {
+        font-style: italic;
+      }
+
+      div#username-green-circle {
+        @include circle($main-green-hue, 8px);
+        display: inline-block;
+        margin-right: 7px;
+        margin-bottom: $margin-bottom-offset;
+        opacity: 0.5;
+        transition: opacity 0.15s ease-in-out;
+      }
+
+      &:hover div#username-green-circle {
+        opacity: 1;
+      }
+
+      img#return-home {
+        opacity: 0;
+        transition: opacity 0.2s ease-in-out;
+        rotate: -90deg;
+        width: 20px;
+        margin-top: $margin-bottom-offset * -1;
+        position: absolute;
+        right: 5px;
+      }
+
+      &:hover img#return-home {
+        opacity: 0.35;
+      }
     }
   }
 

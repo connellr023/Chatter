@@ -39,7 +39,7 @@ button.outline {
   }
 }
 
-button.bubble {
+%base-bubble {
   @include base-props(7px, 15px, 10px, 0.15s);
 
   padding-left: 7px;
@@ -56,6 +56,18 @@ button.bubble {
   &.selected {
     color: $light-text-color;
   }
+}
+
+button.bubble {
+  @extend %base-bubble;
+}
+
+div.bubble {
+  @extend %base-bubble;
+
+  padding-right: 0;
+  margin-left: -4px;
+  margin-bottom: -4px;
 }
 
 div.flex-container {

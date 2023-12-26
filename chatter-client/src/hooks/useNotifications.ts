@@ -34,6 +34,14 @@ export function useNotifications() {
         notifications.add(notification)
     }
 
+    /**
+     * Function for pushing notifications through the event bus
+     * @param body The notification text
+     */
+    function pushNotification(body: string): void {
+        eventBus.emit(GlobalEvents.NOTIFICATION, body);
+    }
+
     const off = eventBus.on(GlobalEvents.NOTIFICATION, handlePushNotification);
 
     onUnmounted((): void => {
@@ -41,14 +49,7 @@ export function useNotifications() {
     });
 
     return {
-        notifications
+        notifications,
+        pushNotification
     };
-}
-
-/**
- * Function for pushing notifications through the event bus
- * @param body The notification text
- */
-export function pushNotification(body: string): void {
-    eventBus.emit(GlobalEvents.NOTIFICATION, body);
 }

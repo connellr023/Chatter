@@ -1,12 +1,12 @@
 import {type Router, useRouter} from "vue-router";
 import {type Ref, ref} from "vue";
-import type {UserDataObject, StatusObject, ConnectedUsersObject} from "@/lib/utility";
+import type {UserDataObject, StatusObject} from "@/lib/utility";
 import {useUserStore} from "@/hooks/useUserStore";
+import {useMembers} from "@/hooks/useMembers";
+import {useNotifications} from "@/hooks/useNotifications";
 import {config, StreamEvents} from "@/lib/utility";
-import {pushNotification} from "@/hooks/useNotifications";
 
 import stream from "@/lib/stream";
-import {useMembers} from "@/hooks/useMembers";
 
 /**
  * Function implementing socket stream with client view
@@ -15,6 +15,7 @@ import {useMembers} from "@/hooks/useMembers";
 export function useConnection() {
     const router: Router = useRouter();
     const userStore = useUserStore();
+    const {pushNotification} = useNotifications();
 
     const attemptingConnection: Ref<boolean> = ref(false);
     const enteredName: Ref<string> = ref("");
@@ -53,9 +54,12 @@ export function useConnection() {
 
             stream.once(StreamEvents.ERROR, (): void => {
                 stream.disconnect();
+                stream.removeAllListeners();
 
                 attemptingConnection.value = false;
                 pushNotification("Connection failed");
+
+                router.push({name: "error", params: {code: "10060", "message": "Connection Closed"}}).then();
             });
         }
         else {
