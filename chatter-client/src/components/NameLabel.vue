@@ -5,7 +5,13 @@ function openGithub(): void {
 </script>
 
 <template>
-  <div id="name-label" @click="openGithub"><span id="name-copy">&copy;</span> Connell Reffo</div>
+  <div id="name-label-container">
+    <div id="name-label"><span id="name-copy">&copy;</span> Connell Reffo</div>
+    <div id="separator">|</div>
+    <a id="gh-logo-a" @click="openGithub">
+      <img alt="GitHub logo" id="gh-logo" src="@/assets/github_logo.png">
+    </a>
+  </div>
 </template>
 
 <style scoped lang="scss">
@@ -13,8 +19,42 @@ function openGithub(): void {
 
 * {
   color: $invert-highlight-color;
+  display: inline-block;
   font-family: "Ubuntu Mono", monospace;
   transition: color 0.05s ease-in-out;
+  user-select: none;
+}
+
+a#gh-logo-a {
+  cursor: pointer;
+  margin-left: 4px;
+
+  img {
+    filter: brightness(0.6);
+    width: 30px;
+    margin-bottom: -9px;
+    transition: all 0.15s ease-in-out;
+  }
+
+  &:hover {
+    img {
+      filter: brightness(0.4);
+    }
+  }
+}
+
+div#separator {
+  $side-margin: 10px;
+
+  margin-left: $side-margin;
+  margin-right: $side-margin;
+  color: $invert-highlight-color;
+  font-size: 18px;
+}
+
+div#name-label-container {
+  bottom: 20px;
+  position: absolute;
 }
 
 span#name-copy {
@@ -23,20 +63,6 @@ span#name-copy {
 
 div#name-label {
   font-size: 17px;
-  bottom: 15px;
-  position: absolute;
-  text-decoration: none;
-  user-select: none;
-}
-
-div#name-label:hover, div#name-label:hover #name-copy {
-  color: $main-red-hue;
-  cursor: pointer;
-  text-decoration: underline;
-}
-
-div#name-label:hover #name-copy {
-  text-decoration: none;
 }
 
 </style>

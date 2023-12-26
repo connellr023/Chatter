@@ -1,6 +1,8 @@
 <script setup lang="ts">
 import {useRouter} from "vue-router";
+
 import CornerLogo from "@/components/CornerLogo.vue";
+import NameLabel from "@/components/NameLabel.vue";
 
 const router = useRouter();
 
@@ -11,13 +13,14 @@ const props = defineProps({
 </script>
 
 <template>
-  <div id="error-view-container">
+  <div id="error-view-container" class="flex-container">
     <CornerLogo />
     <div class="error-header">
       &lt;{{props.code}}&gt;
       <div>{{props.message}}</div>
       <button id="return-button" class="outline" @click="router.push('/')">Return</button>
     </div>
+    <NameLabel />
   </div>
 </template>
 
@@ -30,16 +33,11 @@ button#return-button {
   padding: 8px;
 }
 
-.error-header {
+div.error-header {
   color: $main-red-hue;
   font-family: $monospace-font;
   font-size: 65px;
   font-weight: bold;
-  position: absolute;
-  left: 50%;
-  top: 50%;
-  transform: translate(-50%, -50%);
-  text-align: center;
   user-select: none;
 
   div {

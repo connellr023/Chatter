@@ -5,6 +5,7 @@ import {onMounted} from "vue";
 import LoadingButton from "@/components/LoadingButton.vue";
 import NameLabel from "@/components/NameLabel.vue";
 import CornerLogo from "@/components/CornerLogo.vue";
+import WelcomeTitle from "@/components/WelcomeTitle.vue";
 
 const {connect, disconnect, enteredName, attemptingConnection} = useConnection();
 
@@ -14,10 +15,10 @@ onMounted((): void => {
 </script>
 
 <template>
-  <div id="start-view-container">
+  <div id="start-view-container" class="flex-container">
     <CornerLogo />
     <div id="start-connect-window">
-      <div id="start-connect-title">Welcome back!</div>
+      <WelcomeTitle />
       <input v-model="enteredName" id="username-input" class="regular" placeholder="Enter name..." /><br />
       <LoadingButton id="connect-button" classes="regular" text="Connect" @pressed="connect" :is-loading="attemptingConnection" />
       <div id="prompt" class="regular">Please enter a username above.</div>
@@ -29,15 +30,6 @@ onMounted((): void => {
 <style scoped lang="scss">
 @import "@/styles/variables";
 @import "@/styles/utility";
-
-div#start-view-container {
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  height: 100vh;
-  width: 100vw;
-  text-align: center;
-}
 
 div#start-connect-window {
   $size: 30vw;
@@ -65,13 +57,6 @@ div#start-connect-window {
     min-width: $min-size - $offset;
     max-width: $max-size - $offset;
   }
-}
-
-div#start-connect-title {
-  font-weight: bolder;
-  font-size: 30px;
-  margin-bottom: 10px;
-  user-select: none;
 }
 
 input#username-input {

@@ -11,7 +11,7 @@ onMounted((): void => {
     window.setTimeout((): void => {
       disableYet.value = true;
     }, 400);
-  }, 70);
+  }, 100);
 });
 </script>
 
@@ -28,7 +28,7 @@ div#overlay {
   width: 100vw;
   height: 100vh;
   opacity: 1;
-  transition: opacity 0.35s ease-in-out;
+  transition: opacity 0.5s ease-in-out;
   z-index: 5;
 }
 

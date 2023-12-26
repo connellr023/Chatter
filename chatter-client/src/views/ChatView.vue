@@ -18,12 +18,14 @@ const messageBody = ref("");
  * Helper function for sending messages through Vue events
  */
 function message() {
-  if (messageBody.value.length >= config.MIN_MESSAGE_LENGTH && messageBody.value.length <= config.MAX_MESSAGE_LENGTH) {
-    sendMessage(messageBody.value);
-    messageBody.value = "";
+  if (messageBody.value.length <= config.MAX_MESSAGE_LENGTH) {
+    if (messageBody.value.length >= config.MIN_MESSAGE_LENGTH) {
+      sendMessage(messageBody.value);
+      messageBody.value = "";
+    }
   }
   else {
-    pushNotification({body: `Message must be within ${config.MIN_MESSAGE_LENGTH} and ${config.MAX_MESSAGE_LENGTH} characters`});
+    pushNotification(`Message must be within ${config.MIN_MESSAGE_LENGTH} and ${config.MAX_MESSAGE_LENGTH} characters`);
   }
 }
 
