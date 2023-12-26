@@ -38,7 +38,7 @@ export function useConnection() {
                 attemptingConnection.value = false;
                 userStore.connected = true;
 
-                pushNotification({body: "Connected", color: "var(--main-green-color)"});
+                pushNotification("Connected");
 
                 stream.once(StreamEvents.SERVER_SEND_STATUS, (status: StatusObject): void => {
                     if (status.success) {
@@ -46,7 +46,7 @@ export function useConnection() {
                         router.push("/chat").then();
                     }
                     else {
-                        pushNotification({body: "Server rejected request"});
+                        pushNotification("Server rejected request");
                     }
                 });
             });
@@ -55,11 +55,11 @@ export function useConnection() {
                 stream.disconnect();
 
                 attemptingConnection.value = false;
-                pushNotification({body: "Connection failed"});
+                pushNotification("Connection failed");
             });
         }
         else {
-            pushNotification({body: `Username must be within ${config.MIN_NAME_LENGTH} and ${config.MAX_NAME_LENGTH} characters`});
+            pushNotification(`Username must be within ${config.MIN_NAME_LENGTH} and ${config.MAX_NAME_LENGTH} characters`);
         }
     }
 
@@ -74,7 +74,7 @@ export function useConnection() {
                 userStore.connected = false;
                 userStore.username = "";
 
-                pushNotification({body: "Disconnected"});
+                pushNotification("Disconnected");
             });
         }
     }

@@ -9,7 +9,7 @@ function openGithub(): void {
 </template>
 
 <style scoped lang="scss">
-@import "@/assets/styles/variables";
+@import "@/styles/variables";
 
 * {
   color: $invert-highlight-color;

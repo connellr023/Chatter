@@ -1,8 +1,10 @@
 <script setup lang="ts">
-import LoadingButton from "@/components/LoadingButton.vue";
 import {useConnection} from "@/hooks/useConnection";
 import {onMounted} from "vue";
+
+import LoadingButton from "@/components/LoadingButton.vue";
 import NameLabel from "@/components/NameLabel.vue";
+import CornerLogo from "@/components/CornerLogo.vue";
 
 const {connect, disconnect, enteredName, attemptingConnection} = useConnection();
 
@@ -13,7 +15,7 @@ onMounted((): void => {
 
 <template>
   <div id="start-view-container">
-    <img id="logo" alt="Chatter logo" src="@/assets/logo_white.png" />
+    <CornerLogo />
     <div id="start-connect-window">
       <div id="start-connect-title">Welcome back!</div>
       <input v-model="enteredName" id="username-input" class="regular" placeholder="Enter name..." /><br />
@@ -25,17 +27,8 @@ onMounted((): void => {
 </template>
 
 <style scoped lang="scss">
-@import "@/assets/styles/variables";
-
-img#logo {
-  $distance: 20px;
-
-  position: absolute;
-  width: 180px;
-
-  left: $distance;
-  top: $distance - 2px;
-}
+@import "@/styles/variables";
+@import "@/styles/utility";
 
 div#start-view-container {
   display: flex;
@@ -57,19 +50,12 @@ div#start-connect-window {
   width: 50%;
   min-width: $min-size + 10px;
 
-  $c1: #5e00ff;
-  $c2: #7b00ff;
-  $darken-amount: 15%;
-
   button#connect-button {
-    background: linear-gradient(to top, $c1, $c2);
+    @include gradient-button(#5e00ff, #7b00ff);
+
     width: $size;
     min-width: $min-size;
     max-width: $max-size;
-
-    &:active:enabled, &:disabled {
-      background: linear-gradient(to top, darken($c1, $darken-amount), darken($c2, $darken-amount));
-    }
   }
 
   input {

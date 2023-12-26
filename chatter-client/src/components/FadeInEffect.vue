@@ -20,7 +20,7 @@ onMounted((): void => {
 </template>
 
 <style scoped lang="scss">
-@import "@/assets/styles/variables";
+@import "@/styles/variables";
 
 div#overlay {
   background-color: $main-bg-color;

@@ -1,6 +1,6 @@
 @import "variables";
 
-%base-regular {
+%base {
   $time: 0.25s;
   $method: ease-in-out;
 
@@ -15,31 +15,22 @@
               background-position $time $method;
 }
 
-input.regular {
-  @extend %base-regular;
-
-  border: 2px solid $invert-highlight-color;
-  background-color: $main-bg-color;
-  font-family: $sans-serif-font;
-
-  &:focus {
-    border-color: $invert-bg-color;
-    color: $light-text-color;
-  }
-
-  &::placeholder {
-    color: $invert-highlight-color;
-    opacity: 1;
-  }
+%base-highlight {
+  border-color: $invert-bg-color;
+  color: $light-text-color;
 }
 
-button.regular {
-  @extend %base-regular;
+%base-border {
+  border: 2px solid $invert-highlight-color;
+}
 
-  border: none;
-  cursor: pointer;
+@mixin gradient-button($c1, $c2) {
+  $darken-amount: 12%;
+  $direction: to top;
 
-  &:hover:enabled {
-    color: $invert-bg-color;
+  background: linear-gradient($direction, $c1, $c2);
+
+  &:active:enabled, &:disabled {
+    background: linear-gradient($direction, darken($c1, $darken-amount), darken($c2, $darken-amount));
   }
 }

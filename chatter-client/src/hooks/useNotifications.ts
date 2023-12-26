@@ -17,15 +17,11 @@ export function useNotifications() {
     /**
      * Updates the reactive notifications set accordingly
      * @param body The body of the notification
-     * @param symbol The sender of the notification
-     * @param color The color of the notification symbol
      */
-    function handlePushNotification(body: string, symbol: string = "!", color: string = "var(--main-theme-color)"): void {
+    function handlePushNotification(body: string): void {
         const notification = reactive({
             id: counter++,
             body: body,
-            symbol: symbol,
-            color: color,
             clear: (): void => {
                 notifications.delete(notification);
             }
@@ -38,9 +34,7 @@ export function useNotifications() {
         notifications.add(notification)
     }
 
-    const off = eventBus.on(GlobalEvents.NOTIFICATION, (notification: NotificationObject): void => {
-        handlePushNotification(notification.body, notification.symbol, notification.color);
-    });
+    const off = eventBus.on(GlobalEvents.NOTIFICATION, handlePushNotification);
 
     onUnmounted((): void => {
         off();
@@ -53,8 +47,8 @@ export function useNotifications() {
 
 /**
  * Function for pushing notifications through the event bus
- * @param notification An object that contains notification data
+ * @param body The notification text
  */
-export function pushNotification(notification: {body: string, color?: string, symbol?: string}): void {
-    eventBus.emit(GlobalEvents.NOTIFICATION, notification);
+export function pushNotification(body: string): void {
+    eventBus.emit(GlobalEvents.NOTIFICATION, body);
 }

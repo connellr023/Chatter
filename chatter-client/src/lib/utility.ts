@@ -111,7 +111,5 @@ export interface UserDataObject {
 export interface NotificationObject {
     id: number
     body: string,
-    symbol: string,
-    color: string,
     clear: () => void
 }
