@@ -1,6 +1,6 @@
 # <img style="width: 280px" src="https://github.com/connellr023/Chatter/blob/main/chatter-client/src/assets/logo_white.png?raw=true">
 
-> A web based chat application that is entirely session based.
+> A web based chat application that is entirely oriented around temporary sessions.
 
 <div align="left">
  <img src="https://img.shields.io/badge/client-Vue-seagreen">
@@ -12,7 +12,7 @@
 
 ### Overview
 Chatter is a web app centered around a global chat system. It features isolated chat rooms that users can connect to without
-requiring an account. Currently, all chat rooms are global, however there is infrastructure in place in the API to allow for private
+requiring an account. Currently, all chat rooms are global, however there is infrastructure in place within the server the API to allow for private
 chat rooms in the future.
 
 <br />
@@ -38,7 +38,7 @@ The test suite for the API includes **unit** and **networking** tests in order t
 
 <br />
 
-### Client Test Suite *(WIP)*
+### Client Test Suite `WIP`
 The client test suite is also visible in the **Actions** tab. Otherwise, navigate to the client folder,
 ```bash
 cd chatter-client
@@ -57,6 +57,23 @@ npm run test:e2e
 ### Tools
 - The server API was built with **express.js** and **socket.io** and tested with **Jest**.
 - The client was built with the **Vue** framework and tested with **Vitest** and **Playwright**.
+
+<br />
+
+### History Of The Project
+Chatter was first conceived around 2018 (8th grade for me) as my first **PHP** project.
+The scope then was actually larger than this iteration of Chatter as the original included
+an account system stored on an **SQL** database using **PHPMyAdmin** on an Acer chromebook emulating Ubuntu.
+The messaging system consisted of constant **HTTP polling** requests made by the client. It worked,
+but of course it was not sustainable for a larger user base. Unfortunately the code is long gone.
+That's what happens when you use Google Drive as version control.
+
+The second iteration of Chatter was developed by me in 2020 however it was never completed to my satisfaction. In terms of the software, it used
+completely different technologies than the original. For instance, the client was created using the **React** javascript framework
+and the server used **Node.js** with **MongoDB** for storing account data. I still have this project private (it will never see the light of day).
+
+**Interesting Note:** The logo used in all versions of Chatter has remained the same since 2018.
+That is the only shared aspect this iteration has with the original.
 
 <br />
 

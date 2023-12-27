@@ -1,6 +1,17 @@
 @import "../variables";
 @import "../utility";
 
+$default-opacity-transition: opacity 0.15s ease-in-out;
+
+div.dim-title {
+  font-size: 16px;
+  color: $invert-bg-color;
+  text-align: left;
+  margin-bottom: 10px;
+  opacity: 0.4;
+  user-select: none;
+}
+
 div#chat-view-container {
   display: flex;
   justify-content: space-between;
@@ -17,27 +28,23 @@ div#chat-view-container {
   }
 
   $user-options-panel-width: min(max(25%, 220px), 270px);
-  $members-panel-width: min(max(12%, 110px), 130px);
+  $members-panel-width: min(max(12%, 160px), 175px);
   $chat-panel-width: calc(100% - $user-options-panel-width - $members-panel-width);
+
+  $side-panel-edge-padding: 15px;
+
+  $base-green-circle-opacity: 0.5;
 
   div#user-options-panel {
     background-color: $main-bg-color;
     width: $user-options-panel-width;
     display: block;
 
-    $edge-padding: 15px;
-
     div#select-rooms-container {
-      padding:$edge-padding;
+      padding: $side-panel-edge-padding;
 
-      div.select-room-prompt {
-        font-size: 16px;
-        color: $invert-bg-color;
-        text-align: left;
-        margin-bottom: 10px;
+      div.dim-title {
         margin-left: 7px;
-        opacity: 0.4;
-        user-select: none;
       }
 
       button.room-option {
@@ -48,7 +55,7 @@ div#chat-view-container {
         span {
           font-size: 0.85em;
           opacity: 0.4;
-          transition: opacity 0.15s ease-in-out;
+          transition: $default-opacity-transition;
         }
 
         &.selected span {
@@ -63,9 +70,9 @@ div#chat-view-container {
       text-align: left;
       position: absolute;
       height: fit-content;
-      left: $edge-padding;
-      bottom: $edge-padding + 3px;
-      width: calc($user-options-panel-width - ($edge-padding * 2));
+      left: $side-panel-edge-padding;
+      bottom: $side-panel-edge-padding + 3px;
+      width: calc($user-options-panel-width - ($side-panel-edge-padding * 2));
 
       span#username {
         font-style: italic;
@@ -74,12 +81,12 @@ div#chat-view-container {
 
       div#username-green-circle {
         @include circle($main-theme-hue-2, 8px);
+
         display: inline-block;
         margin-right: 7px;
-        margin-left: 3px;
         margin-bottom: $margin-bottom-offset;
-        opacity: 0.5;
-        transition: opacity 0.15s ease-in-out;
+        opacity: $base-green-circle-opacity;
+        transition: $default-opacity-transition;
       }
 
       &:hover div#username-green-circle {
@@ -184,7 +191,7 @@ div#chat-view-container {
         img {
           opacity: 0.6;
           width: 25px;
-          transition: opacity 0.15s ease-in-out;
+          transition: $default-opacity-transition;
         }
 
         &:hover img {
@@ -196,7 +203,35 @@ div#chat-view-container {
 
   div#members-panel {
     background-color: $main-bg-color;
+    display: block;
     width: $members-panel-width;
+
+    div#members-container {
+      padding: $side-panel-edge-padding;
+
+      div.member-element {
+        cursor: auto;
+        font-size: 16px;
+        font-style: italic;
+        overflow-x: hidden;
+
+        div.member-green-circle {
+          @include circle($main-theme-hue-2, 5px);
+
+          display: inline-block;
+          opacity: $base-green-circle-opacity;
+          transition: $default-opacity-transition;
+        }
+
+        &:hover div.member-green-circle {
+          opacity: 1;
+        }
+
+        &:hover {
+          color: $light-text-color;
+        }
+      }
+    }
   }
 }
 

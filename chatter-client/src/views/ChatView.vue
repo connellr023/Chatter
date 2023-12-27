@@ -43,7 +43,7 @@ onMounted((): void => {
   <div id="chat-view-container">
     <div id="user-options-panel" class="panel">
       <div id="select-rooms-container" class="content-container">
-        <div class="select-room-prompt">My connections</div>
+        <div class="dim-title">My connections</div>
         <div id="room-list">
           <button v-for="room in rooms" :class="{'selected': selectedRoomId == room.id}" class="room-option bubble" @click="selectedRoomId = room.id">
             {{room.name}}
@@ -75,8 +75,15 @@ onMounted((): void => {
       </div>
     </div>
     <div id="members-panel" class="panel">
-      <div>Members: {{members.get(selectedRoomId)?.length || 0}}</div>
-      <div v-for="member in members.get(selectedRoomId)">{{member.username}}</div>
+      <div id="members-container">
+        <div class="dim-title"><b>{{members.get(selectedRoomId)?.length || 0}}</b> Online</div>
+        <div id="members-list">
+          <div class="member-element bubble" v-for="member in members.get(selectedRoomId)">
+            <div class="member-green-circle"></div>
+            {{member.username}}
+          </div>
+        </div>
+      </div>
     </div>
   </div>
 </template>
