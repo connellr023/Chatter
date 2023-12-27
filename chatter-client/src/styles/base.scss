@@ -4,7 +4,7 @@
 input.regular {
   @extend %base-main, %base-border;
 
-  background-color: $main-bg-color;
+  background-color: transparent;
   font-family: $sans-serif-font;
 
   &:focus {
@@ -31,7 +31,7 @@ button.regular {
 button.outline {
   @extend %base-main, %base-border;
 
-  background: $main-bg-color;
+  background-color: transparent;
   cursor: pointer;
 
   &:hover:enabled {

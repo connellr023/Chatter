@@ -9,7 +9,6 @@ export default class PrivateChatRoom extends AbstractChatRoom {
 
     /**
      * @inheritDoc
-     * Unused
      */
     public onClientJoined(client: Client): void {
         super.addClient(client);

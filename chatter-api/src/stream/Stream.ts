@@ -19,7 +19,7 @@ export default class Stream {
     /**
      * Map of observers indexed by the room ID they listen for messages from
      */
-    protected roomObservers: Map<number, IStreamObserver[]>;
+    protected observers: Map<number, IStreamObserver[]>;
 
     /**
      * Map clients indexed by their corresponding socket ID
@@ -32,7 +32,7 @@ export default class Stream {
      */
     public constructor(io: Server) {
         this.io = io;
-        this.roomObservers = new Map<number, IStreamObserver[]>();
+        this.observers = new Map<number, IStreamObserver[]>();
         this.connections = new Map<string, Client>();
     }
 
@@ -66,11 +66,11 @@ export default class Stream {
      * @param observers The sequence of observers to attach
      */
     public attach(roomId: number, ...observers: IStreamObserver[]): void {
-        if (!this.roomObservers.has(roomId)) {
-            this.roomObservers.set(roomId, []);
+        if (!this.observers.has(roomId)) {
+            this.observers.set(roomId, []);
         }
 
-        this.roomObservers.get(roomId).push(...observers);
+        this.observers.get(roomId).push(...observers);
     }
 
     /**
@@ -79,7 +79,7 @@ export default class Stream {
      * @param roomId The ID of the room they joined
      */
     public notifyJoin(client: Client, roomId: number): void {
-        this.roomObservers.get(roomId).forEach((observer: IStreamObserver): void => {
+        this.observers.get(roomId).forEach((observer: IStreamObserver): void => {
             observer.onClientJoined(client);
         });
     }
@@ -111,7 +111,7 @@ export default class Stream {
      * @param data The object that encodes the message
      */
     public notifyClientMessage(roomId: number, client: Client, data: ChatObject): void {
-        this.roomObservers.get(roomId).forEach((observer: IStreamObserver): void => {
+        this.observers.get(roomId).forEach((observer: IStreamObserver): void => {
             observer.onClientMessage(client, data);
         });
     }
@@ -154,7 +154,7 @@ export default class Stream {
      * Gets a map of observers indexed by the event they listen for
      */
     public getObserverMap(): Map<number, IStreamObserver[]> {
-        return this.roomObservers;
+        return this.observers;
     }
 
     /**
@@ -163,7 +163,7 @@ export default class Stream {
     public getEachObserver(): Set<IStreamObserver> {
         let final: Set<IStreamObserver> = new Set<IStreamObserver>();
 
-        this.roomObservers.forEach((observerArray: IStreamObserver[]): void => {
+        this.observers.forEach((observerArray: IStreamObserver[]): void => {
            observerArray.forEach((observer: IStreamObserver): void => {
                 final.add(observer);
            });

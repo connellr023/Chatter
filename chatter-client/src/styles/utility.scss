@@ -25,6 +25,14 @@
   }
 }
 
+@mixin gradient-text($c1, $c2) {
+  $direction: to right;
+
+  background: linear-gradient($direction, $c1, $c2);
+  background-clip: text;
+  color: transparent;
+}
+
 @mixin circle($c, $size) {
   background-color: $c;
   border: none;

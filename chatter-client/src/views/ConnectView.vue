@@ -43,7 +43,7 @@ div#start-connect-window {
   min-width: $min-size + 10px;
 
   button#connect-button {
-    @include gradient-button(#5e00ff, #7b00ff);
+    @include gradient-button($main-gradient-hue-start, $main-gradient-hue-end);
 
     width: $size;
     min-width: $min-size;

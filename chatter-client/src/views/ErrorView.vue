@@ -16,8 +16,8 @@ const props = defineProps({
   <div id="error-view-container" class="flex-container">
     <CornerLogo />
     <div class="error-header">
-      &lt;{{props.code}}&gt;
-      <div>{{props.message}}</div>
+      <div id="error-code">&lt;{{props.code}}&gt;</div>
+      <div id="error-message">{{props.message}}</div>
       <button id="return-button" class="bubble" @click="router.push('/')">Return</button>
     </div>
     <NameLabel />
@@ -28,29 +28,33 @@ const props = defineProps({
 @import "@/styles/variables.scss";
 @import "@/styles/utility.scss";
 
-button#return-button {
-  font-size: 0.32em;
-  padding: 12px;
-
-  &:hover {
-    color: $light-text-color;
-  }
-}
-
 div.error-header {
-  color: $main-red-hue;
-  font-family: $monospace-font;
   font-size: 65px;
-  font-weight: bold;
-  user-select: none;
 
-  div {
+  div#error-code {
+    @include gradient-text($main-gradient-hue-start, $main-gradient-hue-end);
+
+    font-family: $monospace-font;
+    font-weight: bold;
+    user-select: none;
+  }
+
+  div#error-message {
     color: $invert-bg-color;
     font-weight: normal;
     font-family: $sans-serif-font;
     margin-top: 3px;
     margin-bottom: 4px;
     font-size: 30px;
+  }
+
+  button#return-button {
+    font-size: 0.32em;
+    padding: 12px;
+
+    &:hover {
+      color: $light-text-color;
+    }
   }
 }
 

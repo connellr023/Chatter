@@ -44,8 +44,7 @@ onMounted((): void => {
     <div id="user-options-panel" class="panel">
       <div id="select-rooms-container" class="content-container">
         <div class="select-room-prompt">My connections</div>
-        <div id="empty-rooms" class="empty" v-if="rooms.length == 0">&lt;empty&gt;</div>
-        <div id="room-list" v-else>
+        <div id="room-list">
           <button v-for="room in rooms" :class="{'selected': selectedRoomId == room.id}" class="room-option bubble" @click="selectedRoomId = room.id">
             {{room.name}}
             <span><br />{{room.isGlobal ? "Public" : "Private"}}</span>
@@ -60,16 +59,18 @@ onMounted((): void => {
     </div>
     <div id="chat-panel" class="panel">
       <div id="messages-container" class="content-container">
-        <div id="empty-messages" class="empty" v-if="messages.size == 0 || !messages.get(selectedRoomId)">Empty</div>
+        <img id="empty-messages" alt="Chatter logo small" v-if="messages.size == 0 || !messages.get(selectedRoomId)" src="@/assets/logo_white_small.png" />
         <div id="messages-list" v-else>
-          <div v-for="message in messages.get(selectedRoomId)" class="message-element lighter-shadow">
+          <div v-for="message in messages.get(selectedRoomId)" class="message-element">
             <div class="message-sender">{{message.sender}}</div>
             <div class="message-body">{{message.body}}</div>
           </div>
         </div>
       </div>
       <div id="message-input-container">
-        <button id="send-button" class="regular" @click="message">&minus;&gt;</button>
+        <a id="send-button" class="regular" @click="message">
+          <img alt="Send icon" src="@/assets/arrow.svg" />
+        </a>
         <input id="chat-input" class="regular" placeholder="Send chat..." v-model="messageBody" @keyup.enter="message"/>
       </div>
     </div>
@@ -81,127 +82,5 @@ onMounted((): void => {
 </template>
 
 <style scoped lang="scss">
-@import "@/styles/variables";
-@import "@/styles/utility";
-
-div#chat-view-container {
-  display: flex;
-  justify-content: space-between;
-  flex-wrap: wrap;
-  height: 100vh;
-  width: 100vw;
-
-  div#user-options-panel, div#chat-panel, div#members-panel {
-    height: 100%;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    text-align: center;
-  }
-
-  $user-options-panel-width: min(max(25%, 220px), 270px);
-  $members-panel-width: min(max(12%, 110px), 130px);
-
-  div#user-options-panel {
-    background-color: $main-bg-color;
-    width: $user-options-panel-width;
-    display: block;
-
-    $edge-padding: 15px;
-
-    div#select-rooms-container {
-      padding:$edge-padding;
-
-      div.select-room-prompt {
-        font-size: 15px;
-        color: $invert-bg-color;
-        text-align: left;
-        margin-bottom: 10px;
-        margin-left: 7px;
-        opacity: 0.4;
-        user-select: none;
-      }
-
-      button.room-option {
-        width: calc(100%);
-        margin-bottom: 10px;
-
-        span {
-          font-size: 13px;
-          opacity: 0.4;
-          transition: opacity 0.15s ease-in-out;
-        }
-
-        &.selected span {
-          opacity: 0.7;
-        }
-      }
-    }
-
-    $margin-bottom-offset: -3px;
-
-    div#user-info {
-      text-align: left;
-      position: absolute;
-      height: fit-content;
-      left: $edge-padding;
-      bottom: $edge-padding + 3px;
-      width: calc($user-options-panel-width - ($edge-padding * 2));
-
-      span#username {
-        font-style: italic;
-      }
-
-      div#username-green-circle {
-        @include circle($main-green-hue, 8px);
-        display: inline-block;
-        margin-right: 7px;
-        margin-bottom: $margin-bottom-offset;
-        opacity: 0.5;
-        transition: opacity 0.15s ease-in-out;
-      }
-
-      &:hover div#username-green-circle {
-        opacity: 1;
-      }
-
-      img#return-home {
-        opacity: 0;
-        transition: opacity 0.2s ease-in-out;
-        rotate: -90deg;
-        width: 20px;
-        margin-top: $margin-bottom-offset * -1;
-        position: absolute;
-        right: 5px;
-      }
-
-      &:hover img#return-home {
-        opacity: 0.35;
-      }
-    }
-  }
-
-  div#chat-panel {
-    background-color: $secondary-bg-color;
-    width: calc(100% - $user-options-panel-width - $members-panel-width);
-  }
-
-  div#members-panel {
-    background-color: $main-bg-color;
-    width: $members-panel-width;
-  }
-}
-
-div.empty {
-  color: $invert-highlight-color;
-  user-select: none;
-  font-size: 35px;
-  margin-top: 10px;
-}
-
-input#chat-input {
-  border-radius: 8px;
-  padding: 10px;
-}
-
+@import "@/styles/scoped/chatview";
 </style>

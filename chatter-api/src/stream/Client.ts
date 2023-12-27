@@ -2,7 +2,7 @@ import {type Socket} from "socket.io";
 import {StreamEvents} from "../lib/utility";
 
 /**
- * Represents a client stream with restriction on access to stream functionality
+ * Represents a client stream with restriction on access to socket functionality
  * @author Connell Reffo
  */
 export default class Client {
