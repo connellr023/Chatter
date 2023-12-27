@@ -19,7 +19,7 @@ onMounted((): void => {
     <CornerLogo />
     <div id="start-connect-window">
       <WelcomeTitle />
-      <input v-model="enteredName" id="username-input" class="regular" placeholder="Enter name..." /><br />
+      <input v-model="enteredName" id="username-input" class="regular" placeholder="Enter name..." @keyup.enter="connect" /><br />
       <LoadingButton id="connect-button" classes="regular" text="Connect" @pressed="connect" :is-loading="attemptingConnection" />
       <div id="prompt" class="regular">Please enter a username above.</div>
     </div>
