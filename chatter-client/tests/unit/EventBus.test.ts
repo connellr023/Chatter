@@ -1,6 +1,6 @@
 import EventBus from "../../src/lib/EventBus";
 
-import {beforeEach, test, expect, } from "vitest";
+import {beforeEach, test, expect} from "vitest";
 
 let eventBus: EventBus;
 
