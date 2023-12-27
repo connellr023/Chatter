@@ -1,7 +1,7 @@
 import {type Ref, ref} from "vue";
 
 /**
- * Function for implementing animated ASCII strings
+ * Function for implementing basic animations on the DOM
  * @author Connell Reffo
  * @param frames The list of frames to cycle through
  * @param shouldContinue A reference to a boolean that should be true if the animation should be running
@@ -10,6 +10,9 @@ import {type Ref, ref} from "vue";
 export function useAnimate(frames: string[], shouldContinue: Ref<boolean>, ms: number) {
     const frame: Ref<string> = ref("");
 
+    /**
+     * Updates the reactive `frame` variable to the next frame in the `frames` array after a given interval
+     */
     function animate(): void {
         let i: number = 0;
 

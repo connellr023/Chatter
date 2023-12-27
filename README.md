@@ -39,24 +39,18 @@ The test suite for the API includes **unit** and **networking** tests in order t
 <br />
 
 ### Client Test Suite `WIP`
-The client test suite is also visible in the **Actions** tab. Otherwise, navigate to the client folder,
+The client test suite is also visible in the **Actions** tab. Otherwise, run the following commands,
 ```bash
 cd chatter-client
 ```
-Now, the test suite for the client is seperated into two types of tests: **unit** and **end-to-end** tests. The unit tests can be executed by,
 ```bash
-npm run test:unit
+npm run test
 ```
-The **end-to-end** tests can be run by,
-```bash
-npm run test:e2e
-```
-
 <br />
 
 ### Tools
 - The server API was built with **express.js** and **socket.io** and tested with **Jest**.
-- The client was built with the **Vue** framework and tested with **Vitest** and **Playwright**.
+- The client was built with the **Vue** framework and tested with **Vitest**.
 
 <br />
 
