@@ -12,6 +12,8 @@ test("Mount component", async (): Promise<void> => {
 });
 
 test("openGithub() opens proper window", async (): Promise<void> => {
+    expect(NameLabel).toBeTruthy();
+
     const originalOpen = window.open;
     window.open = vitest.fn();
 

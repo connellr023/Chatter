@@ -120,11 +120,28 @@ div#chat-view-container {
       width: 100%;
       height: 100%;
 
+      $fade-time: 0.4s;
+
       img#empty-messages {
+
         margin-top: calc(50vh - 165px);
         min-width: 150px;
         max-width: 200px;
-        opacity: 0.1;
+
+        $final-opacity: 0.1;
+
+        opacity: $final-opacity;
+        animation: fade-in-empty $fade-time;
+
+        @keyframes fade-in-empty {
+          0% {
+            opacity: 0;
+          }
+
+          100% {
+            opacity: $final-opacity;
+          }
+        }
       }
 
       div#messages-list {
@@ -135,6 +152,21 @@ div#chat-view-container {
 
         scrollbar-color: $secondary-highlight-color-light $secondary-highlight-color;
         scrollbar-width: thin;
+
+        $final-opacity: 1;
+
+        opacity: $final-opacity;
+        animation: fade-in-messages $fade-time;
+
+        @keyframes fade-in-messages {
+          0% {
+            opacity: 0;
+          }
+
+          100% {
+            opacity: $final-opacity;
+          }
+        }
 
         div.message-element {
           $element-spacing: 9px;
