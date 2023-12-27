@@ -1,4 +1,4 @@
-import EventBus from "../../src/lib/EventBus";
+import EventBus from "../src/lib/EventBus";
 
 import {beforeEach, test, expect} from "vitest";
 

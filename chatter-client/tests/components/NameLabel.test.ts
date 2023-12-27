@@ -1,12 +1,12 @@
 import {expect, test, vitest} from "vitest";
-import {mount} from "@vue/test-utils";
+import {shallowMount} from "@vue/test-utils";
 
 import NameLabel from "../../src/components/NameLabel.vue";
 
 test("Mount component", async (): Promise<void> => {
     expect(NameLabel).toBeTruthy();
 
-    const wrapper = mount(NameLabel);
+    const wrapper = shallowMount(NameLabel);
 
     expect(wrapper.text()).toContain("Connell Reffo");
 });
@@ -17,7 +17,7 @@ test("openGithub() opens proper window", async (): Promise<void> => {
     const originalOpen = window.open;
     window.open = vitest.fn();
 
-    const wrapper = mount(NameLabel);
+    const wrapper = shallowMount(NameLabel);
     const button = wrapper.find("#gh-logo-a");
 
     await button.trigger("click");
