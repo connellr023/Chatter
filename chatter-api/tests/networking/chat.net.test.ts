@@ -52,7 +52,7 @@ afterAll((): void => {
     clientSocket2.disconnect();
 });
 
-test("Test clients receive updated list of connected users on client connect with GlobalChatRoom", (done): void => {
+test("Clients receive updated list of connected users on client connect with GlobalChatRoom", (done): void => {
     const globalRoom: AbstractChatRoom = ChatRoomFactory.instantiate("t1");
 
     const user1: UserDataObject = {username: "arhp"};
@@ -93,7 +93,7 @@ test("Test clients receive updated list of connected users on client connect wit
     clientSocket1.emit(StreamEvents.CLIENT_SEND_USERDATA, user1);
 });
 
-test("Test only correct clients receive updated list of connected users on client connect with PrivateChatRoom", (done): void => {
+test("Only correct clients receive updated list of connected users on client connect with PrivateChatRoom", (done): void => {
     const privateRoom: AbstractChatRoom = ChatRoomFactory.instantiate("t1", false);
 
     const user1: UserDataObject = {username: "finger"};
@@ -136,7 +136,7 @@ test("Test only correct clients receive updated list of connected users on clien
     clientSocket1.emit(StreamEvents.CLIENT_SEND_USERDATA, user1);
 });
 
-test("Test clients receive updated list of connected users on client disconnect with GlobalChatRoom", (done): void => {
+test("Clients receive updated list of connected users on client disconnect with GlobalChatRoom", (done): void => {
     const room: AbstractChatRoom = ChatRoomFactory.instantiate("test");
     const user1: UserDataObject = {username: "crisp"};
     const user2: UserDataObject = {username: "hp123"};
@@ -173,9 +173,9 @@ test("Test clients receive updated list of connected users on client disconnect 
     clientSocket1.emit(StreamEvents.CLIENT_SEND_USERDATA, user1);
 });
 
-test("Test receive valid chat message with GlobalChatRoom", (done): void => {
+test("Receive valid chat message with GlobalChatRoom", (done): void => {
     const room: AbstractChatRoom = ChatRoomFactory.instantiate("test");
-    const message: string = "test message";
+    const message: string = "message";
     const user: UserDataObject = {username: "alice"};
     const chat: ChatObject = {roomId: 0, text: message};
 
@@ -196,11 +196,11 @@ test("Test receive valid chat message with GlobalChatRoom", (done): void => {
     clientSocket1.emit(StreamEvents.CLIENT_SEND_CHAT, chat);
 });
 
-test("Test only clients in room receive chat message with GlobalChatRoom", (done): void => {
+test("Only clients in room receive chat message with GlobalChatRoom", (done): void => {
     const r1: AbstractChatRoom = ChatRoomFactory.instantiate("test1");
     const r2: AbstractChatRoom = ChatRoomFactory.instantiate("test1");
 
-    const message: string = "test message";
+    const message: string = "message";
     const chat: ChatObject = {roomId: 0, text: message};
 
     const user1: UserDataObject = {username: "phinger01"};
@@ -236,7 +236,7 @@ test("Test only clients in room receive chat message with GlobalChatRoom", (done
     clientSocket1.emit(StreamEvents.CLIENT_SEND_CHAT, chat);
 });
 
-test("Test receive message too long with GlobalChatRoom", (done): void => {
+test("Receive message too long with GlobalChatRoom", (done): void => {
     const r1: AbstractChatRoom = new AbstractChatRoomStub("test1", 50);
     const message: string = "dhfguidfifodshjiodfhgfdiuohjgifodfigduohosjsdklsdlf";
     const user: UserDataObject = {username: "bob"};
@@ -263,7 +263,7 @@ test("Test receive message too long with GlobalChatRoom", (done): void => {
     clientSocket1.emit(StreamEvents.CLIENT_SEND_CHAT, chat);
 });
 
-test("Test receive message too short with GlobalChatRoom", (done): void => {
+test("Receive message too short with GlobalChatRoom", (done): void => {
     const r1: AbstractChatRoom = ChatRoomFactory.instantiate("test");
     const message: string = "";
     const user: UserDataObject = {username: "frank"};
@@ -290,7 +290,7 @@ test("Test receive message too short with GlobalChatRoom", (done): void => {
     clientSocket1.emit(StreamEvents.CLIENT_SEND_CHAT, chat);
 });
 
-test("Test receive garbage message with GlobalChatRoom", (done): void => {
+test("Receive garbage message with GlobalChatRoom", (done): void => {
     const r1: AbstractChatRoom = ChatRoomFactory.instantiate("test");
     const message: string = null;
     const user: UserDataObject = {username: "frank"};

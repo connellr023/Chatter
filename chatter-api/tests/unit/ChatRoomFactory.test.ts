@@ -8,14 +8,14 @@ beforeEach((): void => {
     ChatRoomFactory.reset();
 });
 
-test("Test unique ID assignment", (): void => {
+test("Unique ID assignment", (): void => {
     const f1: AbstractChatRoom = ChatRoomFactory.instantiate("1");
     const f2: AbstractChatRoom = ChatRoomFactory.instantiate("2");
 
     expect(f1.getID()).not.toEqual(f2.getID());
 });
 
-test("Test memberOf() with global chat rooms", (): void => {
+test("memberOf() with global chat rooms", (): void => {
     const f1: AbstractChatRoom = ChatRoomFactory.instantiate("1");
     const f2: AbstractChatRoom = ChatRoomFactory.instantiate("2");
 
@@ -36,7 +36,7 @@ test("Test memberOf() with global chat rooms", (): void => {
     expect(ChatRoomFactory.memberOf(c)).toStrictEqual(expected);
 });
 
-test("Test memberOf() with private chat rooms", (): void => {
+test("memberOf() with private chat rooms", (): void => {
     const f1: AbstractChatRoom = ChatRoomFactory.instantiate("1", false);
     const f2: AbstractChatRoom = ChatRoomFactory.instantiate("2", false);
 
@@ -57,7 +57,7 @@ test("Test memberOf() with private chat rooms", (): void => {
     expect(ChatRoomFactory.memberOf(c)).toStrictEqual(expected);
 });
 
-test("Test encode()", (): void => {
+test("encode()", (): void => {
     const f1: AbstractChatRoom = ChatRoomFactory.instantiate("1");
     const f2: AbstractChatRoom = ChatRoomFactory.instantiate("2", false);
 

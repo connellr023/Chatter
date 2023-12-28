@@ -12,7 +12,7 @@ beforeEach((): void => {
     stream = new Stream(io);
 });
 
-test("Test attach() with multiple observers to single event", (): void => {
+test("attach() with multiple observers to single event", (): void => {
     const o1: IStreamObserver = new IStreamObserverStub();
     const o2: IStreamObserver = new IStreamObserverStub();
 
@@ -23,7 +23,7 @@ test("Test attach() with multiple observers to single event", (): void => {
     expect(stream.getObserverMap()).toStrictEqual(expected);
 });
 
-test("Test attach() with multiple observers to multiple events", (): void => {
+test("attach() with multiple observers to multiple events", (): void => {
     const o1: IStreamObserver = new IStreamObserverStub();
     const o2: IStreamObserver = new IStreamObserverStub();
     const o3: IStreamObserver = new IStreamObserverStub();
@@ -37,7 +37,7 @@ test("Test attach() with multiple observers to multiple events", (): void => {
     expect(stream.getObserverMap()).toStrictEqual(expected);
 });
 
-test("Test getEachObserver() has no duplicate instances", (): void => {
+test("getEachObserver() has no duplicate instances", (): void => {
     const o1: IStreamObserver = new IStreamObserverStub();
     const o2: IStreamObserver = new IStreamObserverStub();
     const o3: IStreamObserver = o1;
@@ -52,21 +52,21 @@ test("Test getEachObserver() has no duplicate instances", (): void => {
     expect(actual).toStrictEqual(expected);
 });
 
-test("Test onReceiveUser() with username too long", (): void => {
+test("onReceiveUser() with username too long", (): void => {
     const socket: Socket = null as Socket;
     const status: StatusObject = stream.handleVerifyClient(socket, {username: "aaaaaaaaaaaaaaaa"});
 
     expect(status.success).toBe(false);
 });
 
-test("Test onReceiveUser() with username too short", (): void => {
+test("onReceiveUser() with username too short", (): void => {
     const socket: Socket = null as Socket;
     const status: StatusObject = stream.handleVerifyClient(socket, {username: ""});
 
     expect(status.success).toBe(false);
 });
 
-test("Test notifyJoin()", (): void => {
+test("notifyJoin() notifies only select observers properly", (): void => {
     const o1: IStreamObserverStub = new IStreamObserverStub();
     const o2: IStreamObserverStub = new IStreamObserverStub();
 
@@ -97,7 +97,7 @@ test("Test notifyJoin()", (): void => {
     });
 });
 
-test("Test notifyConnect()", (): void => {
+test("notifyConnect() notifies all observers properly", (): void => {
     const o1: IStreamObserverStub = new IStreamObserverStub();
     const o2: IStreamObserverStub = new IStreamObserverStub();
 
@@ -119,7 +119,7 @@ test("Test notifyConnect()", (): void => {
     });
 });
 
-test("Test notifyDisconnect()", (): void => {
+test("notifyDisconnect() notifies all observers properly", (): void => {
     const o1: IStreamObserverStub = new IStreamObserverStub();
     const o2: IStreamObserverStub = new IStreamObserverStub();
 
@@ -141,14 +141,14 @@ test("Test notifyDisconnect()", (): void => {
     });
 });
 
-test("Test notifyClientMessage()", (): void => {
+test("notifyClientMessage() notifies only select observers properly", (): void => {
     const o1: IStreamObserverStub = new IStreamObserverStub();
     const o2: IStreamObserverStub = new IStreamObserverStub();
     const o3: IStreamObserverStub = new IStreamObserverStub();
 
     const shouldReceive: IStreamObserverStub[] = [o1, o2];
     const shouldNotReceive: IStreamObserverStub[] = [o3];
-    const expectedTrigger: string = "test message"
+    const expectedTrigger: string = "message"
 
     stream.attach(0, o1, o2);
     stream.attach(1, o3);

@@ -6,9 +6,11 @@ import {shallowMount} from "@vue/test-utils";
 const frames: string[] = ["•", "••", "•••", "••••", "•••••", "••••", "•••", "••"];
 const ms: number = 250;
 
-test("Mount component with `isLoading` prop false", async (): Promise<void> => {
+beforeEach((): void => {
     expect(LoadingButton).toBeTruthy();
+});
 
+test("Mount component with `isLoading` prop false", async (): Promise<void> => {
     const wrapper = shallowMount(LoadingButton, {
         props: {
             id: "test",
@@ -21,8 +23,6 @@ test("Mount component with `isLoading` prop false", async (): Promise<void> => {
 });
 
 test("Mount component with `isLoading` prop true", async (): Promise<void> => {
-    expect(LoadingButton).toBeTruthy();
-
     const wrapper = shallowMount(LoadingButton, {
         props: {
             isLoading: true,
@@ -36,8 +36,6 @@ test("Mount component with `isLoading` prop true", async (): Promise<void> => {
 });
 
 test("Test that button text updates when `isLoading` switches from false to true", async (): Promise<void> => {
-    expect(LoadingButton).toBeTruthy();
-
     const wrapper = shallowMount(LoadingButton, {
         props: {
             id: "test",
@@ -53,8 +51,6 @@ test("Test that button text updates when `isLoading` switches from false to true
 });
 
 test("First frame displayed is the last item in `frames` array", async (): Promise<void> => {
-    expect(LoadingButton).toBeTruthy();
-
     const wrapper = shallowMount(LoadingButton, {
         props: {
             id: "test",
@@ -80,8 +76,6 @@ test("First frame displayed is the last item in `frames` array", async (): Promi
 });
 
 test("Second frame displayed is the first item in `frames` array", async () => {
-    expect(LoadingButton).toBeTruthy();
-
     const wrapper = shallowMount(LoadingButton, {
         props: {
             id: "test",

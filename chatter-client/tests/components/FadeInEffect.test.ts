@@ -7,6 +7,7 @@ const hideTime: number = 130;
 const disabledTime: number = 500;
 
 beforeEach((): void => {
+   expect(FadeInEffect).toBeTruthy();
    vitest.useFakeTimers();
 });
 
@@ -15,8 +16,6 @@ afterEach((): void => {
 });
 
 test("Has no classes on mount", async (): Promise<void> => {
-   expect(FadeInEffect).toBeTruthy();
-
    const wrapper = shallowMount(FadeInEffect);
    const overlay = wrapper.find("#overlay");
 
@@ -24,8 +23,6 @@ test("Has no classes on mount", async (): Promise<void> => {
 });
 
 test("`hide` class should be added", async (): Promise<void> => {
-   expect(FadeInEffect).toBeTruthy();
-
    const wrapper = shallowMount(FadeInEffect);
    const overlay = wrapper.find("#overlay");
 
@@ -37,8 +34,6 @@ test("`hide` class should be added", async (): Promise<void> => {
 });
 
 test("`hide` and `disable` class should be added", async (): Promise<void> => {
-   expect(FadeInEffect).toBeTruthy();
-
    const wrapper = shallowMount(FadeInEffect);
    const overlay = wrapper.find("#overlay");
 
