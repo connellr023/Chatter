@@ -6,7 +6,7 @@ export default mergeConfig(
   viteConfig,
   defineConfig({
     test: {
-      //silent: true,
+      silent: true,
       coverage: {
           reporter: ["text", "json", "html"]  
       },

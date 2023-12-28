@@ -9,17 +9,25 @@ import ChatRoomFactory from "./lib/ChatRoomFactory";
 import Logger from "./lib/Logger";
 import express, {Application} from "express";
 import Stream from "./stream/Stream";
+import path from "node:path";
 import cors from "cors";
 
 import {Server, type Socket} from "socket.io";
 import {config, StreamEvents} from "./lib/utility";
 
-const port: number = config.DEV_PORT;
+const port: number = (process.env["PORT"] as any) || config.DEV_PORT;
 
 // Setup express
 const app: Application = express();
 
 app.use(cors());
+
+// HTTP Routing (Vue project must be built in the src folder)
+app.use("/", express.static(path.join(__dirname, "build")));
+
+app.get("*", (req, res): void => {
+    res.sendFile(path.join(__dirname, "build", "index.html"));
+});
 
 // Setup HTTP server
 const server: http.Server = app.listen(port, (): void => {

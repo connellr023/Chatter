@@ -4,6 +4,8 @@
 
 */coverage
 
+*/build/
+
 # Logs
 logs
 *.log
