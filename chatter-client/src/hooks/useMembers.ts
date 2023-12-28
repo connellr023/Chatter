@@ -1,6 +1,6 @@
 import type {ConnectedUsersObject, UserDataObject} from "@/lib/utility";
 import {onMounted, onUnmounted, reactive} from "vue";
-import stream from "@/lib/stream";
+import {stream} from "@/lib/stream";
 import {StreamEvents} from "@/lib/utility";
 
 const members: Map<number, UserDataObject[]> = reactive(new Map<number, UserDataObject[]>());

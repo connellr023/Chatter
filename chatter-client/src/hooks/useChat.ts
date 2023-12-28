@@ -7,8 +7,7 @@ import {
     type ReceiveChatObject,
     type ChatObject
 } from "@/lib/utility";
-
-import stream from "@/lib/stream";
+import {stream} from "@/lib/stream";
 
 /**
  * Function for implementing room interactions with the client

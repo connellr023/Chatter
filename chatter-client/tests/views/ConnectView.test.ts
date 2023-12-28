@@ -8,51 +8,24 @@ import NameLabel from "../../src/components/NameLabel.vue";
 
 import {test, expect, beforeAll, afterAll, afterEach, beforeEach} from "vitest";
 import {mount} from "@vue/test-utils";
-import {createPinia, Pinia} from "pinia";
 import {Server, Socket} from "socket.io";
 import {StreamEvents, UserDataObject} from "../../src/lib/utility";
-import {createRouter, createWebHistory, Router} from "vue-router";
 import {useNotifications} from "../../src/hooks/useNotifications";
+import {pinia, router, serverSocketOptions, hostname} from "../testUtility";
+import {initializeStream} from "../../src/lib/stream";
 
 let httpServer: http.Server;
 let io: Server;
 
-const port: number = 8000;
-
-const pinia: Pinia = createPinia();
-const router: Router = createRouter({
-    history: createWebHistory(),
-    routes: [
-        {
-            path: "/chat",
-            component: {template: "<div>Chat</div>"}
-        },
-        {
-            path: "/error/:code/:message",
-            name: "error",
-            component: {template: "<div>Error</div>"}
-        },
-        {
-            path: "/",
-            component: {template: "<div>Root</div>"}
-        }
-    ]
-});
+const port: number = 5000;
 
 beforeAll((): void => {
-    httpServer = http.createServer();
-    httpServer.listen(port, "localhost");
+    initializeStream(port, hostname);
 
-    io = new Server(httpServer, {
-        httpCompression: false,
-        transports: ["websocket", "polling"],
-        allowUpgrades: false,
-        cors: {
-            origin: "*",
-            methods: ["GET", "POST"],
-            credentials: true
-        }
-    });
+    httpServer = http.createServer();
+    httpServer.listen(port, hostname);
+
+    io = new Server(httpServer, serverSocketOptions);
 });
 
 beforeEach((): void => {

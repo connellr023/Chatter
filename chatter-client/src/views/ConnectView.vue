@@ -1,13 +1,15 @@
 <script setup lang="ts">
 import {useConnection} from "@/hooks/useConnection";
-import {onMounted} from "vue";
+import {onMounted, ref, type Ref} from "vue";
 
 import LoadingButton from "@/components/LoadingButton.vue";
 import NameLabel from "@/components/NameLabel.vue";
 import CornerLogo from "@/components/CornerLogo.vue";
 import WelcomeTitle from "@/components/WelcomeTitle.vue";
 
-const {connect, disconnect, enteredName, attemptingConnection} = useConnection();
+const {connect, disconnect, attemptingConnection} = useConnection();
+
+const enteredName: Ref<string> = ref("");
 
 onMounted((): void => {
   disconnect();
@@ -19,8 +21,8 @@ onMounted((): void => {
     <CornerLogo />
     <div id="start-connect-window">
       <WelcomeTitle />
-      <input v-model="enteredName" id="username-input" class="regular" placeholder="Enter name..." @keyup.enter="connect" /><br />
-      <LoadingButton id="connect-button" classes="regular" text="Connect" @pressed="connect" :is-loading="attemptingConnection" />
+      <input v-model="enteredName" id="username-input" class="regular" placeholder="Enter name..." @keyup.enter="connect(enteredName)" /><br />
+      <LoadingButton id="connect-button" classes="regular" text="Connect" @pressed="connect(enteredName)" :is-loading="attemptingConnection" />
       <div id="prompt" class="regular">Please enter a username above.</div>
     </div>
     <NameLabel />

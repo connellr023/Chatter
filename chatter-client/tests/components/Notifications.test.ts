@@ -2,7 +2,7 @@ import Notifications from "../../src/components/Notifications.vue";
 
 import {test, expect, beforeEach, vitest, afterEach} from "vitest";
 import {shallowMount} from "@vue/test-utils";
-import {useNotifications} from "../../src/hooks/useNotifications";
+import {pushNotification} from "../../src/hooks/useNotifications";
 
 beforeEach((): void => {
     vitest.useFakeTimers();
@@ -26,8 +26,6 @@ test("No notification elements on mount", async (): Promise<void> => {
 test("Test notification is displayed after being pushed", async (): Promise<void> => {
     expect(Notifications).toBeTruthy();
 
-    const {pushNotification} = useNotifications();
-
     const wrapper = shallowMount(Notifications);
     const container = wrapper.find("#notifications-container");
 
@@ -40,8 +38,6 @@ test("Test notification is displayed after being pushed", async (): Promise<void
 
 test("Test notification is deleted after being cleared", async (): Promise<void> => {
     expect(Notifications).toBeTruthy();
-
-    const {pushNotification} = useNotifications();
 
     const wrapper = shallowMount(Notifications);
     const container = wrapper.find("#notifications-container");
@@ -61,8 +57,6 @@ test("Test notification is deleted after being cleared", async (): Promise<void>
 
 test("Test notification is deleted after time", async (): Promise<void> => {
     expect(Notifications).toBeTruthy();
-
-    const {pushNotification} = useNotifications();
 
     const wrapper = shallowMount(Notifications);
     const container = wrapper.find("#notifications-container");

@@ -8,11 +8,11 @@ beforeEach((): void => {
     eventBus = EventBus.resetInstance();
 });
 
-test("Test resetInstance() equals getInstance()", (): void => {
+test("resetInstance() equals getInstance()", (): void => {
     expect(EventBus.resetInstance()).toStrictEqual(EventBus.getInstance());
 });
 
-test("Test emit() with exactly 1 listener", (): void => {
+test("emit() with exactly 1 listener", (): void => {
     const expected = {"test": 0};
     let actual: {};
 
@@ -22,7 +22,7 @@ test("Test emit() with exactly 1 listener", (): void => {
     expect(actual).toStrictEqual(expected);
 });
 
-test("Test emit() with 2 listeners; only one should trigger", (): void => {
+test("emit() with 2 listeners; only one should trigger", (): void => {
     const expected = {"test": 0};
     let actual: {};
 
@@ -33,7 +33,7 @@ test("Test emit() with 2 listeners; only one should trigger", (): void => {
     expect(actual).toStrictEqual(expected);
 });
 
-test("Test emit() with 2 listeners; all should be triggered", (): void => {
+test("emit() with 2 listeners; all should be triggered", (): void => {
     const expected = {"test": 0};
     let actual1: {};
     let actual2: {};
@@ -46,7 +46,7 @@ test("Test emit() with 2 listeners; all should be triggered", (): void => {
     expect(actual2).toStrictEqual(expected);
 });
 
-test("Test off() with 1 listener; none should be triggered", (): void => {
+test("off() with 1 listener; none should be triggered", (): void => {
     let triggered: boolean = false;
 
     const off = eventBus.on("test", (): void => {triggered = true});

@@ -2,7 +2,7 @@ import ErrorView from "../../src/views/ErrorView.vue";
 import CornerLogo from "../../src/components/CornerLogo.vue";
 import NameLabel from "../../src/components/NameLabel.vue";
 
-import {test, expect} from "vitest";
+import {test, expect, beforeEach} from "vitest";
 import {shallowMount} from "@vue/test-utils";
 import {createRouter, createWebHistory, Router} from "vue-router";
 
@@ -24,9 +24,11 @@ const router: Router = createRouter({
     ]
 });
 
-test("Mount component", async (): Promise<void> => {
+beforeEach((): void => {
     expect(ErrorView).toBeTruthy();
+});
 
+test("Mount component", async (): Promise<void> => {
     const wrapper = shallowMount(ErrorView, {
         props: {
             code: "test code",
@@ -42,8 +44,6 @@ test("Mount component", async (): Promise<void> => {
 });
 
 test("Child components exist on mount", async (): Promise<void> => {
-    expect(ErrorView).toBeTruthy();
-
     const wrapper = shallowMount(ErrorView, {
         props: {
             code: "test code",
@@ -56,8 +56,6 @@ test("Child components exist on mount", async (): Promise<void> => {
 });
 
 test("Return button goes back to root route", async (): Promise<void> => {
-    expect(ErrorView).toBeTruthy();
-
     const wrapper = shallowMount(ErrorView, {
         props: {
             code: "test code",
