@@ -7,7 +7,6 @@ test("Mount component", async (): Promise<void> => {
     expect(WelcomeTitle).toBeTruthy();
 
     const wrapper = shallowMount(WelcomeTitle);
-
     expect(wrapper.text()).toContain("Welcome back");
 
     wrapper.unmount();
