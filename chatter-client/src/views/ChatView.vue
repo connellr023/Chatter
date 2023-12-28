@@ -5,13 +5,12 @@ import {useChat} from "@/hooks/useChat";
 import {onMounted, ref} from "vue";
 import {useRouter} from "vue-router";
 import {useMembers} from "@/hooks/useMembers";
-import {useNotifications} from "@/hooks/useNotifications";
+import {pushNotification} from "@/hooks/useNotifications";
 
 const router = useRouter();
 const userStore = useUserStore();
 const {rooms, messages, selectedRoomId, sendMessage, queryRooms} = useChat();
 const {members} = useMembers();
-const {pushNotification} = useNotifications();
 
 const messageBody = ref("");
 

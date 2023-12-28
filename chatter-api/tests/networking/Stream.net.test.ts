@@ -48,7 +48,7 @@ afterAll((): void => {
     clientSocket2.disconnect();
 });
 
-test("Test receive user data success", (done): void => {
+test("Receive user data success", (done): void => {
     const data: UserDataObject = {
         username: "alice"
     };
@@ -61,7 +61,7 @@ test("Test receive user data success", (done): void => {
     clientSocket1.emit(StreamEvents.CLIENT_SEND_USERDATA, data);
 });
 
-test("Test receive bad user data with name too long", (done): void => {
+test("Receive bad user data with name too long", (done): void => {
     const data: UserDataObject = {
         username: "sjdoifjiodsfgiodfjiogdf"
     };
@@ -74,7 +74,7 @@ test("Test receive bad user data with name too long", (done): void => {
     clientSocket1.emit(StreamEvents.CLIENT_SEND_USERDATA, data);
 });
 
-test("Test receive bad user data with name too short", (done): void => {
+test("Receive bad user data with name too short", (done): void => {
     const data: UserDataObject = {
         username: ""
     };
@@ -87,7 +87,7 @@ test("Test receive bad user data with name too short", (done): void => {
     clientSocket1.emit(StreamEvents.CLIENT_SEND_USERDATA, data);
 });
 
-test("Test receive garbage user data", (done): void => {
+test("Receive garbage user data", (done): void => {
     const data: {} = {};
 
     clientSocket1.once(StreamEvents.SERVER_SEND_STATUS, (status: StatusObject): void => {
@@ -98,7 +98,7 @@ test("Test receive garbage user data", (done): void => {
     clientSocket1.emit(StreamEvents.CLIENT_SEND_USERDATA, data);
 });
 
-test("Test receive room encodings", (done): void => {
+test("Send room encodings", (done): void => {
     const r1: AbstractChatRoom = ChatRoomFactory.instantiate("1");
     const r2: AbstractChatRoom = ChatRoomFactory.instantiate("34");
     const r3: AbstractChatRoom = ChatRoomFactory.instantiate("private", false);

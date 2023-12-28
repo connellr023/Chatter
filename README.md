@@ -38,7 +38,7 @@ The test suite for the API includes **unit** and **networking** tests in order t
 
 <br />
 
-### Client Test Suite `WIP`
+### Client Test Suite
 The client test suite is also visible in the **Actions** tab. Otherwise, run the following commands,
 ```bash
 cd chatter-client
@@ -46,6 +46,24 @@ cd chatter-client
 ```bash
 npm run test
 ```
+<br />
+
+### Building
+This web app is not currently deployed. However, in order to do so, build the client by,
+```bash
+cd chatter-client
+```
+```bash
+npm run build
+```
+This will create a directory called `build` in `chatter-api/src` containing the static webpage. The hostname and port
+the client will attempt to connect to is `localhost:8000` by default. If the server is not able to run on port `8000`, then
+this can be changed in `stream.ts`. The server API attempts to host on `process.env.PORT` or `8000` if not set. The server API
+can be run in production mode by,
+```bash
+npm run start
+```
+
 <br />
 
 ### Tools

@@ -3,10 +3,9 @@ import {type Ref, ref} from "vue";
 import type {UserDataObject, StatusObject} from "@/lib/utility";
 import {useUserStore} from "@/hooks/useUserStore";
 import {useMembers} from "@/hooks/useMembers";
-import {useNotifications} from "@/hooks/useNotifications";
+import {pushNotification} from "@/hooks/useNotifications";
 import {config, StreamEvents} from "@/lib/utility";
-
-import stream from "@/lib/stream";
+import {stream} from "@/lib/stream";
 
 /**
  * Function implementing socket stream with client view
@@ -15,19 +14,18 @@ import stream from "@/lib/stream";
 export function useConnection() {
     const router: Router = useRouter();
     const userStore = useUserStore();
-    const {pushNotification} = useNotifications();
 
     const attemptingConnection: Ref<boolean> = ref(false);
-    const enteredName: Ref<string> = ref("");
 
     useMembers();
 
     /**
      * Attempts to establish a stream with the server <br />
      * Notifications and reactive properties are updated accordingly
+     * @param enteredName Is the username to be verified when connecting to the server
      */
-    function connect(): void {
-        const userData: UserDataObject = {username: enteredName.value};
+    function connect(enteredName: string): void {
+        const userData: UserDataObject = {username: enteredName || ""};
 
         if (userData.username.length >= config.MIN_NAME_LENGTH && userData.username.length <= config.MAX_NAME_LENGTH) {
             attemptingConnection.value = true;
@@ -85,7 +83,6 @@ export function useConnection() {
 
     return {
         attemptingConnection,
-        enteredName,
         connect,
         disconnect
     };

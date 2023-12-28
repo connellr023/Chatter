@@ -4,7 +4,11 @@
  */
 import {io, type Socket} from "socket.io-client";
 
-const url: string = "http://localhost:8000";
-const stream: Socket = io(url, {autoConnect: false});
+export const port: number = 8000;
+export let stream: Socket;
 
-export default stream;
+export function initializeStream(port: number, hostname: string): void {
+    stream = io(`http://${hostname}:${port}`, {autoConnect: false});
+}
+
+initializeStream(port, "localhost");

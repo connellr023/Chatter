@@ -4,6 +4,8 @@
 
 */coverage
 
+/chatter-api/src/build/
+
 # Logs
 logs
 *.log
