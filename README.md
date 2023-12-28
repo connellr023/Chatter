@@ -64,6 +64,8 @@ can be run in production mode by,
 npm run start
 ```
 
+<br />
+
 ### Tools
 - The server API was built with **express.js** and **socket.io** and tested with **Jest**.
 - The client was built with the **Vue** framework and tested with **Vitest**.
