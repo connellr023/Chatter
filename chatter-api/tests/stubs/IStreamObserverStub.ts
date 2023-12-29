@@ -15,6 +15,10 @@ export default class IStreamObserverStub implements IStreamObserver {
         this.trigger = "join";
     }
 
+    public onClientLeft(client: Client): void {
+        this.trigger = "left";
+    }
+
     public onClientConnected(client: Client): void {
         this.trigger = "connect";
     }

@@ -56,7 +56,7 @@ test("encodeConnections()", (): void => {
     const c: Client = new Client(null, "arhp");
 
     try {
-        room.addClient(c);
+        room.addClientAndBroadcast(c);
     }
     catch (e) {}
 

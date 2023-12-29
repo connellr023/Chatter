@@ -54,22 +54,27 @@ export default abstract class AbstractChatRoom implements IStreamObserver {
     /**
      * @inheritDoc
      */
+    public onClientLeft(client:Client): void {
+        this.removeClientAndBroadcast(client);
+    }
+
+    /**
+     * @inheritDoc
+     */
     public onClientDisconnected(client: Client): void {
-        this.clients.delete(client);
-        this.broadcast(StreamEvents.SERVER_UPDATE_CONNECTIONS, this.encodeConnections());
+        this.removeClientAndBroadcast(client);
     }
 
     /**
      * @inheritDoc
      */
     public onClientMessage(client: Client, message: ChatObject): void {
+        const status: StatusObject = this.verifyClientMessage(message);
         const data: SendChatObject = {
             username: client.getName(),
             roomId: message.roomId,
             message: message.text
         };
-
-        const status: StatusObject = this.verifyClientMessage(message);
 
         if (status.success) {
             this.broadcast(StreamEvents.SERVER_CHAT_RESPONSE, data);
@@ -83,8 +88,17 @@ export default abstract class AbstractChatRoom implements IStreamObserver {
      * Adds a client as a member to this chat room and broadcasts that a client was added to the rest of the room
      * @param client The client to add
      */
-    public addClient(client: Client): void {
+    public addClientAndBroadcast(client: Client): void {
         this.clients.add(client);
+        this.broadcast(StreamEvents.SERVER_UPDATE_CONNECTIONS, this.encodeConnections());
+    }
+
+    /**
+     * Removes a client as a member from this chat room and broadcasts the new connections encoding
+     * @param client The client to be removed
+     */
+    public removeClientAndBroadcast(client: Client): void {
+        this.clients.delete(client);
         this.broadcast(StreamEvents.SERVER_UPDATE_CONNECTIONS, this.encodeConnections());
     }
 

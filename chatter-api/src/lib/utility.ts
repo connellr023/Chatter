@@ -1,6 +1,10 @@
 /**
- * Object to represent constants used to configure certain aspects of this API
+ * Server API utility file
  * @author Connell Reffo
+ */
+
+/**
+ * Object to represent constants used to configure certain aspects of this API
  */
 export const config = {
     DEV_PORT: 8000,                                     // Port to be used for development testing
@@ -12,7 +16,6 @@ export const config = {
 
 /**
  * Enumeration of events that are permissible to occur on the stream
- * @author Connell Reffo
  */
 export enum StreamEvents {
     CLIENT_CONNECTED = "connection",
@@ -20,6 +23,8 @@ export enum StreamEvents {
     CLIENT_REQUEST_ROOMS = "client_request_rooms",
     CLIENT_SEND_CHAT = "client_send_chat",
     CLIENT_SEND_USERDATA = "client_send_userdata",
+    CLIENT_JOIN_ROOM = "client_join_room",
+    CLIENT_LEAVE_ROOM = "client_leave_room",
     SERVER_SEND_STATUS = "server_send_status",
     SERVER_SEND_ROOMS = "server_send_rooms",
     SERVER_CHAT_RESPONSE = "server_send_chat",
@@ -28,7 +33,6 @@ export enum StreamEvents {
 
 /**
  * Represents an object that encodes an array of connected users by their username
- * @author Connell Reffo
  */
 export interface ConnectedUsersObject {
     roomId: number,
@@ -36,8 +40,14 @@ export interface ConnectedUsersObject {
 }
 
 /**
+ * Represents an object that only encodes a room ID
+ */
+export interface RoomActionObject {
+    roomId: number
+}
+
+/**
  * Represents an object that encodes of a status message sent over a stream
- * @author Connell Reffo
  */
 export interface StatusObject {
     success: boolean
@@ -45,7 +55,6 @@ export interface StatusObject {
 
 /**
  * Represents an object that encodes a room
- * @author Connell Reffo
  */
 export interface RoomObject {
     name: string,
@@ -55,7 +64,6 @@ export interface RoomObject {
 
 /**
  * Represents an object that encodes a message that was sent
- * @author Connell Reffo
  */
 export interface SendChatObject {
     username: string,
@@ -65,7 +73,6 @@ export interface SendChatObject {
 
 /**
  * Represents an object that encodes a list of room objects to be sent
- * @author Connell Reffo
  */
 export interface RoomsListObject {
     rooms: RoomObject[]
@@ -73,7 +80,6 @@ export interface RoomsListObject {
 
 /**
  * Represents an object that encodes a chat message that was received
- * @author Connell Reffo
  */
 export interface ChatObject {
     roomId: number,
@@ -82,7 +88,6 @@ export interface ChatObject {
 
 /**
  * Represents an object that encodes user data that was received
- * @author Connell Reffo
  */
 export interface UserDataObject {
     username: string

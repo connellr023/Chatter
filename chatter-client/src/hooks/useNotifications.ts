@@ -2,7 +2,7 @@ import EventBus from "@/lib/EventBus";
 
 import {onUnmounted, reactive, ref} from "vue";
 import {type NotificationObject} from "@/lib/utility";
-import {GlobalEvents} from "@/lib/utility";
+import {GlobalClientEvents} from "@/lib/utility";
 
 const eventBus: EventBus = EventBus.getInstance();
 
@@ -34,7 +34,7 @@ export function useNotifications() {
         notifications.add(notification)
     }
 
-    const off = eventBus.on(GlobalEvents.NOTIFICATION, handlePushNotification);
+    const off = eventBus.on(GlobalClientEvents.NOTIFICATION, handlePushNotification);
 
     onUnmounted((): void => {
         off();
@@ -50,5 +50,5 @@ export function useNotifications() {
  * @param body The notification text
  */
 export function pushNotification(body: string): void {
-    eventBus.emit(GlobalEvents.NOTIFICATION, body);
+    eventBus.emit(GlobalClientEvents.NOTIFICATION, body);
 }

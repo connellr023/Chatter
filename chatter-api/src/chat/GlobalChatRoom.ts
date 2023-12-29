@@ -11,7 +11,7 @@ export default class GlobalChatRoom extends AbstractChatRoom {
      * @inheritDoc
      */
     public onClientConnected(client: Client): void {
-        super.addClient(client);
+        this.addClientAndBroadcast(client);
     }
 
     /**

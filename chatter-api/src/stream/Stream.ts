@@ -3,7 +3,7 @@ import Client from "./Client";
 import ChatRoomFactory from "../lib/ChatRoomFactory";
 
 import {Server, type Socket} from "socket.io";
-import {ChatObject, config, StatusObject, StreamEvents, UserDataObject} from "../lib/utility";
+import {ChatObject, config, RoomActionObject, StatusObject, StreamEvents, UserDataObject} from "../lib/utility";
 
 /**
  * Class for managing socket.io connections
@@ -22,7 +22,7 @@ export default class Stream {
     protected observers: Map<number, IStreamObserver[]>;
 
     /**
-     * Map clients indexed by their corresponding socket ID
+     * Map of clients indexed by their corresponding socket ID
      */
     protected connections: Map<string, Client>;
 
@@ -47,11 +47,19 @@ export default class Stream {
             });
 
             socket.on(StreamEvents.CLIENT_SEND_CHAT, (data: ChatObject): void => {
-                this.notifyClientMessage(data.roomId, this.connections.get(socket.id), data);
+                this.notifyClientMessage(this.connections.get(socket.id), data.roomId, data);
             });
 
             socket.on(StreamEvents.CLIENT_REQUEST_ROOMS, (): void => {
                 socket.emit(StreamEvents.SERVER_SEND_ROOMS, ChatRoomFactory.encode(ChatRoomFactory.memberOf(this.connections.get(socket.id))));
+            });
+
+            socket.on(StreamEvents.CLIENT_JOIN_ROOM, (data: RoomActionObject): void => {
+                this.notifyJoin(this.connections.get(socket.id), data.roomId);
+            });
+
+            socket.on(StreamEvents.CLIENT_LEAVE_ROOM, (data: RoomActionObject): void => {
+                this.notifyLeft(this.connections.get(socket.id), data.roomId);
             });
 
             socket.on(StreamEvents.CLIENT_DISCONNECTED, (): void => {
@@ -79,9 +87,24 @@ export default class Stream {
      * @param roomId The ID of the room they joined
      */
     public notifyJoin(client: Client, roomId: number): void {
-        this.observers.get(roomId).forEach((observer: IStreamObserver): void => {
-            observer.onClientJoined(client);
-        });
+        if (client) {
+            this.observers.get(roomId).forEach((observer: IStreamObserver): void => {
+                observer.onClientJoined(client);
+            });
+        }
+    }
+
+    /**
+     * Notifies every room observer of a given room ID that a client left that room
+     * @param client The client that left
+     * @param roomId The ID of the room they left
+     */
+    public notifyLeft(client: Client, roomId: number): void {
+        if (client) {
+            this.observers.get(roomId).forEach((observer: IStreamObserver): void => {
+                observer.onClientLeft(client);
+            });
+        }
     }
 
     /**
@@ -106,14 +129,16 @@ export default class Stream {
 
     /**
      * Notifies stream observers of a specified room ID that a client sent a message
-     * @param roomId The room ID the message was sent to
      * @param client The client that sent the message
+     * @param roomId The room ID the message was sent to
      * @param data The object that encodes the message
      */
-    public notifyClientMessage(roomId: number, client: Client, data: ChatObject): void {
-        this.observers.get(roomId).forEach((observer: IStreamObserver): void => {
-            observer.onClientMessage(client, data);
-        });
+    public notifyClientMessage(client: Client, roomId: number, data: ChatObject): void {
+        if (client) {
+            this.observers.get(roomId).forEach((observer: IStreamObserver): void => {
+                observer.onClientMessage(client, data);
+            });
+        }
     }
 
     /**

@@ -1,8 +1,14 @@
 /**
- * Object to represent constants used to configure certain aspects of the client
+ * Client utility file
  * @author Connell Reffo
  */
+
+/**
+ * Object to represent constants used to configure certain aspects of the client
+ */
 export const config = {
+    SOCKET_DEV_PORT: 8000,                              // Port to of the socket server to connect to in development mode
+    SOCKET_DEV_HOSTNAME: "localhost",                   // Hostname of the socket server to connect to in development mode
     MIN_MESSAGE_LENGTH: 1,                              // The minimum length of a chat message
     MAX_MESSAGE_LENGTH: 30,                             // The maximum length of a chat message
     MIN_NAME_LENGTH: 1,                                 // The minimum length of a client username
@@ -11,7 +17,6 @@ export const config = {
 
 /**
  * Enumeration of events that are permissible to occur on the stream
- * @author Connell Reffo
  */
 export enum StreamEvents {
     CONNECT = "connect",
@@ -20,6 +25,8 @@ export enum StreamEvents {
     CLIENT_REQUEST_ROOMS = "client_request_rooms",
     CLIENT_SEND_CHAT = "client_send_chat",
     CLIENT_SEND_USERDATA = "client_send_userdata",
+    CLIENT_JOIN_ROOM = "client_join_room",
+    CLIENT_LEAVE_ROOM = "client_leave_room",
     SERVER_SEND_STATUS = "server_send_status",
     SERVER_SEND_ROOMS = "server_send_rooms",
     SERVER_CHAT_RESPONSE = "server_send_chat",
@@ -28,15 +35,13 @@ export enum StreamEvents {
 
 /**
  * Enumeration of events that can happen globally over the Vue app
- * @author Connell Reffo
  */
-export enum GlobalEvents {
+export enum GlobalClientEvents {
     NOTIFICATION = "notification"
 }
 
 /**
  * Represents an object that encodes an array of connected users by their username
- * @author Connell Reffo
  */
 export interface ConnectedUsersObject {
     roomId: number,
@@ -44,8 +49,14 @@ export interface ConnectedUsersObject {
 }
 
 /**
+ * Represents an object that only encodes a room ID
+ */
+export interface RoomActionObject {
+    roomId: number
+}
+
+/**
  * Represents an object that encodes of a status message sent over a stream
- * @author Connell Reffo
  */
 export interface StatusObject {
     success: boolean
@@ -53,7 +64,6 @@ export interface StatusObject {
 
 /**
  * Represents an object that encodes a room
- * @author Connell Reffo
  */
 export interface RoomObject {
     name: string,
@@ -63,7 +73,6 @@ export interface RoomObject {
 
 /**
  * Object that the represents a single chat message
- * @author Connell Reffo
  */
 export interface MessageObject {
     sender: string,
@@ -72,7 +81,6 @@ export interface MessageObject {
 
 /**
  * Represents an object that encodes a chat message that was received
- * @author Connell Reffo
  */
 export interface ReceiveChatObject {
     username: string,
@@ -82,7 +90,6 @@ export interface ReceiveChatObject {
 
 /**
  * Represents an object that encodes a list of room objects to be received
- * @author Connell Reffo
  */
 export interface RoomsListObject {
     rooms: RoomObject[]
@@ -90,7 +97,6 @@ export interface RoomsListObject {
 
 /**
  * Represents an object that encodes a chat message that was sent
- * @author Connell Reffo
  */
 export interface ChatObject {
     roomId: number,
@@ -99,7 +105,6 @@ export interface ChatObject {
 
 /**
  * Represents an object that encodes user data that was sent
- * @author Connell Reffo
  */
 export interface UserDataObject {
     username: string
@@ -107,7 +112,6 @@ export interface UserDataObject {
 
 /**
  * Represents a client side notification
- * @author Connell Reffo
  */
 export interface NotificationObject {
     id: number

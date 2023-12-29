@@ -57,9 +57,9 @@ cd chatter-client
 npm run build
 ```
 This will create a directory called `build` in `chatter-api/src` containing the static webpage. The hostname and port
-the client will attempt to connect to in **development mode** is `localhost:8000` by default otherwise in **production** it will use the hostname
+the client will attempt to connect to in **development mode** is `localhost:8000` by default. Otherwise, in **production** it will use the hostname
 and port within the JavaScript `window.location` object. If the server is not able to run on port `8000` in **development**, then
-this can be changed in `chatter-client/src/lib/stream.ts`. The server API attempts to host on `process.env.PORT` or `8000` if not set. The server API
+this can be changed in `chatter-client/src/lib/utility.ts` *config* object. The server API attempts to host on `process.env.PORT` or `8000` if not set. The server API
 can be run in production mode by,
 ```bash
 npm run start
