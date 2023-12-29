@@ -13,7 +13,7 @@ import {
     UserDataObject,
     SendChatObject,
     StatusObject,
-    StreamEvents
+    StreamEvents, RoomActionObject
 } from "../../src/lib/utility";
 
 let io: Server;
@@ -93,7 +93,7 @@ test("Clients receive updated list of connected users on client connect with Glo
     clientSocket1.emit(StreamEvents.CLIENT_SEND_USERDATA, user1);
 });
 
-test("Only correct clients receive updated list of connected users on client connect with PrivateChatRoom", (done): void => {
+test("Only correct clients receive updated list of connected users on client join with PrivateChatRoom", (done): void => {
     const privateRoom: AbstractChatRoom = ChatRoomFactory.instantiate("t1", false);
 
     const user1: UserDataObject = {username: "finger"};
@@ -127,7 +127,55 @@ test("Only correct clients receive updated list of connected users on client con
                 throw new Error("Expected successful status for receiving userdata for user2");
             }
 
-            stream.notifyJoin(stream.getConnections().get(clientSocket2.id), privateRoom.getID());
+            const data: RoomActionObject = {
+                roomId: privateRoom.getID()
+            };
+
+            clientSocket2.emit(StreamEvents.CLIENT_JOIN_ROOM, data);
+        });
+
+        clientSocket2.emit(StreamEvents.CLIENT_SEND_USERDATA, user2);
+    });
+
+    clientSocket1.emit(StreamEvents.CLIENT_SEND_USERDATA, user1);
+});
+
+test("Clients receive updated list of connected users on client leave with GlobalChatRoom", (done): void => {
+    const room: AbstractChatRoom = ChatRoomFactory.instantiate("t1");
+
+    const user1: UserDataObject = {username: "phinger01"};
+    const user2: UserDataObject = {username: "cr023"};
+
+    stream.attach(room.getID(), room);
+
+    clientSocket1.once(StreamEvents.SERVER_SEND_STATUS, (status: StatusObject): void => {
+        if (!status.success) {
+            throw new Error("Expected successful status for receiving userdata for user1");
+        }
+
+        clientSocket2.once(StreamEvents.SERVER_SEND_STATUS, (status: StatusObject): void => {
+            if (!status.success) {
+                throw new Error("Expected successful status for receiving userdata for user2");
+            }
+
+            clientSocket1.once(StreamEvents.SERVER_UPDATE_CONNECTIONS, (data: ConnectedUsersObject): void => {
+                expect(data).toStrictEqual({
+                    roomId: room.getID(),
+                    connections: [user1]
+                });
+
+                done();
+            });
+
+            clientSocket2.once(StreamEvents.SERVER_UPDATE_CONNECTIONS, (): void => {
+                throw new Error("user2 not expecting to receive any connection updates");
+            });
+
+            const data: RoomActionObject = {
+                roomId: room.getID()
+            };
+
+            clientSocket2.emit(StreamEvents.CLIENT_LEAVE_ROOM, data);
         });
 
         clientSocket2.emit(StreamEvents.CLIENT_SEND_USERDATA, user2);

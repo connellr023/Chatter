@@ -46,6 +46,7 @@ div.error-header {
     margin-top: 3px;
     margin-bottom: 4px;
     font-size: 30px;
+    user-select: none;
   }
 
   button#return-button {

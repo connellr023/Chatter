@@ -71,3 +71,30 @@ test("encodeConnections()", (): void => {
 
     expect(room.encodeConnections()).toStrictEqual(expected);
 });
+
+test("addClientAndBroadcast() adds client", (): void => {
+    const c: Client = new Client(null, "finger");
+
+    try {
+        room.addClientAndBroadcast(c);
+    }
+    catch (e) {}
+
+    expect(room.hasClient(c)).toBe(true);
+});
+
+test("removeClientAndBroadcast() removes client", (): void => {
+    const c: Client = new Client(null, "cr023");
+
+    try {
+        room.addClientAndBroadcast(c);
+    }
+    catch (e) {}
+
+    try {
+        room.removeClientAndBroadcast(c);
+    }
+    catch (e) {}
+
+    expect(room.hasClient(c)).toBe(false);
+});

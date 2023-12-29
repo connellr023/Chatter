@@ -196,11 +196,4 @@ export default class Stream {
 
         return final;
     }
-
-    /**
-     * Gets a map of clients indexed by their corresponding socket ID
-     */
-    public getConnections(): Map<string, Client> {
-        return this.connections;
-    }
 }
