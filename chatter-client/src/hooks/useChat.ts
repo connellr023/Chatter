@@ -51,6 +51,22 @@ export function useChat() {
     }
 
     /**
+     * Emits a message to the server requesting to open a room with a given name
+     * @param name The name of the room to open
+     */
+    function openRoom(name: string): void {
+        stream.emit(StreamEvents.CLIENT_OPEN_ROOM, name);
+    }
+
+    /**
+     * Emits a message to the server requesting to join a room of a specified ID
+     * @param id The ID of the room to join
+     */
+    function joinRoom(id: number): void {
+        stream.emit(StreamEvents.CLIENT_JOIN_ROOM, id);
+    }
+
+    /**
      * Listens for messages sent by other clients across all chat rooms this client is a member of
      * @param data The data received
      */
@@ -78,6 +94,8 @@ export function useChat() {
         rooms,
         messages,
         selectedRoomId,
+        openRoom,
+        joinRoom,
         sendMessage,
         queryRooms
     };

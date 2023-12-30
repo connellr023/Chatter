@@ -9,24 +9,40 @@ import {pushNotification} from "@/hooks/useNotifications";
 
 const router = useRouter();
 const userStore = useUserStore();
-const {rooms, messages, selectedRoomId, sendMessage, queryRooms} = useChat();
+const {rooms, messages, selectedRoomId, openRoom, joinRoom, sendMessage, queryRooms} = useChat();
 const {members} = useMembers();
 
-const messageBody = ref("");
+const messageBodyInput = ref("");
+const roomNameInput = ref("");
+const roomIdInput = ref(0);
 
 /**
  * Helper function for sending messages through Vue events
  */
-function message() {
-  if (messageBody.value.length <= config.MAX_MESSAGE_LENGTH) {
-    if (messageBody.value.length >= config.MIN_MESSAGE_LENGTH) {
-      sendMessage(messageBody.value);
-      messageBody.value = "";
+function message(): void {
+  if (messageBodyInput.value.length <= config.MAX_MESSAGE_LENGTH) {
+    if (messageBodyInput.value.length >= config.MIN_MESSAGE_LENGTH) {
+      sendMessage(messageBodyInput.value);
+      messageBodyInput.value = "";
     }
   }
   else {
     pushNotification(`Message must be within ${config.MIN_MESSAGE_LENGTH} and ${config.MAX_MESSAGE_LENGTH} characters`);
   }
+}
+
+/**
+ * Helper function for opening a room
+ */
+function open(): void {
+  // TODO
+}
+
+/**
+ * Helper function for joining a room
+ */
+function join(): void {
+  // TODO
 }
 
 onMounted((): void => {
@@ -51,6 +67,16 @@ onMounted((): void => {
           </button>
         </div>
       </div>
+      <div id="room-action-container">
+        <div>
+          <input v-model="roomNameInput" class="bubble" placeholder="Enter room name..." />
+          <button class="bubble" @click="open">Open</button>
+        </div>
+        <div>
+          <input v-model="roomIdInput" class="bubble" type="number" placeholder="Enter room ID..." />
+          <button class="bubble" @click="join">Join</button>
+        </div>
+      </div>
       <div id="user-info" class="bubble" @click="router.push('/')">
         <div id="username-green-circle"></div>
         <span id="username">{{userStore.username}}</span>
@@ -71,7 +97,7 @@ onMounted((): void => {
         <a id="send-button" class="regular" @click="message">
           <img alt="Send icon" src="@/assets/arrow.svg" />
         </a>
-        <input id="chat-input" class="regular" placeholder="Send chat..." v-model="messageBody" @keyup.enter="message"/>
+        <input id="chat-input" class="regular" placeholder="Send chat..." v-model="messageBodyInput" @keyup.enter="message"/>
       </div>
     </div>
     <div id="members-panel" class="panel">
