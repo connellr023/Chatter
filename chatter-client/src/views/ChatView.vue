@@ -46,7 +46,8 @@ onMounted((): void => {
         <div id="room-list">
           <button v-for="room in rooms" :class="{'selected': selectedRoomId == room.id}" class="room-option bubble" @click="selectedRoomId = room.id">
             {{room.name}}
-            <span><br />{{room.isGlobal ? "Public" : "Private"}}</span>
+            <br />
+            <span class="room-info">{{room.isGlobal ? "Public" : "Private"}} <span>({{room.id}})</span></span>
           </button>
         </div>
       </div>

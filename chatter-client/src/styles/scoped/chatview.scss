@@ -52,13 +52,17 @@ div#chat-view-container {
         margin-bottom: 10px;
         font-size: 16px;
 
-        span {
+        span.room-info {
           font-size: 0.85em;
           opacity: 0.4;
           transition: $default-opacity-transition;
+
+          span {
+            margin-left: 8px;
+          }
         }
 
-        &.selected span {
+        &.selected span.room-info {
           opacity: 0.7;
         }
       }

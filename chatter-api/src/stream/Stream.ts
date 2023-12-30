@@ -3,7 +3,15 @@ import Client from "./Client";
 import ChatRoomFactory from "../lib/ChatRoomFactory";
 
 import {Server, type Socket} from "socket.io";
-import {ChatObject, config, RoomActionObject, StatusObject, StreamEvents, UserDataObject} from "../lib/utility";
+import {
+    ChatObject,
+    config,
+    RoomActionObject,
+    StatusObject,
+    StreamEvents,
+    UserDataObject,
+    verifyString
+} from "../lib/utility";
 
 /**
  * Class for managing socket.io connections
@@ -55,6 +63,20 @@ export default class Stream {
             });
 
             socket.on(StreamEvents.CLIENT_JOIN_ROOM, (data: RoomActionObject): void => {
+                // const client: Client = this.connections.get(socket.id);
+                //
+                // // Open a new private room if not already existent
+                // if (!this.observers.has(data.roomId) && data.name) {
+                //     const name: string = data.name.trim();
+                //
+                //     if (verifyString(name, config.MIN_ROOM_NAME_LENGTH, config.MAX_ROOM_NAME_LENGTH)) {
+                //         const room: AbstractChatRoom = ChatRoomFactory.instantiate(name, false);
+                //
+                //         this.attach(data.roomId, room);
+                //         this.notifyJoin(client, room.getID());
+                //     }
+                // }
+
                 this.notifyJoin(this.connections.get(socket.id), data.roomId);
             });
 
@@ -82,7 +104,7 @@ export default class Stream {
     }
 
     /**
-     * Notifies room observers of a specified room ID that a client joined that room
+     * Notifies room observers of a specified room ID that a client joined that room <br />
      * @param client The client that joined
      * @param roomId The ID of the room they joined
      */
@@ -151,7 +173,7 @@ export default class Stream {
         let status: StatusObject = {success: false};
 
         if (typeof data.username == "string") {
-            if (data.username.length >= config.MIN_NAME_LENGTH && data.username.length <= config.MAX_NAME_LENGTH) {
+            if (verifyString(data.username, config.MIN_NAME_LENGTH, config.MAX_NAME_LENGTH)) {
                 status.success = true;
 
                 const client: Client = new Client(socket, data.username);

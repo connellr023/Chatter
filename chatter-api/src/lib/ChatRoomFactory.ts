@@ -12,9 +12,9 @@ import {RoomObject, RoomsListObject} from "./utility";
 export default class ChatRoomFactory {
 
     /**
-     * List of rooms instantiated by this factory
+     * Map of rooms instantiated by this factory indexed by  their room ID
      */
-    private static rooms: AbstractChatRoom[] = [];
+    private static rooms: Map<number, AbstractChatRoom> = new Map<number, AbstractChatRoom>();
 
     /**
      * Counter for maintaining unique identifiers
@@ -30,7 +30,7 @@ export default class ChatRoomFactory {
     public static instantiate(name: string, isGlobal: boolean = true): AbstractChatRoom {
         let room: AbstractChatRoom = isGlobal ? new GlobalChatRoom(name, this.counter) : new PrivateChatRoom(name, this.counter);
 
-        this.rooms.push(room);
+        this.rooms.set(this.counter, room)
         this.counter++;
 
         return room;
@@ -79,7 +79,7 @@ export default class ChatRoomFactory {
      * @static
      */
     public static reset(): void {
-        this.rooms = [];
+        this.rooms.clear();
         this.counter = 0;
     }
 }

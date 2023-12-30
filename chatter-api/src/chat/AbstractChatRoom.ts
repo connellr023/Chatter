@@ -4,7 +4,7 @@ import {
     ChatObject,
     StatusObject,
     StreamEvents,
-    ConnectedUsersObject, UserDataObject, SendChatObject
+    ConnectedUsersObject, UserDataObject, SendChatObject, verifyString
 } from "../lib/utility";
 import IStreamObserver from "../stream/IStreamObserver";
 
@@ -108,16 +108,8 @@ export default abstract class AbstractChatRoom implements IStreamObserver {
      * @param message The message to be verified
      */
     public verifyClientMessage(message: ChatObject): StatusObject {
-        let success: boolean = false;
-
-        if (typeof message.text == "string") {
-            if (this.id == message.roomId && message.text.length >= config.MIN_MESSAGE_LENGTH && message.text.length <= config.MAX_MESSAGE_LENGTH) {
-                success = true;
-            }
-        }
-
         return {
-            success: success
+            success: (this.id == message.roomId && verifyString(message.text, config.MIN_MESSAGE_LENGTH, config.MAX_MESSAGE_LENGTH))
         };
     }
 

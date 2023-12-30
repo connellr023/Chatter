@@ -11,7 +11,9 @@ export const config = {
     MIN_MESSAGE_LENGTH: 1,                              // The minimum length of a chat message
     MAX_MESSAGE_LENGTH: 30,                             // The maximum length of a chat message
     MIN_NAME_LENGTH: 1,                                 // The minimum length of a client username
-    MAX_NAME_LENGTH: 15                                 // The maximum length of a client username
+    MAX_NAME_LENGTH: 15,                                // The maximum length of a client username
+    MIN_ROOM_NAME_LENGTH: 1,
+    MAX_ROOM_NAME_LENGTH: 15
 };
 
 /**
@@ -43,6 +45,7 @@ export interface ConnectedUsersObject {
  * Represents an object that only encodes a room ID
  */
 export interface RoomActionObject {
+    name?: string,
     roomId: number
 }
 
@@ -91,4 +94,20 @@ export interface ChatObject {
  */
 export interface UserDataObject {
     username: string
+}
+
+/**
+ * Verifies that a given variable is a string and its length is within the min and max values
+ * @param data The variable to check
+ * @param min The minimum length
+ * @param max The maximum length
+ */
+export function verifyString(data: any, min: number, max: number): boolean {
+    if (typeof data == "string") {
+        if (data.length >= min && data.length <= max) {
+            return true;
+        }
+    }
+
+    return false;
 }
