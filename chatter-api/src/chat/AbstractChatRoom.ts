@@ -54,13 +54,6 @@ export default abstract class AbstractChatRoom implements IStreamObserver {
     /**
      * @inheritDoc
      */
-    public onClientLeft(client:Client): void {
-        this.removeClientAndBroadcast(client);
-    }
-
-    /**
-     * @inheritDoc
-     */
     public onClientDisconnected(client: Client): void {
         this.removeClientAndBroadcast(client);
     }

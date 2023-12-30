@@ -25,8 +25,8 @@ export enum StreamEvents {
     CLIENT_REQUEST_ROOMS = "client_request_rooms",
     CLIENT_SEND_CHAT = "client_send_chat",
     CLIENT_SEND_USERDATA = "client_send_userdata",
+    CLIENT_OPEN_ROOM = "client_open_room",
     CLIENT_JOIN_ROOM = "client_join_room",
-    CLIENT_LEAVE_ROOM = "client_leave_room",
     SERVER_SEND_STATUS = "server_send_status",
     SERVER_SEND_ROOMS = "server_send_rooms",
     SERVER_CHAT_RESPONSE = "server_send_chat",
@@ -39,14 +39,6 @@ export enum StreamEvents {
 export interface ConnectedUsersObject {
     roomId: number,
     connections: UserDataObject[]
-}
-
-/**
- * Represents an object that only encodes a room ID
- */
-export interface RoomActionObject {
-    name?: string,
-    roomId: number
 }
 
 /**

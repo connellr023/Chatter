@@ -1,12 +1,12 @@
-import IStreamObserver from "./IStreamObserver";
 import Client from "./Client";
 import ChatRoomFactory from "../lib/ChatRoomFactory";
+import type IStreamObserver from "./IStreamObserver";
+import type AbstractChatRoom from "../chat/AbstractChatRoom";
 
 import {Server, type Socket} from "socket.io";
 import {
     ChatObject,
     config,
-    RoomActionObject,
     StatusObject,
     StreamEvents,
     UserDataObject,
@@ -62,26 +62,12 @@ export default class Stream {
                 socket.emit(StreamEvents.SERVER_SEND_ROOMS, ChatRoomFactory.encode(ChatRoomFactory.memberOf(this.connections.get(socket.id))));
             });
 
-            socket.on(StreamEvents.CLIENT_JOIN_ROOM, (data: RoomActionObject): void => {
-                // const client: Client = this.connections.get(socket.id);
-                //
-                // // Open a new private room if not already existent
-                // if (!this.observers.has(data.roomId) && data.name) {
-                //     const name: string = data.name.trim();
-                //
-                //     if (verifyString(name, config.MIN_ROOM_NAME_LENGTH, config.MAX_ROOM_NAME_LENGTH)) {
-                //         const room: AbstractChatRoom = ChatRoomFactory.instantiate(name, false);
-                //
-                //         this.attach(data.roomId, room);
-                //         this.notifyJoin(client, room.getID());
-                //     }
-                // }
-
-                this.notifyJoin(this.connections.get(socket.id), data.roomId);
+            socket.on(StreamEvents.CLIENT_OPEN_ROOM, (name: string): void => {
+                this.handleOpenRoom(socket, name);
             });
 
-            socket.on(StreamEvents.CLIENT_LEAVE_ROOM, (data: RoomActionObject): void => {
-                this.notifyLeft(this.connections.get(socket.id), data.roomId);
+            socket.on(StreamEvents.CLIENT_JOIN_ROOM, (roomId: number): void => {
+                this.notifyJoin(this.connections.get(socket.id), roomId);
             });
 
             socket.on(StreamEvents.CLIENT_DISCONNECTED, (): void => {
@@ -112,19 +98,6 @@ export default class Stream {
         if (client) {
             this.observers.get(roomId).forEach((observer: IStreamObserver): void => {
                 observer.onClientJoined(client);
-            });
-        }
-    }
-
-    /**
-     * Notifies every room observer of a given room ID that a client left that room
-     * @param client The client that left
-     * @param roomId The ID of the room they left
-     */
-    public notifyLeft(client: Client, roomId: number): void {
-        if (client) {
-            this.observers.get(roomId).forEach((observer: IStreamObserver): void => {
-                observer.onClientLeft(client);
             });
         }
     }
@@ -164,7 +137,23 @@ export default class Stream {
     }
 
     /**
-     * Executed when <b>RECEIVE_USER</b> is triggered
+     * Executed when <b>CLIENT_OPEN_ROOM</b> is triggered
+     * @param socket The socket connection that triggered this event
+     * @param name The name of the private chat room to open
+     */
+    public handleOpenRoom(socket: Socket, name: string): void {
+        name = name.trim();
+
+        if (verifyString(name, config.MIN_ROOM_NAME_LENGTH, config.MAX_ROOM_NAME_LENGTH)) {
+            const room: AbstractChatRoom = ChatRoomFactory.instantiate(name, false);
+
+            this.attach(room.getID(), room);
+            this.notifyJoin(this.connections.get(socket.id), room.getID());
+        }
+    }
+
+    /**
+     * Executed when <b>CLIENT_SEND_USERDATA</b> is triggered
      * @param socket The socket connection that triggered this event
      * @param data The object that encodes the user data received
      * @return An encoding of a status that can be sent back to the client
@@ -172,22 +161,20 @@ export default class Stream {
     public handleVerifyClient(socket: Socket, data: UserDataObject): StatusObject {
         let status: StatusObject = {success: false};
 
-        if (typeof data.username == "string") {
-            if (verifyString(data.username, config.MIN_NAME_LENGTH, config.MAX_NAME_LENGTH)) {
-                status.success = true;
+        if (verifyString(data.username, config.MIN_NAME_LENGTH, config.MAX_NAME_LENGTH)) {
+            status.success = true;
 
-                const client: Client = new Client(socket, data.username);
+            const client: Client = new Client(socket, data.username);
 
-                this.connections.set(socket.id, client);
-                this.notifyConnect(client);
-            }
+            this.connections.set(socket.id, client);
+            this.notifyConnect(client);
         }
 
         return status;
     }
 
     /**
-     * Executed when <b>DISCONNECT</b> is triggered
+     * Executed when <b>CLIENT_DISCONNECTED</b> is triggered
      * @param socket The socket that disconnected
      */
     public handleDisconnect(socket: Socket): void {

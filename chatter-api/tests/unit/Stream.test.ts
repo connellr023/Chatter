@@ -98,38 +98,6 @@ test("notifyJoin() notifies only select observers properly", (): void => {
     });
 });
 
-
-test("notifyLeft() notifies only select observers properly", (): void => {
-    const o1: IStreamObserverStub = new IStreamObserverStub();
-    const o2: IStreamObserverStub = new IStreamObserverStub();
-
-    const shouldRun: IStreamObserverStub[] = [o1];
-    const shouldNotRun: IStreamObserver[] = [o2];
-
-    const expectedTrigger: string = "left";
-
-    stream.attach(0, o1);
-    stream.attach(1, o2);
-    stream.notifyLeft(new Client(null, "test"), 0);
-
-    shouldRun.forEach((observer: IStreamObserverStub): void => {
-        if (observer.getTrigger() != expectedTrigger) {
-            if (observer.getTrigger().length == 0) {
-                throw new Error("Not triggered when should have");
-            }
-            else {
-                throw new Error("Wrong trigger");
-            }
-        }
-    });
-
-    shouldNotRun.forEach((observer: IStreamObserverStub): void => {
-        if (observer.getTrigger() != "") {
-            throw new Error("Triggered when not expected to");
-        }
-    });
-});
-
 test("notifyConnect() notifies all observers properly", (): void => {
     const o1: IStreamObserverStub = new IStreamObserverStub();
     const o2: IStreamObserverStub = new IStreamObserverStub();

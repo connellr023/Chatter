@@ -15,12 +15,6 @@ export default interface IStreamObserver {
     onClientJoined(client: Client): void;
 
     /**
-     * Triggered when a client leaves a room this observer watches
-     * @param client The client that left
-     */
-    onClientLeft(client: Client): void;
-
-    /**
      * Triggered when any client connects to the server
      * @param client The client that connected
      */
