@@ -16,6 +16,11 @@ import {Server, type Socket} from "socket.io";
 import {config, StreamEvents} from "./lib/utility";
 
 const port: number = (process.env["PORT"] as any) || config.DEV_PORT;
+const origins: string[] = [
+    "http://localhost:5173",
+    `http://localhost:${port}`,
+    "https://chatter-lqqb.onrender.com"
+];
 
 // Setup express
 const app: Application = express();
@@ -40,7 +45,7 @@ const io: Server = new Server(server, {
     transports: ["websocket", "polling"],
     allowUpgrades: false,
     cors: {
-        origin: ["http://localhost:5173", `http://localhost:${port}`],
+        origin: origins,
         methods: ["GET", "POST"],
         credentials: true
     }
