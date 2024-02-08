@@ -1,6 +1,6 @@
 import EventBus from "@/lib/EventBus";
 
-import {onUnmounted, reactive, ref} from "vue";
+import {onUnmounted, reactive} from "vue";
 import {type NotificationObject} from "@/lib/utility";
 import {GlobalEvents} from "@/lib/utility";
 

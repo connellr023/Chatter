@@ -25,7 +25,7 @@ app.use(cors());
 // HTTP Routing (Vue project must be built in the src folder)
 app.use("/", express.static(path.join(__dirname, "build")));
 
-app.get("*", (req, res): void => {
+app.get("*", (_req, res): void => {
     res.sendFile(path.join(__dirname, "build", "index.html"));
 });
 
@@ -40,7 +40,7 @@ const io: Server = new Server(server, {
     transports: ["websocket", "polling"],
     allowUpgrades: false,
     cors: {
-        origin: "*",
+        origin: ["http://localhost:5173", `http://localhost:${port}`],
         methods: ["GET", "POST"],
         credentials: true
     }
