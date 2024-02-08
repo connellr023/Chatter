@@ -4,8 +4,8 @@
  */
 import "@/styles/main.scss";
 
-import App from "./App.vue";
-import router from "./router/router";
+import App from "@/App.vue";
+import router from "@/router/router";
 
 import {createApp} from "vue";
 import {createPinia} from "pinia";
