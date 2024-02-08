@@ -3,8 +3,8 @@
   "version": "1.0.3",
   "description": "A web based chat application that is entirely oriented around temporary sessions.",
   "scripts": {
-    "install-deps-client-linux": "cd ./chatter-client && npm i",
-    "install-deps-api-linux": "cd ./chatter-api && npm i",
+    "install-deps-client-linux": "cd ./chatter-client && npm i --omit=dev",
+    "install-deps-api-linux": "cd ./chatter-api && npm i --omit=dev",
     "build-client-linux": "cd ./chatter-client && npm run build",
     "deploy-linux": "cd ./chatter-api && npm run start"
   },
