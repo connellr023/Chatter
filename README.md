@@ -20,7 +20,7 @@ chat rooms in the future.
 <br />
 
 ### Deployment
-This web app is deployed to: [Deployed App](https://chatter-lqqb.onrender.com/)
+This web app is deployed on *Render* <a href="https://chatter-lqqb.onrender.com/" target="_blank">here</a>.
 
 <br />
 

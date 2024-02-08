@@ -17,7 +17,7 @@ let io: Server;
 const port: number = 7000;
 
 beforeAll((): void => {
-    initializeStream(port, hostname);
+    initializeStream(true, port);
 
     httpServer = http.createServer();
     httpServer.listen(port, hostname);
