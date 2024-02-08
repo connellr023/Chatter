@@ -2,10 +2,12 @@
 
 > A web based chat application that is entirely oriented around temporary sessions.
 
-<div align="left">
+<div>
  <img src="https://img.shields.io/badge/client-Vue-seagreen">
  <img src="https://img.shields.io/badge/api-TypeScript-blue">
  <img src="https://img.shields.io/badge/developer-Connell Reffo-crimson">
+ <img src="https://github.com/connellr023/Chatter/actions/workflows/api-jest.yml/badge.svg">
+ <img src="https://github.com/connellr023/Chatter/actions/workflows/client-vitest.yml/badge.svg">
 </div>
 
 <br />
@@ -49,7 +51,7 @@ npm run test
 <br />
 
 ### Building
-This web app is not currently deployed. However, in order to do so, build the client by,
+Build the client by,
 ```bash
 cd chatter-client
 ```
